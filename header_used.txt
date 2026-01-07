@@ -1,0 +1,11 @@
+# values for further data filtering
+'Technologie','WindAnLandOderAufSee','Bundesland','Landkreis','Gemeinde','Postleitzahl','Gemarkung',
+
+# exact location
+'Laengengrad' 'Breitengrad',
+
+# relevant data points for import
+'NameWindpark','Hersteller','Typenbezeichnung','Nabenhoehe','Rotordurchmesser',
+'EegMastrNummer','Nettonennleistung','NameStromerzeugungseinheit'
+# opening_date,start_date, end_date, check_date
+'GeplantesInbetriebnahmedatum','Inbetriebnahmedatum','DatumEndgueltigeStilllegung', 'DatumDownload'

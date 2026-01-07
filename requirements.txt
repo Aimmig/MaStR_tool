@@ -1,0 +1,2 @@
+open_mastr==0.16.1
+pandas==2.3.3
