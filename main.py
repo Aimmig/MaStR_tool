@@ -16,13 +16,14 @@ used_cols = {
         'NameStromerzeugungseinheit': 'name_unit',
         'Laengengrad': 'lon', 'Breitengrad': 'lat',
         'EinheitMastrNummer': 'ref:MaStR',
+        'AnlagenschluesselEeg': 'ref:EEG',
         'Hersteller': 'manufacturer', 'Typenbezeichnung': 'model',
         'Nabenhoehe': 'height:hub', 'Rotordurchmesser': 'rotor:diameter'
         }
 
 # columns used for printing/debuging
 print_cols = [
-        'lon', 'lat', 'output', 'ref:MaStR',
+        'lon', 'lat', 'output', 'ref:MaStR', 'ref:EEG',
         'opening_date', 'start_date', 'end_date'
 ]
 
@@ -65,9 +66,10 @@ def get_prefiltered_Mastr(on_or_offshore="Windkraft an Land",
     Parameters:
     on_or_offshore: either "Windkraft an Land" or "Windkraft auf See"
     technoly: either "Horizontalläufer" or "Vertikalläufer"
-    output: the nominal power output of the plant. Default no small plants.
+    output: the nominal power output of the plant. Exclude small plants.
 
-    Returns: Dataframe which contains the pre filtered Mastr
+    Returns: Dataframe which contains the pre filtered Mastr data for
+    wind power plants
     """
 
     # download relevant data with api
@@ -75,12 +77,24 @@ def get_prefiltered_Mastr(on_or_offshore="Windkraft an Land",
     db.download(data="wind", api_data_types=["unit_data"],
                 api_location_type=["location_elec_generation"])
 
-    # generate a list of all tables
+    # get the required tables
     table = "wind_extended"
-    df = pd.read_sql_query(
+    df_extended = pd.read_sql_query(
             "SELECT name FROM sqlite_master WHERE type='table';",
             con=db.engine)
-    df = pd.read_sql(sql=table, con=db.engine)
+    df_extended = pd.read_sql(sql=table, con=db.engine)
+
+    table = "wind_eeg"
+    df_eeg = pd.read_sql_query(
+            "SELECT name FROM sqlite_master WHERE type='table';",
+            con=db.engine)
+    df_eeg = pd.read_sql(sql=table, con=db.engine)
+
+    # join on the internaly used key
+    key = 'EegMastrNummer'
+    # join and remove some duplicate columns which
+    df = df_extended.merge(df_eeg, on=key, how='inner',
+                           suffixes=('', '_DROP')).filter(regex='^(?!.*_DROP)')
 
     # rename columns to better match osm tags
     df = df.rename(columns=used_cols)
@@ -98,12 +112,26 @@ def get_prefiltered_Mastr(on_or_offshore="Windkraft an Land",
 
 # ---- Basic filters based on NaT ------
 
+def get_plants_with_(df, date_type):
+    """Template function to filter for plants that have
+    the specified date_tye present. Also sorts data for
+    convenience
+
+    Parameter:
+    date_type: Either "end_date", "start_date", "opening_date"
+
+    Returns:
+    Sorted dataframe with plants with selected date_type present
+    """
+    return df[df[date_type].notnull()].sort_values(date_type)
+
+
 def get_plants_with_end_date(df):
     """Return only plants with known end_date.
     (Planed) Decommissioning can be safely assumed.
     This date can safely be assumed to be in the past.
     """
-    return df[df["end_date"].notnull()]
+    return get_plants_with_(df, "end_date")
 
 
 def get_plants_with_start_date(df):
@@ -111,14 +139,14 @@ def get_plants_with_start_date(df):
     This date can safely be assumed to be in the past.
     Note this includes plant that already out of operation again.
     """
-    return df[df["start_date"].notnull()]
+    return get_plants_with_(df, "start_date")
 
 
 def get_plants_with_opening_date(df):
     """Return only plants with known opening_date.
     Note this might include plants which should have openend,
     but still are not in operation."""
-    return df[df["opening_date"].notnull()]
+    return get_plants_with_(df, "opening_date")
 
 
 # ---- Basic filters based on comparison with todays date -----
@@ -129,7 +157,7 @@ def get_plants_with_future_opening_date(df):
 
 
 def get_plants_with_past_opening_date(df):
-    """Returns only plants that should have opened
+    """Return only plants that should have opened
     but still aren't operational.
     This could mean any form delay, or it was never built at all.
     """
@@ -137,8 +165,12 @@ def get_plants_with_past_opening_date(df):
 
 
 def get_plants_currently_operational(df):
-    """Returns only plants that have started and if end_date exists
-    it is still in the future.
+    """Return only plants that are currently in operation.
+    This means plants that are going to opened are excluded,
+    and plants which are permanently closed.
+    Note that short closures which are contained in the
+    full data set are still included here, as these aren't
+    relevant for this purpose.
     """
     df = df.loc[
         (df["opening_date"].isnull()) &
@@ -149,8 +181,6 @@ def get_plants_currently_operational(df):
 if __name__ == '__main__':
     df = get_prefiltered_Mastr()
     # df = filter_region(df, state="Rheinland-Pfalz")
-    df = get_plants_currently_operational(df)
-    df.sort_values("start_date", inplace=True)
-    # df = get_plants_with_end_date(df)
+    df = get_plants_with_end_date(df)
 
     print(df[print_cols])
