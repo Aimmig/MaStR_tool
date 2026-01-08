@@ -12,7 +12,8 @@ used_cols = {
         'Inbetriebnahmedatum': 'start_date',
         'DatumEndgueltigeStilllegung': 'end_date',
         'DatumDownload': 'check_date',
-        'NameWindpark': 'name_windfarm', 'Nettonennleistung': 'output',
+        'NameWindpark': 'name_windfarm',
+        'Nettonennleistung': 'generator:output:electricity',
         'NameStromerzeugungseinheit': 'name_unit',
         'Laengengrad': 'lon', 'Breitengrad': 'lat',
         'EinheitMastrNummer': 'ref:MaStR',
@@ -23,9 +24,10 @@ used_cols = {
 
 # columns used for printing/debuging
 print_cols = [
-        'lon', 'lat', 'output', 'ref:MaStR', 'ref:EEG',
-        'opening_date', 'start_date', 'end_date'
-]
+        'lon', 'lat', 'ref:MaStR',
+        'opening_date', 'start_date', 'end_date',
+        'generator:output:electricity'
+        ]
 
 today = date.today().isoformat()
 
@@ -102,11 +104,17 @@ def get_prefiltered_Mastr(on_or_offshore="Windkraft an Land",
     df.dropna(axis=1, how='all', inplace=True)
     df = df[list(used_cols.values())]
 
+
     # filter according to given or default values which are considered
     df = df.loc[
         (df["on_or_offshore"] == on_or_offshore) &
         (df["technology"] == technology) &
-        (df["output"] > output)]
+        (df["generator:output:electricity"] > output)]
+
+    unit_cols = ["generator:output:electricity"]
+    df[unit_cols] = df[unit_cols].astype(int)
+    df["generator:output:electricity"] = df["generator:output:electricity"].astype(str) + " kW"
+
     return df
 
 
@@ -180,7 +188,8 @@ def get_plants_currently_operational(df):
 
 if __name__ == '__main__':
     df = get_prefiltered_Mastr()
-    # df = filter_region(df, state="Rheinland-Pfalz")
-    df = get_plants_with_end_date(df)
+    df = filter_region(df, state="Rheinland-Pfalz")
+    df = get_plants_with_opening_date(df)
 
-    print(df[print_cols])
+    df[print_cols].to_csv('data.csv')
+    print(df)
