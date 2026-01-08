@@ -1,2 +1,3 @@
 open_mastr==0.16.1
 pandas==2.3.3
+pycodestyle==2.14.0
