@@ -7,12 +7,12 @@ today = date.today().isoformat()
 
 
 class MaStR_EEG_Base:
-    def __init__(self, energy_carrier):
+    def __init__(self, energy_carrier: str):
 
         """
         Downloads the Mastr unit data and filters for the given technology.
         Large parts of data is thrown away since it's not really relevant,
-        also throws away lot's of empty columns which are empty.
+        also throws away lots of empty columns which are empty.
 
         Parameters:
         energy_carrier: The energy carrier to download
@@ -35,7 +35,7 @@ class MaStR_EEG_Base:
             con=db.engine)
         df_eeg = pd.read_sql(sql=table, con=db.engine)
 
-        # join on the internaly used key
+        # join on the internally used key
         key = 'EegMastrNummer'
         # join and remove some duplicate columns which
         df = df_extended.merge(df_eeg, on=key, how='inner',
@@ -45,7 +45,9 @@ class MaStR_EEG_Base:
         # filter data before further processing
         self.df = df.dropna(axis=1, how='all')
 
-    def filter_region(df, state=None, county=None, municipality=None):
+    @staticmethod
+    def filter_region(df: pd.DataFrame, state: str = None,
+                      county: str = None, municipality: str = None):
         """
         Filter data by some regional property
 
