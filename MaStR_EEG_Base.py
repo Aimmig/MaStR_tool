@@ -5,9 +5,17 @@ import operator
 
 today = date.today().isoformat()
 
+# columns used for printing and debugging
+print_cols = [
+    'lon', 'lat', 'ref:mastr',
+    'opening_date', 'start_date', 'end_date',
+    'generator:output:electricity'
+]
+
 
 class MaStR_EEG_Base:
-    def __init__(self, energy_carrier: str):
+
+    def __init__(self, energy_carrier: str, include_ref_eeg: bool = False):
 
         """
         Downloads the Mastr unit data and filters for the given technology.
@@ -16,7 +24,12 @@ class MaStR_EEG_Base:
 
         Parameters:
         energy_carrier: The energy carrier to download
+        include_ref_eeg: If set includes also the older 'ref:eeg'
         """
+
+        self.print_cols = print_cols
+        if include_ref_eeg:
+            self.print_cols.append('ref:eeg')
 
         # download relevant data with api
         db = Mastr()

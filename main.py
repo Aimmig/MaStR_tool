@@ -5,7 +5,7 @@ from MaStR_Filter import MaStR_Filter as plant_filter
 if __name__ == '__main__':
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
     # Small test example to show usage
-    wka = MaStR_WKA()
+    wka = MaStR_WKA(include_ref_eeg=True)
     cols = wka.print_cols
     plants = wka.prefilter()
 

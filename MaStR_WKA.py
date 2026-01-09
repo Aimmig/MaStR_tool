@@ -7,14 +7,6 @@ today = date.today().isoformat()
 
 class MaStR_WKA(MaStR_EEG_Base):
 
-    # columns used for printing and debugging
-    # TO-DO move common tags to parent class
-    print_cols = [
-        'lon', 'lat', 'ref:mastr', 'ref:EEG',
-        'opening_date', 'start_date', 'end_date',
-        'generator:output:electricity'
-    ]
-
     # map to translate only the actually used columns
     # might be adapted to include more data or to throw away unwanted columns
     # TO-DO move common tags to parent class
@@ -27,7 +19,7 @@ class MaStR_WKA(MaStR_EEG_Base):
         'Laengengrad': 'lon', 'Breitengrad': 'lat',
         'DatumDownload': 'check_date',
         'EinheitMastrNummer': 'ref:mastr',
-        'AnlagenschluesselEeg': 'ref:EEG',
+        'AnlagenschluesselEeg': 'ref:eeg',
         'NameStromerzeugungseinheit': 'name_unit',
         'Technologie': 'technology', 'WindAnLandOderAufSee': 'on_or_offshore',
         'NameWindpark': 'name_windfarm',
@@ -36,8 +28,8 @@ class MaStR_WKA(MaStR_EEG_Base):
         'Nabenhoehe': 'height:hub', 'Rotordurchmesser': 'rotor:diameter'
     }
 
-    def __init__(self):
-        super().__init__("wind")
+    def __init__(self,  include_ref_eeg: bool = False):
+        super().__init__("wind", include_ref_eeg)
         # rename columns to better match osm tags
         self.df = self.df.rename(columns=self.used_cols)
         self.df = self.df[list(self.used_cols.values())]
