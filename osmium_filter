@@ -1,0 +1,2 @@
+# xxx to be replaced with the downloaded state date
+osmium tags-filter xxx.osm.pbf n/generator:method=wind_turbine -o xxx_wka_osm.pbf
