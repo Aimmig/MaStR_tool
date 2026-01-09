@@ -6,11 +6,27 @@ import operator
 today = date.today().isoformat()
 
 # columns used for printing and debugging
+# Should always be a subset of the used columns below
 print_cols = [
     'lon', 'lat', 'ref:mastr',
     'opening_date', 'start_date', 'end_date',
-    'generator:output:electricity'
+    'generator:output:electricity',
+    'municipality'
 ]
+
+# map to translate only the actually used columns
+# might be adapted to include more data or to throw away unwanted columns
+used_cols = {
+    'Bundesland': 'state', 'Landkreis': 'county',
+    'Gemeinde': 'municipality',
+    'GeplantesInbetriebnahmedatum': 'opening_date',
+    'Inbetriebnahmedatum': 'start_date',
+    'DatumEndgueltigeStilllegung': 'end_date',
+    'Laengengrad': 'lon', 'Breitengrad': 'lat',
+    'DatumDownload': 'check_date',
+    'EinheitMastrNummer': 'ref:mastr',
+    'AnlagenschluesselEeg': 'ref:eeg',
+}
 
 
 class MaStR_EEG_Base:
@@ -30,6 +46,8 @@ class MaStR_EEG_Base:
         self.print_cols = print_cols
         if include_ref_eeg:
             self.print_cols.append('ref:eeg')
+
+        self.used_cols = used_cols
 
         # download relevant data with api
         db = Mastr()

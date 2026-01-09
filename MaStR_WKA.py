@@ -7,29 +7,22 @@ today = date.today().isoformat()
 
 class MaStR_WKA(MaStR_EEG_Base):
 
-    # map to translate only the actually used columns
-    # might be adapted to include more data or to throw away unwanted columns
-    # TO-DO move common tags to parent class
-    used_cols = {
-        'Bundesland': 'state', 'Landkreis': 'county',
-        'Gemeinde': 'municipality',
-        'GeplantesInbetriebnahmedatum': 'opening_date',
-        'Inbetriebnahmedatum': 'start_date',
-        'DatumEndgueltigeStilllegung': 'end_date',
-        'Laengengrad': 'lon', 'Breitengrad': 'lat',
-        'DatumDownload': 'check_date',
-        'EinheitMastrNummer': 'ref:mastr',
-        'AnlagenschluesselEeg': 'ref:eeg',
-        'NameStromerzeugungseinheit': 'name_unit',
-        'Technologie': 'technology', 'WindAnLandOderAufSee': 'on_or_offshore',
-        'NameWindpark': 'name_windfarm',
-        'Nettonennleistung': 'generator:output:electricity',
-        'Hersteller': 'manufacturer', 'Typenbezeichnung': 'model',
-        'Nabenhoehe': 'height:hub', 'Rotordurchmesser': 'rotor:diameter'
-    }
-
     def __init__(self,  include_ref_eeg: bool = False):
         super().__init__("wind", include_ref_eeg)
+
+        # add technology specificy data which to rename
+        self.used_cols.update({
+            'NameStromerzeugungseinheit': 'name_unit',
+            'Technologie': 'technology',
+            'WindAnLandOderAufSee': 'on_or_offshore',
+            'NameWindpark': 'name_windfarm',
+            'Nettonennleistung': 'generator:output:electricity',
+            'Hersteller': 'manufacturer',
+            'Typenbezeichnung': 'model',
+            'Nabenhoehe': 'height:hub',
+            'Rotordurchmesser': 'rotor:diameter'
+            })
+
         # rename columns to better match osm tags
         self.df = self.df.rename(columns=self.used_cols)
         self.df = self.df[list(self.used_cols.values())]
