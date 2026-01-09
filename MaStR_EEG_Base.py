@@ -11,7 +11,6 @@ print_cols = [
     'lon', 'lat', 'ref:mastr',
     'opening_date', 'start_date', 'end_date',
     'generator:output:electricity',
-    'municipality'
 ]
 
 # map to translate only the actually used columns

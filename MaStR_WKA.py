@@ -23,6 +23,9 @@ class MaStR_WKA(MaStR_EEG_Base):
             'Rotordurchmesser': 'rotor:diameter'
             })
 
+        # optionally add even more data to print later
+        # self.print_cols.extend(['name_windfarm', 'model', 'height:hub'])
+
         # rename columns to better match osm tags
         self.df = self.df.rename(columns=self.used_cols)
         self.df = self.df[list(self.used_cols.values())]
