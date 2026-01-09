@@ -1,6 +1,7 @@
 from open_mastr import Mastr
 import pandas as pd
 from datetime import date
+import operator
 
 # map to translate only the acutally used columns
 # might be adapted to include more data or to throw away unwanted columns
@@ -104,7 +105,6 @@ def get_prefiltered_Mastr(on_or_offshore="Windkraft an Land",
     df.dropna(axis=1, how='all', inplace=True)
     df = df[list(used_cols.values())]
 
-
     # filter according to given or default values which are considered
     df = df.loc[
         (df["on_or_offshore"] == on_or_offshore) &
@@ -150,18 +150,26 @@ def get_plants_with_start_date(df):
     return get_plants_with_(df, "start_date")
 
 
-def get_plants_with_opening_date(df):
+def get_plants_with_opening_date(df, comp=None, date=today):
     """Return only plants with known opening_date.
     Note this might include plants which should have openend,
-    but still are not in operation."""
-    return get_plants_with_(df, "opening_date")
+    but still are not in operation.
+
+    Parameters:
+    comp: Optionally comparison parameter to filter
+    date: Optionally the date to compare with
+    """
+    df = get_plants_with_(df, "opening_date")
+    if comp:
+        return df[comp(df["opening_date"], date)]
+    return df
 
 
 # ---- Basic filters based on comparison with todays date -----
 
 def get_plants_with_future_opening_date(df):
     """Return only plants which are expected to open."""
-    return df[df["opening_date"] > today]
+    return get_plants_with_opening_date(df, operator.gt)
 
 
 def get_plants_with_past_opening_date(df):
@@ -169,7 +177,7 @@ def get_plants_with_past_opening_date(df):
     but still aren't operational.
     This could mean any form delay, or it was never built at all.
     """
-    return df[df["opening_date"] < today]
+    return get_plants_with_opening_date(df, operator.lt)
 
 
 def get_plants_currently_operational(df):
@@ -182,7 +190,7 @@ def get_plants_currently_operational(df):
     """
     df = df.loc[
         (df["opening_date"].isnull()) &
-        (df["end_date"].isnull())]
+        (df["end_date"].isnull())].sort_values("start_date")
     return df
 
 
