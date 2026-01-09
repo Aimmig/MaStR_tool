@@ -7,7 +7,9 @@ today = date.today().isoformat()
 
 
 class MaStR_Filter:
-    def filter_region(df, state=None, county=None, municipality=None):
+    @staticmethod
+    def filter_region(df: pd.DataFrame, state: str = None,
+                      county: str = None, municipality: str = None):
         """
         Filter data by some regional property
 
@@ -30,7 +32,8 @@ class MaStR_Filter:
 
     # ---- Basic filters based on NaT ------
 
-    def get_plants_with_(df, date_type):
+    @staticmethod
+    def get_plants_with_(df: pd.DataFrame, date_type: str):
         """Template function to filter for plants that have
         the specified date_tye present. Also sorts data for
         convenience
@@ -43,21 +46,26 @@ class MaStR_Filter:
         """
         return df[df[date_type].notnull()]
 
-    def get_plants_with_end_date(df):
+    @staticmethod
+    def get_plants_with_end_date(df: pd.DataFrame):
         """Return only plants with known end_date.
         (Planed) Decommissioning can be safely assumed.
         This date can safely be assumed to be in the past.
         """
         return MaStR_Filter.get_plants_with_(df, "end_date")
 
-    def get_plants_with_start_date(df):
+    @staticmethod
+    def get_plants_with_start_date(df: pd.DataFrame):
         """Return only plants with known start_date.
         This date can safely be assumed to be in the past.
         Note this includes plant that already out of operation again.
         """
         return MaStR_Filter.get_plants_with_(df, "start_date")
 
-    def get_plants_with_opening_date(df, comp=None, date=today):
+    @staticmethod
+    def get_plants_with_opening_date(df: pd.DataFrame,
+                                     comp: operator = None,
+                                     comp_date: date = today):
         """Return only plants with known opening_date.
         Note this might include plants which should have openend,
         but still are not in operation.
@@ -67,24 +75,27 @@ class MaStR_Filter:
         date: Optionally the date to compare with
         """
         if comp:
-            return df[comp(df["opening_date"], date)]
+            return df[comp(df["opening_date"], comp_date)]
         else:
             return MaStR_Filter.get_plants_with_(df, "opening_date")
 
-    # ---- Basic filters based on comparison with todays date -----
+    # ---- Basic filters based on comparison with today's date -----
 
-    def get_plants_with_future_opening_date(df):
+    @staticmethod
+    def get_plants_with_future_opening_date(df: pd.DataFrame):
         """Return only plants which are expected to open."""
         return MaStR_Filter.get_plants_with_opening_date(df, operator.gt)
 
-    def get_plants_with_past_opening_date(df):
+    @staticmethod
+    def get_plants_with_past_opening_date(df: pd.DataFrame):
         """Return only plants that should have opened
         but still aren't operational.
         This could mean any form delay, or it was never built at all.
         """
         return MaStR_Filter.get_plants_with_opening_date(df, operator.lt)
 
-    def get_plants_currently_operational(df):
+    @staticmethod
+    def get_plants_currently_operational(df: pd.DataFrame):
         """Return only plants that are currently in operation.
         This means plants that are going to opened are excluded,
         and plants which are permanently closed.
