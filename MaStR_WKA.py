@@ -1,13 +1,12 @@
-from open_mastr import Mastr
 from MaStR_EEG_Base import MaStR_EEG_Base
 import pandas as pd
 from datetime import date
-import operator
 
 today = date.today().isoformat()
 
+
 class MaStR_WKA(MaStR_EEG_Base):
-    
+
     # columns used for printing/debuging
     # TO-DO move common tags to parent class
     print_cols = [
@@ -19,7 +18,7 @@ class MaStR_WKA(MaStR_EEG_Base):
     # map to translate only the acutally used columns
     # might be adapted to include more data or to throw away unwanted columns
     # TO-DO move common tags to parent class
-    used_cols = {     
+    used_cols = {
         'Bundesland': 'state', 'Landkreis': 'county',
         'Gemeinde': 'municipality',
         'GeplantesInbetriebnahmedatum': 'opening_date',
@@ -37,19 +36,19 @@ class MaStR_WKA(MaStR_EEG_Base):
         'Nabenhoehe': 'height:hub', 'Rotordurchmesser': 'rotor:diameter'
     }
 
-
     def __init__(self):
         super().__init__("wind")
         # rename columns to better match osm tags
         self.df = self.df.rename(columns=self.used_cols)
         self.df = self.df[list(self.used_cols.values())]
 
-    def preFilter(self, on_or_offshore="Windkraft an Land",
-                          technology="Horizontalläufer", output=600):
+    def prefilter(self, on_or_offshore="Windkraft an Land",
+                  technology="Horizontalläufer", output=600):
 
         """
         Filters by the given technolgy, On/Offshore and power output.
-        Translates the colums to be shorter names and more closer to usefull osm tags.
+        Translates the colums to be shorter names and more closer to
+        usefull osm tags.
 
         Parameters:
         on_or_offshore: either "Windkraft an Land" or "Windkraft auf See"
@@ -58,11 +57,12 @@ class MaStR_WKA(MaStR_EEG_Base):
         """
 
         # filter according to given or default values which are considered
-        self.df = self.df.loc[
+        df = self.df.loc[
             (self.df["on_or_offshore"] == on_or_offshore) &
             (self.df["technology"] == technology) &
             (self.df["generator:output:electricity"] > output)]
 
-        unit_cols = ["generator:output:electricity"]
-        self.df[unit_cols] = self.df[unit_cols].astype(int)
-        self.df["generator:output:electricity"] = self.df["generator:output:electricity"].astype(str) + " kW"
+        df = df.astype({"generator:output:electricity": int})
+        # df["generator:output:electricity"] = self.df[
+        #        "generator:output:electricity"].astype(str) + " kW"
+        return df
