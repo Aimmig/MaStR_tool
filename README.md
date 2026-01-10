@@ -8,9 +8,9 @@ Since 2023 the data can be used under the OSM licensing terms.
 As usual, no permission is granted to actually import any data using this toolwithout 
 consulting the community (and me, the author) beforehand.
 
-A template class and derived class for basic filtering of wind plants is provided.
-For photovoltaik this would be straight forward, but the dataset is much larger
-and appropriate filters would need to implemented.
+A template class and examples for wind, gsgk, hydro and biomass are provided.
+Note that the dataset for solar and storage is very large and takes a long time download,
+because it also includes millions of small home installtions.
 The full data can also be viewed after downloading using e.g. a regular sqlite viewer
 etc see documention of open-MaStR for reference.
 
