@@ -1,11 +1,11 @@
-from MaStR_EEG_Base import MaStR_EEG_Base
+from energycarrier import MaStR_EEG_Base as base 
 import pandas as pd
 from datetime import date
 
 today = date.today().isoformat()
 
 
-class MaStR_WKA(MaStR_EEG_Base):
+class MaStR_WKA(base.MaStR_EEG_Base):
 
     def __init__(self,  include_ref_eeg: bool = False):
         super().__init__("wind", include_ref_eeg)
@@ -31,7 +31,4 @@ class MaStR_WKA(MaStR_EEG_Base):
             (self.df["Nettonennleistung"] > output)]
 
         df = df.astype({"Nettonennleistung": int})
-        # TO-add kW to column
-        # df["generator:output:electricity"] = self.df[
-        #        "generator:output:electricity"].astype(str) + " kW"
         return df

@@ -1,4 +1,3 @@
-from open_mastr import Mastr
 import pandas as pd
 from datetime import date
 import operator
