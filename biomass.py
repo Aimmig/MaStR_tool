@@ -1,12 +1,11 @@
 import os
-from MaStR_biomass import MaStR_biomass 
+from MaStR_biomass import MaStR_biomass
 from MaStR_Filter import MaStR_Filter as plant_filter
 
 if __name__ == '__main__':
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
     # Small test example to show usage
     bio = MaStR_biomass(include_ref_eeg=True)
-    cols = bio.print_cols
     plants = bio.prefilter()
 
     # get only some region

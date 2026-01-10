@@ -5,28 +5,6 @@ import operator
 
 today = date.today().isoformat()
 
-# columns used for printing and debugging
-# Should always be a subset of the used columns below
-print_cols = [
-    'lon', 'lat', 'ref:mastr',
-    'opening_date', 'start_date', 'end_date',
-    'generator:output:electricity',
-]
-
-# map to translate only the actually used columns
-# might be adapted to include more data or to throw away unwanted columns
-used_cols = {
-    'Bundesland': 'state', 'Landkreis': 'county',
-    'Gemeinde': 'municipality',
-    'GeplantesInbetriebnahmedatum': 'opening_date',
-    'Inbetriebnahmedatum': 'start_date',
-    'DatumEndgueltigeStilllegung': 'end_date',
-    'Laengengrad': 'lon', 'Breitengrad': 'lat',
-    'DatumDownload': 'check_date',
-    'EinheitMastrNummer': 'ref:mastr',
-    'AnlagenschluesselEeg': 'ref:eeg',
-}
-
 
 class MaStR_EEG_Base:
 
@@ -41,12 +19,6 @@ class MaStR_EEG_Base:
         energy_carrier: The energy carrier to download
         include_ref_eeg: If set includes also the older 'ref:eeg'
         """
-
-        self.print_cols = print_cols
-        if include_ref_eeg:
-            self.print_cols.append('ref:eeg')
-
-        self.used_cols = used_cols
 
         # download relevant data with api
         db = Mastr()
@@ -74,26 +46,3 @@ class MaStR_EEG_Base:
 
         # filter data before further processing
         self.df = df.dropna(axis=1, how='all')
-
-    @staticmethod
-    def filter_region(df: pd.DataFrame, state: str = None,
-                      county: str = None, municipality: str = None):
-        """
-        Filter data by some regional property
-
-        Parameters:
-        state: The state which should be included.
-        county: The county which should be included.
-        municipality: The municipality which should be included.
-
-        Returns:
-        The filtered dataframe
-        """
-
-        if state:
-            df = df[df["state"] == state]
-        if county:
-            df = df[df["county"] == county]
-        if municipality:
-            df = df[df["municipality"] == municipality]
-        return df

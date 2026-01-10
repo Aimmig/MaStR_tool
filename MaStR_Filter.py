@@ -23,11 +23,11 @@ class MaStR_Filter:
         """
 
         if state:
-            df = df[df["state"] == state]
+            df = df[df["Bundesland"] == state]
         if county:
-            df = df[df["county"] == county]
+            df = df[df["Landkreis"] == county]
         if municipality:
-            df = df[df["municipality"] == municipality]
+            df = df[df["Gemeinde"] == municipality]
         return df
 
     # ---- Basic filters based on NaT ------
@@ -39,7 +39,8 @@ class MaStR_Filter:
         convenience
 
         Parameter:
-        date_type: Either "end_date", "start_date", "opening_date"
+        date_type: Either "DatumEndgueltigeStilllegung",
+                   "Inbetriebnahmedatum", "GeplantesInbetriebnahmedatum"
 
         Returns:
         Sorted dataframe with plants with selected date_type present
@@ -52,7 +53,7 @@ class MaStR_Filter:
         (Planed) Decommissioning can be safely assumed.
         This date can safely be assumed to be in the past.
         """
-        return MaStR_Filter.get_plants_with_(df, "end_date")
+        return MaStR_Filter.get_plants_with_(df, "DatumEndgueltigeStilllegung")
 
     @staticmethod
     def get_plants_with_start_date(df: pd.DataFrame):
@@ -60,7 +61,7 @@ class MaStR_Filter:
         This date can safely be assumed to be in the past.
         Note this includes plant that already out of operation again.
         """
-        return MaStR_Filter.get_plants_with_(df, "start_date")
+        return MaStR_Filter.get_plants_with_(df, "Inbetriebnahmedatum")
 
     @staticmethod
     def get_plants_with_opening_date(df: pd.DataFrame,
@@ -75,9 +76,10 @@ class MaStR_Filter:
         date: Optionally the date to compare with
         """
         if comp:
-            return df[comp(df["opening_date"], comp_date)]
+            return df[comp(df["GeplantesInbetriebnahmedatum"], comp_date)]
         else:
-            return MaStR_Filter.get_plants_with_(df, "opening_date")
+            return MaStR_Filter.
+        get_plants_with_(df, "GeplantesInbetriebnahmedatum")
 
     # ---- Basic filters based on comparison with today's date -----
 
@@ -104,6 +106,7 @@ class MaStR_Filter:
         relevant for this purpose.
         """
         df = df.loc[
-            (df["opening_date"].isnull()) &
-            (df["end_date"].isnull())].sort_values("start_date")
+            (df["GeplantesInbetriebnahmedatum"].isnull()) &
+            (df["DatumEndgueltigeStilllegung"].isnull())].
+        sort_values("Inbetriebnahmedatum")
         return df

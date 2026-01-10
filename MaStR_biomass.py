@@ -30,7 +30,8 @@ class MaStR_biomass(MaStR_EEG_Base):
         self.df = self.df.rename(columns=self.used_cols)
         self.df = self.df[list(self.used_cols.values())]
 
-    def prefilter(self, gas_or_solid="Feste Biomasse", technology="Verbrennungsmotor", output: int = 500):
+    def prefilter(self, gas_or_solid="Feste Biomasse",
+                  technology="Verbrennungsmotor", output: int = 500):
 
         """
         Filters by the given technology, On/Offshore and power output.
