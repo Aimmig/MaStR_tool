@@ -4,6 +4,11 @@ import operator
 
 today = date.today().isoformat()
 
+COMMON_COLS = {"Laengengrad": "lon",
+               "Breitengrad": "lat",
+               "EinheitMastrNummer": "ref:mastr"
+               }
+
 
 class DataFilter:
     @staticmethod
