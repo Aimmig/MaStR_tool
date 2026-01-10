@@ -16,7 +16,10 @@ if __name__ == '__main__':
     print("--- Test example: Overview over wind power plants in RLP")
     print("----------------------")
 
-    apply_and_print(plant_filter.get_plants_with_start_date, plants)
+    # select columns
+    cols = ["Laengengrad", "Breitengrad", "Nettonennleistung", "EinheitMastrNummer", "Gemeinde", "Typenbezeichnung"]
+
+    apply_and_print(plant_filter.get_plants_with_start_date, plants, cols=cols)
     apply_and_print(plant_filter.get_plants_with_opening_date, plants)
     apply_and_print(plant_filter.get_plants_with_end_date, plants)
     apply_and_print(plant_filter.get_plants_currently_operational, plants)
