@@ -1,6 +1,6 @@
 import os
 from energycarrier.MaStR_biomass import MaStR_biomass
-from energycarrier.MaStR_Filter import MaStR_Filter as plant_filter
+from utils.MaStR_Filter import MaStR_Filter as plant_filter
 from test_printing import apply_and_print
 
 if __name__ == '__main__':
