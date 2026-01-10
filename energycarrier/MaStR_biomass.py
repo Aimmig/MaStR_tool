@@ -11,7 +11,7 @@ class MaStR_biomass(base.MaStR_EEG_Base):
         super().__init__("biomass")
 
     def prefilter(self, gas_liquid_solid="Gasförmige Biomasse",
-                  technology="Verbrennungsmotor", output: int = 500):
+                  technology="Verbrennungsmotor", output: int = 30):
 
         """
         Filters by the given technology, solid_or_gas and power output.

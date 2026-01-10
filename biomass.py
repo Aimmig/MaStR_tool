@@ -7,7 +7,7 @@ if __name__ == '__main__':
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
     # Small test example to show usage
     wka = MaStR_biomass()
-    plants = wka.prefilter()
+    plants = wka.prefilter(gas_liquid_solid="Feste Biomasse")
 
     # get only some region
     plants = plant_filter.filter_region(plants, state="Rheinland-Pfalz")
