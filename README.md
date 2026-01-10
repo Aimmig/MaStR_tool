@@ -14,8 +14,9 @@ and appropriate filters would need to implemented.
 The full data can also be viewed after downloading using e.g. a regular sqlite viewer
 etc see documention of open-MaStR for reference.
 
-The german names for OSM relevant data are replaced with the appropriate OSM tags.
-Refer to OSM wiki for details.
+The german names are used for now. Refer to OSM wiki and the documentation of
+Markstammdatenregister for matching the names/tags between them.
+This might be implemented later.
 Relevant data is start/end/opening date of a plant, location, power output and
 e.g. the height for wind turbines, others might be added as required.
 Most relevant is the 'MaStR-Nummer der Einheit' (OSM ref:mastr) in the form of SEExxxxx
