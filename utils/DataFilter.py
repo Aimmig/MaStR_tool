@@ -20,6 +20,10 @@ class DataFilter:
         return df.query(expression)
 
     @staticmethod
+    def get_EEG(df):
+        return df[df["EegMastrNummer"].notnull()]
+
+    @staticmethod
     def get_KWK(df):
         return df[df["KwkMastrNummer"].notnull()]
 

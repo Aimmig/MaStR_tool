@@ -39,7 +39,7 @@ class Mastrdata:
         # join on the internally used key
         key = 'EegMastrNummer'
         # join and remove some duplicate columns which
-        df = df_extended.merge(df_eeg, on=key, how='inner',
+        df = df_extended.merge(df_eeg, on=key, how='left',
                                suffixes=('', '_DROP')).filter(
                                        regex='^(?!.*_DROP)')
 
