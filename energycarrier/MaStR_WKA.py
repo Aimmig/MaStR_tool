@@ -25,10 +25,10 @@ class MaStR_WKA(base.MaStR_EEG_Base):
         """
 
         # filter according to given or default values which are considered
-        df = self.df.loc[
-            (self.df["WindAnLandOderAufSee"] == on_or_offshore) &
-            (self.df["Technologie"] == technology) &
-            (self.df["Nettonennleistung"] > output)]
+        df = self.df.query(
+                "WindAnLandOderAufSee == @on_or_offshore &\
+                Technologie == @technology &\
+                Nettonennleistung > @output")
 
         df = df.astype({"Nettonennleistung": int})
         return df

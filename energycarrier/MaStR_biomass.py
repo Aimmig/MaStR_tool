@@ -10,24 +10,24 @@ class MaStR_biomass(base.MaStR_EEG_Base):
     def __init__(self):
         super().__init__("biomass")
 
-    def prefilter(self, gas_or_solid="Feste Biomasse",
+    def prefilter(self, gas_liquid_solid="Gasförmige Biomasse",
                   technology="Verbrennungsmotor", output: int = 500):
 
         """
-        Filters by the given technology, On/Offshore and power output.
-        Translates the columns to be shorter names and more closely to
-        useful osm tags.
+        Filters by the given technology, solid_or_gas and power output.
 
         Parameters:
-        on_or_offshore: either "Windkraft an Land" or "Windkraft auf See"
-        technology: either "Horizontalläufer" or "Vertikalläufer"
+        gas_liquid_solid: either "Flüssige Biomasse" or
+        "Feste Biomasse" or "Gasförmige Biomasse"
+        technology: z.b. "Verbrenunngsmotor", "Dampfmotor", etc.
         output: the nominal power output of the plant. Exclude small plants.
         """
 
         # filter according to given or default values which are considered
-        df = self.df.loc[
-            (self.df["Nettonennleistung"] > output) &
-            (self.df["Technologie"] == technology)]
+        df = self.df.query(
+                "Biomasseart == @gas_liquid_solid &\
+                Technologie == @technology &\
+                Nettonennleistung > @output")
 
         df = df.astype({"Nettonennleistung": int})
         return df
