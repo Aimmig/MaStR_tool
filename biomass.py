@@ -16,7 +16,8 @@ if __name__ == '__main__':
     print("--- Test example: Overview over wind power plants in RLP")
     print("----------------------")
 
-    cols = ["Laengengrad", "Breitengrad", "Gemeinde", "Nettonennleistung", "EinheitMastrNummer", "Biomasseart"]
+    cols = ["Laengengrad", "Breitengrad", "Gemeinde",
+            "Nettonennleistung", "EinheitMastrNummer", "Biomasseart"]
 
     apply_and_print(plant_filter.get_plants_with_start_date, plants, cols=cols)
     apply_and_print(plant_filter.get_plants_with_opening_date, plants)

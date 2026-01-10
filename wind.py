@@ -6,7 +6,7 @@ from test_printing import apply_and_print
 if __name__ == '__main__':
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
     # Small test example to show usage
-    wka = MaStR_WKA(include_ref_eeg=True)
+    wka = MaStR_WKA()
     plants = wka.prefilter()
 
     # get only some region
@@ -17,7 +17,8 @@ if __name__ == '__main__':
     print("----------------------")
 
     # select columns
-    cols = ["Laengengrad", "Breitengrad", "Nettonennleistung", "EinheitMastrNummer", "Gemeinde", "Typenbezeichnung"]
+    cols = ["Laengengrad", "Breitengrad", "Nettonennleistung",
+            "EinheitMastrNummer", "Gemeinde", "Typenbezeichnung"]
 
     apply_and_print(plant_filter.get_plants_with_start_date, plants, cols=cols)
     apply_and_print(plant_filter.get_plants_with_opening_date, plants)

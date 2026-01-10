@@ -7,8 +7,8 @@ today = date.today().isoformat()
 
 class MaStR_biomass(base.MaStR_EEG_Base):
 
-    def __init__(self,  include_ref_eeg: bool = False):
-        super().__init__("biomass", include_ref_eeg)
+    def __init__(self):
+        super().__init__("biomass")
 
     def prefilter(self, gas_or_solid="Feste Biomasse",
                   technology="Verbrennungsmotor", output: int = 500):

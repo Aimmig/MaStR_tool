@@ -1,4 +1,4 @@
-from energycarrier import MaStR_EEG_Base as base 
+from energycarrier import MaStR_EEG_Base as base
 import pandas as pd
 from datetime import date
 
@@ -7,8 +7,8 @@ today = date.today().isoformat()
 
 class MaStR_WKA(base.MaStR_EEG_Base):
 
-    def __init__(self,  include_ref_eeg: bool = False):
-        super().__init__("wind", include_ref_eeg)
+    def __init__(self):
+        super().__init__("wind")
 
     def prefilter(self, on_or_offshore: str = "Windkraft an Land",
                   technology: str = "Horizontalläufer", output: int = 600):

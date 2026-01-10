@@ -8,7 +8,7 @@ today = date.today().isoformat()
 
 class MaStR_EEG_Base:
 
-    def __init__(self, energy_carrier: str, include_ref_eeg: bool = False):
+    def __init__(self, energy_carrier: str):
 
         """
         Downloads the Mastr unit data and filters for the given technology.
@@ -17,7 +17,6 @@ class MaStR_EEG_Base:
 
         Parameters:
         energy_carrier: The energy carrier to download
-        include_ref_eeg: If set includes also the older 'ref:eeg'
         """
 
         # download relevant data with api
