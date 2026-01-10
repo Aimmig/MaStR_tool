@@ -5,9 +5,9 @@ import operator
 today = date.today().isoformat()
 
 
-class MaStR_Filter:
+class DataFilter:
     @staticmethod
-    def filter_region(df: pd.DataFrame, state: str = None,
+    def get_region(df: pd.DataFrame, state: str = None,
                       county: str = None, municipality: str = None):
         """
         Filter data by some regional property
@@ -52,7 +52,7 @@ class MaStR_Filter:
         (Planed) Decommissioning can be safely assumed.
         This date can safely be assumed to be in the past.
         """
-        return MaStR_Filter.get_with_(df, "DatumEndgueltigeStilllegung")
+        return DataFilter.get_with_(df, "DatumEndgueltigeStilllegung")
 
     @staticmethod
     def get_plants_with_start_date(df: pd.DataFrame):
@@ -60,7 +60,7 @@ class MaStR_Filter:
         This date can safely be assumed to be in the past.
         Note this includes plant that already out of operation again.
         """
-        return MaStR_Filter.get_with_(df, "Inbetriebnahmedatum")
+        return DataFilter.get_with_(df, "Inbetriebnahmedatum")
 
     @staticmethod
     def get_plants_with_opening_date(df: pd.DataFrame,
@@ -77,7 +77,7 @@ class MaStR_Filter:
         if comp:
             return df[comp(df["GeplantesInbetriebnahmedatum"], comp_date)]
         else:
-            return MaStR_Filter.get_with_(df,
+            return DataFilter.get_with_(df,
                                           "GeplantesInbetriebnahmedatum")
 
     # ---- Basic filters based on comparison with today's date -----
@@ -85,7 +85,7 @@ class MaStR_Filter:
     @staticmethod
     def get_plants_with_future_opening_date(df: pd.DataFrame):
         """Return only plants which are expected to open."""
-        return MaStR_Filter.get_plants_with_opening_date(df, operator.gt)
+        return DataFilter.get_plants_with_opening_date(df, operator.gt)
 
     @staticmethod
     def get_plants_with_past_opening_date(df: pd.DataFrame):
@@ -93,7 +93,7 @@ class MaStR_Filter:
         but still aren't operational.
         This could mean any form delay, or it was never built at all.
         """
-        return MaStR_Filter.get_plants_with_opening_date(df, operator.lt)
+        return DataFilter.get_plants_with_opening_date(df, operator.lt)
 
     @staticmethod
     def get_plants_currently_operational(df: pd.DataFrame):

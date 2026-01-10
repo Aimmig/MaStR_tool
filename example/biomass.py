@@ -1,6 +1,6 @@
 import os
 from energycarrier.MaStR_biomass import MaStR_biomass 
-from utils.MaStR_Filter import MaStR_Filter as plant_filter
+from utils.DataFilter import DataFilter as plant_filter
 from test_printing import apply_and_print
 
 if __name__ == '__main__':
@@ -10,7 +10,7 @@ if __name__ == '__main__':
     plants = wka.prefilter(gas_liquid_solid="Feste Biomasse")
 
     # get only some region
-    plants = plant_filter.filter_region(plants, state="Rheinland-Pfalz")
+    plants = plant_filter.get_region(plants, state="Rheinland-Pfalz")
 
     # Filter by existence of different date types
     print("--- Test example: Overview over wind power plants in RLP")
