@@ -8,7 +8,7 @@ today = date.today().isoformat()
 class DataFilter:
     @staticmethod
     def get_region(df: pd.DataFrame, state: str = None,
-                      county: str = None, municipality: str = None):
+                   county: str = None, municipality: str = None):
         """
         Filter data by some regional property
 
@@ -77,8 +77,8 @@ class DataFilter:
         if comp:
             return df[comp(df["GeplantesInbetriebnahmedatum"], comp_date)]
         else:
-            return DataFilter.get_with_(df,
-                                          "GeplantesInbetriebnahmedatum")
+            return DataFilter.get_with_(
+                    df, "GeplantesInbetriebnahmedatum")
 
     # ---- Basic filters based on comparison with today's date -----
 
@@ -108,4 +108,50 @@ class DataFilter:
             (df["GeplantesInbetriebnahmedatum"].isnull()) &
             (df["DatumEndgueltigeStilllegung"].isnull())] \
             .sort_values("Inbetriebnahmedatum")
+        return df
+
+    @staticmethod
+    def prefilter_wind(df: pd.DataFrame,
+                       on_or_offshore: str = "Windkraft an Land",
+                       technology: str = "Horizontalläufer",
+                       output: int = 600):
+        """
+        Filters by the given technology, On/Offshore and power output.
+        Translates the columns to be shorter names and more closely to
+        useful osm tags.
+
+        Parameters:
+        on_or_offshore: either "Windkraft an Land" or "Windkraft auf See"
+        technology: either "Horizontalläufer" or "Vertikalläufer"
+        output: the nominal power output of the plant. Exclude small plants.
+        """
+
+        # filter according to given or default values which are considered
+        df = df.query(
+                "WindAnLandOderAufSee == @on_or_offshore &\
+                Technologie == @technology &\
+                Nettonennleistung > @output")
+        return df
+
+    @staticmethod
+    def prefilter_biomass(df: pd.DataFrame,
+                          gas_liquid_solid: str = "Gasförmige Biomasse",
+                          technology: str = "Verbrennungsmotor",
+                          output: int = 30):
+        """
+        Filters by the given technology, solid_or_gas and power output.
+
+        Parameters:
+        gas_liquid_solid: either "Flüssige Biomasse" or
+        "Feste Biomasse" or "Gasförmige Biomasse"
+        technology: z.b. "Verbrenunngsmotor", "Dampfmotor", etc.
+        output: the nominal power output of the plant. Exclude small plants.
+        """
+
+        # filter according to given or default values which are considered
+        df = df.query(
+                "Biomasseart == @gas_liquid_solid &\
+                Technologie == @technology &\
+                Nettonennleistung > @output")
+
         return df
