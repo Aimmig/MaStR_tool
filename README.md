@@ -35,3 +35,6 @@ Non renewable plants/generators have other specific values e.g. 'KWKxxxx' for Kr
 So it is generally recommended to primarily use the 'SEExxx' value as this doesn't depend
 on the energy carrier and avoids confusion with different ids.
 But since ref:EEG was/is still used with OSM it is included to potentially match existing tagging.
+
+To execute the examples provided first add the cloned directory to your path e.g.
+export PYTHONPATH=/path/to/cloned_dir
