@@ -6,7 +6,7 @@ import operator
 today = date.today().isoformat()
 
 
-class MaStR_EEG_Base:
+class Mastrdata:
 
     def __init__(self, energy_carrier: str):
 

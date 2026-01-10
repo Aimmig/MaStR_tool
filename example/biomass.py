@@ -1,5 +1,5 @@
 import os
-from energycarrier.MaStR_biomass import MaStR_biomass
+from energycarrier.Mastrdata import Mastrdata
 from utils.DataFilter import DataFilter as plant_filter
 from test_printing import apply_and_print
 
@@ -9,7 +9,7 @@ if __name__ == '__main__':
     cols = {"Gemeinde": "municipality",
             "Nettonennleistung": "generator:output:electricity",
             "Biomasseart": "biomassType"}
-    biomass = MaStR_biomass()
+    biomass = Mastrdata("biomass")
     plants = plant_filter.prefilter_biomass(
             biomass.df,
             gas_liquid_solid="Feste Biomasse")

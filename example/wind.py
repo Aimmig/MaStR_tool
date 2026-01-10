@@ -1,5 +1,5 @@
 import os
-from energycarrier.MaStR_WKA import MaStR_WKA
+from energycarrier.Mastrdata import Mastrdata
 from utils.DataFilter import DataFilter as plant_filter
 from test_printing import apply_and_print
 
@@ -11,7 +11,7 @@ if __name__ == '__main__':
             "Gemeinde": "municipality",
             "Typenbezeichnung": "model"}
     # download data and only keep the columns
-    wind = MaStR_WKA()
+    wind = Mastrdata("wind")
     # first specify some prefilters, like power output, generation method etc
     plants = plant_filter.prefilter_wind(wind.df)
     # get only some region
