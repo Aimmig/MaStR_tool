@@ -33,7 +33,7 @@ class MaStR_Filter:
     # ---- Basic filters based on NaT ------
 
     @staticmethod
-    def get_plants_with_(df: pd.DataFrame, date_type: str):
+    def get_with_(df: pd.DataFrame, date_type: str):
         """Template function to filter for plants that have
         the specified date_tye present. Also sorts data for
         convenience
@@ -53,7 +53,7 @@ class MaStR_Filter:
         (Planed) Decommissioning can be safely assumed.
         This date can safely be assumed to be in the past.
         """
-        return MaStR_Filter.get_plants_with_(df, "DatumEndgueltigeStilllegung")
+        return MaStR_Filter.get_with_(df, "DatumEndgueltigeStilllegung")
 
     @staticmethod
     def get_plants_with_start_date(df: pd.DataFrame):
@@ -61,7 +61,7 @@ class MaStR_Filter:
         This date can safely be assumed to be in the past.
         Note this includes plant that already out of operation again.
         """
-        return MaStR_Filter.get_plants_with_(df, "Inbetriebnahmedatum")
+        return MaStR_Filter.get_with_(df, "Inbetriebnahmedatum")
 
     @staticmethod
     def get_plants_with_opening_date(df: pd.DataFrame,
@@ -78,8 +78,8 @@ class MaStR_Filter:
         if comp:
             return df[comp(df["GeplantesInbetriebnahmedatum"], comp_date)]
         else:
-            return MaStR_Filter.
-        get_plants_with_(df, "GeplantesInbetriebnahmedatum")
+            return MaStR_Filter.get_with_(df,
+                                          "GeplantesInbetriebnahmedatum")
 
     # ---- Basic filters based on comparison with today's date -----
 
@@ -107,6 +107,6 @@ class MaStR_Filter:
         """
         df = df.loc[
             (df["GeplantesInbetriebnahmedatum"].isnull()) &
-            (df["DatumEndgueltigeStilllegung"].isnull())].
-        sort_values("Inbetriebnahmedatum")
+            (df["DatumEndgueltigeStilllegung"].isnull())] \
+            .sort_values("Inbetriebnahmedatum")
         return df
