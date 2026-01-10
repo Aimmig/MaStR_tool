@@ -9,15 +9,11 @@ if __name__ == '__main__':
     cols = {"Gemeinde": "municipality",
             "Nettonennleistung": "generator:output:electricity",
             "Biomasseart": "biomassType"}
-    biomass = Mastrdata("biomass")
-    plants = plant_filter.prefilter_biomass(
-            biomass.df,
-            gas_liquid_solid="Feste Biomasse")
-    # get only some region
-    plants = plant_filter.get_region(plants, state="Rheinland-Pfalz")
+    plants = Mastrdata("biomass").df
+    query_string = "Bundesland == 'Bayern' and Biomasseart == 'Feste Biomasse' and Technologie ==  'Dampfmotor'"
+    plants = plants.query(query_string)
+    plants = plant_filter.get_KWK(plants)
 
-    print("--- Test example: Overview over wind power plants in RLP")
-    print("----------------------")
     # Filter by existence of different date types and only print columns
     apply_and_print(plant_filter.get_plants_with_start_date,
                     plants, cols)

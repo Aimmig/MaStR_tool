@@ -12,10 +12,14 @@ if __name__ == '__main__':
             "ArtDerWasserkraftanlage": "technology"}
     # download data and only keep the columns
     plants = Mastrdata("hydro").df
-    
+
+    # define query string ....
+    query_string = "ArtDerWasserkraftanlage == 'Laufwasseranlage' and Bruttoleistung > 100"
+    plants = plants.query(query_string)
+
     # Filter by existence of different date types
     apply_and_print(plant_filter.get_plants_with_start_date,
-                    plants)
+                    plants, cols)
     apply_and_print(plant_filter.get_plants_with_opening_date,
                     plants)
     apply_and_print(plant_filter.get_plants_with_end_date,

@@ -12,10 +12,15 @@ if __name__ == '__main__':
             "Technologie": "technology"}
     # download data and only keep the columns
     plants = Mastrdata("gsgk").df
-    
+
+    # write custom query string like this
+    query_string = "Technologie == 'Dampfmotor'"
+    plants = plant_filter.get(plants, query_string)
+    # plants = plant_filter.get_KWK(plants)
+
     # Filter by existence of different date types
     apply_and_print(plant_filter.get_plants_with_start_date,
-                    plants)
+                    plants, cols)
     apply_and_print(plant_filter.get_plants_with_opening_date,
                     plants)
     apply_and_print(plant_filter.get_plants_with_end_date,

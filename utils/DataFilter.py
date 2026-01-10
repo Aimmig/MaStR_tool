@@ -7,27 +7,31 @@ today = date.today().isoformat()
 
 class DataFilter:
     @staticmethod
-    def get_region(df: pd.DataFrame, state: str = None,
-                   county: str = None, municipality: str = None):
+    def get(df: pd.DataFrame, expression):
         """
-        Filter data by some regional property
+        Filter data with given query
 
         Parameters:
-        state: The state which should be included.
-        county: The county which should be included.
-        municipality: The municipality which should be included.
+        expression: The expression to query
 
         Returns:
         The filtered dataframe
         """
+        return df.query(expression)
 
-        if state:
-            df = df[df["Bundesland"] == state]
-        if county:
-            df = df[df["Landkreis"] == county]
-        if municipality:
-            df = df[df["Gemeinde"] == municipality]
-        return df
+    @staticmethod
+    def get_KWK(df):
+        return df[df["KwkMastrNummer"].notnull()]
+
+    @staticmethod
+    def get_onshore(df):
+        on_or_offshore = "Windkraft an Land"
+        return DataFilter.get("WindAnLandOderAufSee == @on_or_offshore")
+
+    @staticmethod
+    def get_offshore(df):
+        on_or_offshore = "Windkraft auf See"
+        return DataFilter.get("WindAnLandOderAufSee == @on_or_offshore")
 
     # ---- Basic filters based on NaT ------
 
@@ -108,50 +112,4 @@ class DataFilter:
             (df["GeplantesInbetriebnahmedatum"].isnull()) &
             (df["DatumEndgueltigeStilllegung"].isnull())] \
             .sort_values("Inbetriebnahmedatum")
-        return df
-
-    @staticmethod
-    def prefilter_wind(df: pd.DataFrame,
-                       on_or_offshore: str = "Windkraft an Land",
-                       technology: str = "Horizontalläufer",
-                       output: int = 600):
-        """
-        Filters by the given technology, On/Offshore and power output.
-        Translates the columns to be shorter names and more closely to
-        useful osm tags.
-
-        Parameters:
-        on_or_offshore: either "Windkraft an Land" or "Windkraft auf See"
-        technology: either "Horizontalläufer" or "Vertikalläufer"
-        output: the nominal power output of the plant. Exclude small plants.
-        """
-
-        # filter according to given or default values which are considered
-        df = df.query(
-                "WindAnLandOderAufSee == @on_or_offshore &\
-                Technologie == @technology &\
-                Nettonennleistung > @output")
-        return df
-
-    @staticmethod
-    def prefilter_biomass(df: pd.DataFrame,
-                          gas_liquid_solid: str = "Gasförmige Biomasse",
-                          technology: str = "Verbrennungsmotor",
-                          output: int = 30):
-        """
-        Filters by the given technology, solid_or_gas and power output.
-
-        Parameters:
-        gas_liquid_solid: either "Flüssige Biomasse" or
-        "Feste Biomasse" or "Gasförmige Biomasse"
-        technology: z.b. "Verbrenunngsmotor", "Dampfmotor", etc.
-        output: the nominal power output of the plant. Exclude small plants.
-        """
-
-        # filter according to given or default values which are considered
-        df = df.query(
-                "Biomasseart == @gas_liquid_solid &\
-                Technologie == @technology &\
-                Nettonennleistung > @output")
-
         return df

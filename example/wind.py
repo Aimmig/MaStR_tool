@@ -11,11 +11,11 @@ if __name__ == '__main__':
             "Gemeinde": "municipality",
             "Typenbezeichnung": "model"}
     # download data and only keep the columns
-    wind = Mastrdata("wind")
-    # first specify some prefilters, like power output, generation method etc
-    plants = plant_filter.prefilter_wind(wind.df)
-    # get only some region
-    plants = plant_filter.get_region(plants, state="Rheinland-Pfalz")
+    plants = Mastrdata("wind").df
+
+    # custom query ..
+    query_string = "Bundesland == 'Rheinland-Pfalz' and Nettonennleistung > 500 and Hersteller == 'Nordex SE'"
+    plants = plants.query(query_string)
 
     print("--- Test example: Overview over wind power plants in RLP")
     print("----------------------")
