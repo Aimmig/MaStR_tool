@@ -1,9 +1,6 @@
 from open_mastr import Mastr
 import pandas as pd
-from datetime import date
 import operator
-
-today = date.today().isoformat()
 
 
 class Mastrdata:
@@ -23,18 +20,13 @@ class Mastrdata:
         db = Mastr()
         db.download(data=energy_carrier, api_data_types=["unit_data"],
                     api_location_type=["location_elec_generation"])
+
         # get the required tables
         table = energy_carrier + "_extended"
-        df_extended = pd.read_sql_query(
-            "SELECT name FROM sqlite_master WHERE type='table';",
-            con=db.engine)
-        df_extended = pd.read_sql(sql=table, con=db.engine)
+        df_extended = Mastrdata.get_dataFrame(db, table)
 
         table = energy_carrier + "_eeg"
-        df_eeg = pd.read_sql_query(
-            "SELECT name FROM sqlite_master WHERE type='table';",
-            con=db.engine)
-        df_eeg = pd.read_sql(sql=table, con=db.engine)
+        df_eeg = Mastrdata.get_dataFrame(db, table)
 
         key = 'EegMastrNummer'
         # TO-DO:
@@ -50,3 +42,16 @@ class Mastrdata:
 
         # filter data before further processing
         self.df = df.dropna(axis=1, how='all')
+
+    @staticmethod
+    def get_dataFrame(db, table: str):
+
+        """
+        Helper Method to get one table from the database
+        """
+
+        df = pd.read_sql_query(
+            "SELECT name FROM sqlite_master WHERE type='table';",
+            con=db.engine)
+        df = pd.read_sql(sql=table, con=db.engine)
+        return df
