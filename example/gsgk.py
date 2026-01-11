@@ -1,6 +1,6 @@
 import os
 from energycarrier.Mastrdata import Mastrdata
-from utils.DataFilter import DataFilter as plant_filter
+from utils.DataFilter import DataFilter as PlantFilter
 from utils.Constants import COMMON_COLS
 from utils.PostProcessing import PostProcessing
 
@@ -17,8 +17,8 @@ if __name__ == '__main__':
     query_string = "Technologie == 'Verbrennungsmotor' and Energietraeger == 'Klärschlamm'"
     plants = plants.query(query_string)
 
-    plants = plant_filter.get_KWK(plants)
-    plants = plant_filter.get_plants_currently_operational(plants)
+    plants = PlantFilter.get_KWK(plants)
+    plants =PlantFilter.get_plants_currently_operational(plants)
 
     # format power and rename
     plants = PostProcessing.format_power(plants, "MW")

@@ -5,7 +5,7 @@ from utils.DataFilter import DataFilter
 
 class PostProcessing:
     @staticmethod
-    def replace_manufacturer_str(val: str, manufacturer: tuple) -> str:
+    def replace_manufacturer_str(val: str, manufacturer: tuple) -> str | None:
         old = manufacturer[0]
         new = manufacturer[1]
         if val is not None and old in val:
@@ -24,7 +24,7 @@ class PostProcessing:
         return df
 
     @staticmethod
-    def format_lambda(df, column: str, manufacturer: tuple):
+    def format_lambda(df: pd.DataFrame, column: str, manufacturer: tuple):
         df[column] = df[column].apply(
                 lambda x: PostProcessing.replace_manufacturer_str(
                     x, manufacturer)
