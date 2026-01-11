@@ -1,26 +1,26 @@
 import os
 from energycarrier.Mastrdata import Mastrdata
 from utils.DataFilter import DataFilter as plant_filter
-from utils.DataFilter import COMMON_COLS
-from test_printing import apply_and_print
+from utils.Constants import COMMON_COLS
 
 if __name__ == '__main__':
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
-    # Small test example to show usage
-    # select columns to keep with osm-translation
+
+    # columns with osm-translation
     cols = COMMON_COLS
     cols.update({"Nettonennleistung": "generator:output:electricity",
                  "Gemeinde": "municipality",
                  "Technologie": "technology"
                  })
-    # download data and only keep the columns
+    # download data
     plants = Mastrdata("gsgk").df
 
     # write custom query string like this
-    query_string = "Technologie == 'Dampfmotor'"
+    query_string = "Technologie == 'Verbrennungsmotor' and Energietraeger == 'Klärschlamm'"
     plants = plant_filter.get(plants, query_string)
-    # plants = plant_filter.get_KWK(plants)
-
-    # Filter by existence of different date types
-    apply_and_print(plant_filter.get_plants_with_start_date,
-                    plants, cols)
+    plants = plant_filter.get_KWK(plants)
+    plants = plant_filter.get_plants_currently_operational(plants)
+    plants = plant_filter.get_columns(plants, cols)
+    plants = plant_filter.get_renamed(plants, cols)
+    print(plants)
+    plants.to_csv("gsgk.csv")

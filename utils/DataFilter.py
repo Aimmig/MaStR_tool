@@ -117,3 +117,12 @@ class DataFilter:
             (df["DatumEndgueltigeStilllegung"].isnull())] \
             .sort_values("Inbetriebnahmedatum")
         return df
+
+
+    @staticmethod
+    def get_columns(df: pd.DataFrame, cols: dict):
+        return df[list(cols.keys())]
+
+    @staticmethod
+    def get_renamed(df: pd.DataFrame, cols: dict):
+        return df.rename(cols, axis='columns')
