@@ -24,19 +24,24 @@ e.g. the height for wind turbines, others can be added/removed as required.
 Most relevant is the 'MaStR-Nummer der Einheit' (OSM ref:mastr) in the form of SEExxxxx
 that can be used to cross-reference with the original data and therefore allows to update
 plants over their lifecycle.
-This is issued for every sort of generator/power plant and can serve as a unique id. 
+This is issued for every individual generator(!) and can serve as a unique id.
 
 Note there's also 'EEG-Anlagenschlüssel' (OSM ref:EEG) in the form Exxxxxxxxxxxxxxx,
 this is only issued for renewable energy plants and only after the validation of the
 grid operator which can take a few months even after the plant is already in operation,
 so this is not ideal to use for cross-referencing.
-Similar there's also 'MaStR-Nummer der EEG-Anlage' in the form EEGxxxxx which is still
-another identifer in the data.
-Non renewable plants/generators have other specific values e.g. 'KWKxxxx' for Kraft-Wärmekopplung.
+Similar there's also 'MaStR-Nummer der EEG-Anlage' in the form EEGxxxxx which is used to
+identify the whole plant e.g. to group multiple generators at the same location together.
+
+Some plants e.g biomass, waste and non-renewable have other specific values e.g. 'KWKxxxx'
+for Kraft-Wärmekopplung.
 
 So it is generally recommended to primarily use the 'SEExxx' value as this doesn't depend
 on the energy carrier and avoids confusion with different ids.
 But since ref:EEG was/is still used with OSM can be included to potentially match existing tagging.
+For plants where only the whole plant is mapped e.g. biomass plants often have multiple generators
+which are not obvious to differentiate on the ground this might be included too. These plants
+then have multiple "SEExxx" numbers attached to it in the dataset.
 Also latitude/longitude are always included, as these are the most relevant tags for matching.
 
 To execute the examples provided first add the cloned directory to your path e.g.

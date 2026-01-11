@@ -36,9 +36,14 @@ class Mastrdata:
             con=db.engine)
         df_eeg = pd.read_sql(sql=table, con=db.engine)
 
-        # join on the internally used key
         key = 'EegMastrNummer'
-        # join and remove some duplicate columns which
+        # TO-DO:
+        # Adapt this join to also work properly with plants
+        # where no 1 to 1 matching exists between both tables.
+        # Often one plant consists of multiple generators.
+        # In these cases the extended table contains all individual
+        # units and the eeg table contains the aggregated plant
+        # that these generators are part of.
         df = df_extended.merge(df_eeg, on=key, how='left',
                                suffixes=('', '_DROP')).filter(
                                        regex='^(?!.*_DROP)')
