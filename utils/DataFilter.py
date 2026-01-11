@@ -7,18 +7,6 @@ today = date.today().isoformat()
 
 class DataFilter:
     @staticmethod
-    def get(df: pd.DataFrame, expression: str) -> pd.DataFrame:
-        """
-        Filter data with given query
-
-        Parameters:
-        expression: The expression to query
-
-        Returns: pd.DataFrame: The filtered dataframe
-        """
-        return df.query(expression)
-
-    @staticmethod
     def get_EEG(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
         return df[df["EegMastrNummer"].notnull()]
@@ -32,13 +20,13 @@ class DataFilter:
     def get_onshore(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
         on_or_offshore = "Windkraft an Land"
-        return DataFilter.get(df, "WindAnLandOderAufSee == @on_or_offshore")
+        return df.query("WindAnLandOderAufSee == @on_or_offshore")
 
     @staticmethod
     def get_offshore(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
         on_or_offshore = "Windkraft auf See"
-        return DataFilter.get(df, "WindAnLandOderAufSee == @on_or_offshore")
+        return df.query("WindAnLandOderAufSee == @on_or_offshore")
 
     # ---- Basic filters based on NaT ------
 
