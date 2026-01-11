@@ -44,7 +44,7 @@ class Mastrdata:
         self.df = df.dropna(axis=1, how='all')
 
     @staticmethod
-    def get_dataFrame(db, table: str):
+    def get_dataFrame(db, table: str) -> pd.DataFrame:
 
         """
         Helper Method to get one table from the database

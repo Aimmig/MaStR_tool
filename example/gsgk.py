@@ -2,6 +2,7 @@ import os
 from energycarrier.Mastrdata import Mastrdata
 from utils.DataFilter import DataFilter as plant_filter
 from utils.Constants import COMMON_COLS
+from utils.PostProcessing import PostProcessing
 
 if __name__ == '__main__':
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
@@ -12,15 +13,15 @@ if __name__ == '__main__':
                  "Gemeinde": "municipality",
                  "Technologie": "technology"
                  })
-    # download data
     plants = Mastrdata("gsgk").df
-
-    # write custom query string like this
     query_string = "Technologie == 'Verbrennungsmotor' and Energietraeger == 'Klärschlamm'"
-    plants = plant_filter.get(plants, query_string)
+    plants = plants.query(query_string)
+
     plants = plant_filter.get_KWK(plants)
     plants = plant_filter.get_plants_currently_operational(plants)
-    plants = plant_filter.get_columns(plants, cols)
-    plants = plant_filter.get_renamed(plants, cols)
+
+    # format power and rename
+    plants = PostProcessing.format_power(plants, "MW")
+    plants = PostProcessing.get_renamed(plants, cols)
     print(plants)
     plants.to_csv("gsgk.csv")
