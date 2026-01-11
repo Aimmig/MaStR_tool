@@ -24,13 +24,3 @@ if __name__ == '__main__':
     # Filter by existence of different date types
     apply_and_print(plant_filter.get_plants_with_start_date,
                     plants, cols)
-    apply_and_print(plant_filter.get_plants_with_opening_date,
-                    plants)
-    apply_and_print(plant_filter.get_plants_with_end_date,
-                    plants)
-    apply_and_print(plant_filter.get_plants_currently_operational,
-                    plants)
-    apply_and_print(plant_filter.get_plants_with_future_opening_date,
-                    plants)
-    apply_and_print(plant_filter.get_plants_with_past_opening_date,
-                    plants, cols)
