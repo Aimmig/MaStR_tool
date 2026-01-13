@@ -27,4 +27,4 @@ if __name__ == '__main__':
     plants = PostProcessing.format_power(plants, "MW")
     plants = PostProcessing.get_renamed(plants, cols)
     print(plants)
-    plants.to_csv("wind.csv")
+    plants.to_csv("wind.csv", index=False)
