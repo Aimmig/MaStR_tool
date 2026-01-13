@@ -14,7 +14,7 @@ MANUFACTURERS = {"Nordex": "Nordex",
                  "Kenersys": "Kenersys",
                  "Siemens Gamesa": "Siemens Gamesa",
                  "Gamesa Corporación Tecnológica": "Gamesa",
-                 "Siemens Windenergie GmbH" : "Siemens Windenergie GmbH"
+                 "Siemens Windenergie GmbH": "Siemens Windenergie GmbH",
                  "REpower": "REpower",
                  "DeWind": "DeWind",
                  "Senvion": "Senvion",
@@ -28,12 +28,12 @@ MANUFACTURERS = {"Nordex": "Nordex",
                  "AN Windenergie": "AN Windenergie",
                  "Jacobs": "Jacobs",
                  "HSW": "HSW",
-                 "Lagerwey": "Lagerwey"
+                 "Lagerwey": "Lagerwey",
                  "Amperax": "Amperax",
-                 "Adwen": "Adwen"
+                 "Adwen": "Adwen",
                  }
 
 COMMON_COLS = {"Laengengrad": "lon",
                "Breitengrad": "lat",
-               "EinheitMastrNummer": "ref:mastr"
+               "EinheitMastrNummer": "ref:mastr",
                }

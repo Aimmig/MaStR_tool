@@ -18,7 +18,7 @@ if __name__ == '__main__':
     plants = plants.query(query_string)
 
     plants = PlantFilter.get_KWK(plants)
-    plants =PlantFilter.get_plants_currently_operational(plants)
+    plants = PlantFilter.get_plants_currently_operational(plants)
 
     # format power and rename
     plants = PostProcessing.format_power(plants, "MW")

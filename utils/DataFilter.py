@@ -40,7 +40,8 @@ class DataFilter:
         date_type: Either "DatumEndgueltigeStilllegung",
                    "Inbetriebnahmedatum", "GeplantesInbetriebnahmedatum"
 
-        Returns: pd.DataFrame: Sorted dataframe with plants with selected date_type present
+        Returns: pd.DataFrame: Sorted dataframe with plants with
+        selected date_type present
         """
         return df[df[date_type].notnull()]
 

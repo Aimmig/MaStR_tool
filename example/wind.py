@@ -17,7 +17,6 @@ if __name__ == '__main__':
     plants = Mastrdata("wind").df
     query_string = "Bundesland == 'Rheinland-Pfalz' and InstallierteLeistung > 300 and Technologie == 'Horizontalläufer'"
     plants = plants.query(query_string)
-    
     plants = PlantFilter.get_plants_with_end_date(plants)
 
     # some more processing
