@@ -33,7 +33,28 @@ MANUFACTURERS = {"Nordex": "Nordex",
                  "Adwen": "Adwen",
                  }
 
+ENERGY_SOURCES = ["wind", "hydro", "biomass", "gsgk"]
+
 COMMON_COLS = {"Laengengrad": "lon",
                "Breitengrad": "lat",
                "EinheitMastrNummer": "ref:mastr",
+               }
+
+SELECT_COLS = {"EegMastrNummer": "ref:EEG",
+               "InstallierteLeistung": "generator:output:electricity",
+               "Nettonennleistung": "generator:output:electricity",
+               "Inbetriebnahmedatum": "start_date",
+               "GeplantesInbetriebnahmedatum": "opening_date",
+               "DatumEndgueltigeStilllegung": "end_date",
+               "Hersteller": "manufacturer",
+               "Typenbezeichnung": "model",
+               "NameStromerzeugungseinheit": "nameUnit",
+               "Energietraeger": "energyCarrier",
+               "Biomasseart": "typeOfBiomas",
+               "Hauptbrennstoff": "mainFuel",
+               "Gemeinde": "municipality",
+               "Landkreis": "county",
+               "Bundesland": "state",
+               "Technologie": "technology",
+               "ArtDerWasserkraftanlage": "technology",
                }

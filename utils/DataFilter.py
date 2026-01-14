@@ -9,24 +9,36 @@ class DataFilter:
     @staticmethod
     def get_EEG(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
-        return df[df["EegMastrNummer"].notnull()]
+        eegnumber = "EegMastrNummer"
+        if eegnumber not in df.columns.values:
+            return df
+        return df[df[eegnumber].notnull()]
 
     @staticmethod
     def get_KWK(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
-        return df[df["KwkMastrNummer"].notnull()]
+        kwknumber = "KwKMastrNummer"
+        if kwknumber not in df.columns.values:
+            return df
+        return df[df[kwknumber].notnull()]
 
     @staticmethod
     def get_onshore(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
-        on_or_offshore = "Windkraft an Land"
-        return df.query("WindAnLandOderAufSee == @on_or_offshore")
+        col_key = 'WindAnLandOderAufSee'
+        on_or_offshore = 'Windkraft an Land'
+        if col_key not in df.columns.values:
+            return df
+        return df.query(f"{col_key} == '{on_or_offshore}'")
 
     @staticmethod
     def get_offshore(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
-        on_or_offshore = "Windkraft auf See"
-        return df.query("WindAnLandOderAufSee == @on_or_offshore")
+        col_key = 'WindAnLandOderAufSee'
+        on_or_offshore = 'Windkraft auf See'
+        if col_key not in df.columns.values:
+            return df
+        return df.query(f"{col_key} == '{on_or_offshore}'")
 
     # ---- Basic filters based on NaT ------
 
@@ -123,5 +135,8 @@ class DataFilter:
         return df
 
     @staticmethod
-    def get_columns(df: pd.DataFrame, cols: dict) -> pd.DataFrame:
-        return df[list(cols.keys())]
+    def get_without_small(df: pd.DataFrame, minPower: int) -> pd.DataFrame:
+        power_col = "Nettonennleistung"
+        if power_col not in df.columns.values:
+            return df
+        return df.query(f"{power_col} > {minPower}")
