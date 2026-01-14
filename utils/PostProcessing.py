@@ -14,7 +14,6 @@ class PostProcessing:
             return val
 
     @staticmethod
-    # TO-DO make power variable parameter to work with different cases
     def format_power(df: pd.DataFrame, unit: str) -> pd.DataFrame:
         power = "InstallierteLeistung"
         if power not in df.columns.values:
@@ -51,9 +50,9 @@ class PostProcessing:
 
     @staticmethod
     def printData(args, data: pd.DataFrame) -> None:
-        # check subset before printing to avoid crash
-        # when selecting non existing values
-        cols = PostProcessing.createColumnDict(args)
+        # generate full dict and then only keep existing ones
+        allCols = PostProcessing.createColumnDict(args)
+        cols = {k: allCols[k] for k in allCols.keys() if k in data.columns.values}
         translatedHeader = True
         if args.translate:
             translatedHeader = list(cols.values())
