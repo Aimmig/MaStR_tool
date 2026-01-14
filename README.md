@@ -10,15 +10,14 @@ see https://wiki.openstreetmap.org/wiki/DE:Permissions/Marktstammdatenregister.
 As usual, no permission is granted to actually import any data using this tool without
 consulting the community (and me, the author) beforehand.
 
-A template class and examples for wind, gsgk, hydro and biomass are provided.
 Note that the dataset for solar and storage is very large and takes a long time to download,
 because it also includes millions of small home installations.
 The full data can also be viewed after downloading using e.g. a regular sqlite viewer
 etc where all columns and possible values can be investigated.
 Also see documention of open-MaStR and of MaStR for reference.
 
-This script mainly uses the german names, but these can be replaced with appropriate english
-terms if required. Refer to OSM wiki and the documentation of
+This script mainly uses the german names, but these can be translated if required.
+Refer to OSM wiki and the documentation of
 Markstammdatenregister for matching the names/tags between them.
 Relevant data is start/end/opening date of a plant, location, power output and
 for wind turbines e.g. manufacturere, height, rotor diameter.
@@ -49,9 +48,13 @@ These plants have multiple "SEExxx" numbers attached to it in the dataset.
 To execute the examples provided first add the cloned directory to your path e.g.
 export PYTHONPATH=/path/to/cloned_dir
 
-The workflow usage is something like the following (see also provided examples):
-    - Download data for one energy carrier using the provided Mastrdata class
-    - define additional columns and their translations as dict depending on the energy carrier
-    - define and apply custom query string filter depending on the energy carrier
-    - using the provided DataFilter to apply general filters not depending on the energy carrier
-    - using the provided PostProcessing to e.g. adjust names of manufactureres, format power values as needed and in the last step rename the columns to match OSM
+The workflow usage is something like the following:
+- Download data for one energy carrier using the provided Mastrdata class
+- define additional columns and their translations as dict depending on the energy carrier
+- define and apply custom query string filter depending on the energy carrier
+- using the provided DataFilter to apply general filters not depending on the energy carrier
+- using the provided PostProcessing to e.g. adjust names of manufactureres, format power values
+  as needed and in the last step rename the columns to match OSM
+  
+Some filters can be used (see the help page of script) directly as options,
+others can be added via custom query strings "key1 = 'value1' and/or key2 = 'value2' and/or ...."
