@@ -1,0 +1,4 @@
+"Biomasseart == 'Gasförmige Biomasse' and Landkreis == 'Alb-Donau-Kreis'"
+"Bundesland == 'Rheinland-Pfalz' and InstallierteLeistung > 300 and Technologie == 'Horizontalläufer'"
+"Technologie == 'Verbrennungsmotor' and Energietraeger == 'Klärschlamm'"
+"ArtDerWasserkraftanlage == 'Laufwasseranlage' and Bruttoleistung > 100"
