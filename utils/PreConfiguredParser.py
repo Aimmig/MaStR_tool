@@ -17,8 +17,7 @@ def createParser():
         help="The energy source for which to download the data from MaStR",
         )
     parser.add_argument(
-        "output",
-        nargs='?',
+        "--output", "-o",
         type=str,
         help="Optional file to write csv data to",
         )
@@ -93,11 +92,6 @@ def createParser():
         help="Only with KWKxxx",
         )
     parser.add_argument(
-        "--translate", "-t",
-        action=argparse.BooleanOptionalAction,
-        help="Translate column names before writing/printing",
-        )
-    parser.add_argument(
         "--query", "-q",
         type=str,
         help="Aditional query string \"key='value' and/or key='value' ....\"",
@@ -110,6 +104,5 @@ def createParser():
 
     parser.set_defaults(formatPower="kW")
     parser.set_defaults(formatManufacturer=True)
-    parser.set_defaults(translate=True)
     parser.set_defaults(discardSmall=30)
     return parser

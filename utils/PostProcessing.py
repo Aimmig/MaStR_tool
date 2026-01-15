@@ -1,5 +1,5 @@
 import pandas as pd
-from utils.Constants import MANUFACTURERS, COMMON_COLS, SELECT_COLS
+from utils.Constants import MANUFACTURERS, COMMON_COLS, SELECT_COLS, GEOMETRY_COLS
 from utils.DataFilter import DataFilter
 
 
@@ -41,26 +41,18 @@ class PostProcessing:
         return df
 
     @staticmethod
-    def createColumnDict(args) -> dict:
-        cols = COMMON_COLS
+    def createColumnDict(args, withGeometry: bool) -> dict:
+        cols = dict(COMMON_COLS)
+        if withGeometry:
+            cols.update(GEOMETRY_COLS)
         if args.keepColumns:
             colsToKeep = {k: SELECT_COLS[k] for k in args.keepColumns}
             cols.update(colsToKeep)
         return cols
 
     @staticmethod
-    def printData(args, data: pd.DataFrame) -> None:
+    def translate(data: pd.DataFrame, args) -> pd.DataFrame:
         # generate full dict and then only keep existing ones
-        allCols = PostProcessing.createColumnDict(args)
+        allCols = PostProcessing.createColumnDict(args, withGeometry=True)
         cols = {k: allCols[k] for k in allCols.keys() if k in data.columns.values}
-        translatedHeader = True
-        if args.translate:
-            translatedHeader = list(cols.values())
-        csv = data.to_csv(
-                args.output,
-                header=translatedHeader,
-                columns=list(cols.keys()),
-                index=False,
-                )
-        if csv:
-            print(csv)
+        return data[cols.keys()].rename(columns=cols)

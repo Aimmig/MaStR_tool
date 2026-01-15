@@ -35,6 +35,7 @@ MANUFACTURERS = {"Nordex": "Nordex",
 
 ENERGY_SOURCES = ["wind", "hydro", "biomass", "gsgk"]
 
+GEOMETRY_COLS = {"geometry": "geometry"}
 COMMON_COLS = {"Laengengrad": "lon",
                "Breitengrad": "lat",
                "EinheitMastrNummer": "ref:mastr",

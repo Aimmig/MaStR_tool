@@ -1,6 +1,7 @@
 import argparse
 import os
 from energycarrier.Mastrdata import Mastrdata
+from utils.Constants import SELECT_COLS
 from utils.DataFilter import DataFilter as PlantFilter
 from utils.PostProcessing import PostProcessing
 from utils.PreConfiguredParser import createParser
@@ -12,7 +13,7 @@ def getData(args) -> pd.DataFrame:
     Wrapper function that gets the data and applies the parser args.
     Returns: The pandas DataFrame
     """
-    cols = PostProcessing.createColumnDict(args)
+    #cols = PostProcessing.createColumnDict(args)
     plants = Mastrdata(args.source).df
 
     if args.query:
@@ -51,7 +52,19 @@ if __name__ == "__main__":
     parser = createParser()
     args = parser.parse_args()
     plants = getData(args)
-    PostProcessing.printData(args, plants)
+    plants = PostProcessing.translate(plants, args)
+    cols_wo_geometry = list(PostProcessing.createColumnDict(args, withGeometry=False).values())
     if args.plot:
-        plotted_map = plants.explore(column="Nettonennleistung", popup=["Hersteller", "Typenbezeichnung", "Nettonennleistung", "Inbetriebnahmedatum", "EinheitMastrNummer"], color="red")
+        #main_col = SELECT_COLS["Nettonennleistung"]
+        main_col = "year"
+        plants["year"] = plants['start_date'].dt.year
+        plotted_map = plants.explore(
+                column=main_col,
+                popup=cols_wo_geometry,
+                )
         plotted_map.save('map.html')
+    if args.output:
+        csv = plants[cols_wo_geometry].to_csv(
+                args.output,
+                index=False,
+                )
