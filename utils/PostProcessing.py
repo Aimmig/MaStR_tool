@@ -1,5 +1,6 @@
 import pandas as pd
-from utils.Constants import MANUFACTURERS, COMMON_COLS, SELECT_COLS, GEOMETRY_COLS
+from utils.Constants import MANUFACTURERS
+from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS
 from utils.DataFilter import DataFilter
 
 
@@ -41,18 +42,18 @@ class PostProcessing:
         return df
 
     @staticmethod
-    def createColumnDict(args, withGeometry: bool) -> dict:
-        cols = dict(COMMON_COLS)
-        if withGeometry:
-            cols.update(GEOMETRY_COLS)
-        if args.keepColumns:
-            colsToKeep = {k: SELECT_COLS[k] for k in args.keepColumns}
-            cols.update(colsToKeep)
-        return cols
-
-    @staticmethod
-    def translate(data: pd.DataFrame, args) -> pd.DataFrame:
+    def translate(data: pd.DataFrame, keepColumns) -> pd.DataFrame:
         # generate full dict and then only keep existing ones
-        allCols = PostProcessing.createColumnDict(args, withGeometry=True)
+        allCols = ColumnDict(keepColumns, withGeometry=True)
         cols = {k: allCols[k] for k in allCols.keys() if k in data.columns.values}
         return data[cols.keys()].rename(columns=cols)
+
+
+def ColumnDict(keepColumns, withGeometry: bool) -> dict:
+    cols = dict(COMMON_COLS)
+    if withGeometry:
+        cols.update(GEOMETRY_COLS)
+    if keepColumns:
+        colsToKeep = {k: SELECT_COLS[k] for k in keepColumns}
+        cols.update(colsToKeep)
+    return cols

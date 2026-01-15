@@ -44,7 +44,8 @@ class Mastrdata:
         # filter data before further processing
         df = df.dropna(axis=1, how='all')
         gdf = gpd.GeoDataFrame(
-            df, geometry=gpd.points_from_xy(df.Laengengrad, df.Breitengrad), crs="EPSG:4326"
+            df, geometry=gpd.points_from_xy(df.Laengengrad, df.Breitengrad),
+            crs="EPSG:4326",
         )
         self.df = gdf
 

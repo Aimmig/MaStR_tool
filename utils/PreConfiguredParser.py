@@ -98,8 +98,9 @@ def createParser():
         )
     parser.add_argument(
         "--plot",
-        action='store_true',
-        help="wether to plot the data",
+        type=str,
+        nargs='?',
+        help="Wether to plot data and which column to use as colour",
         )
 
     parser.set_defaults(formatPower="kW")

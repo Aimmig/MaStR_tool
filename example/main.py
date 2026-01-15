@@ -4,16 +4,17 @@ from energycarrier.Mastrdata import Mastrdata
 from utils.Constants import SELECT_COLS
 from utils.DataFilter import DataFilter as PlantFilter
 from utils.PostProcessing import PostProcessing
+from utils.PostProcessing import ColumnDict
 from utils.PreConfiguredParser import createParser
 import pandas as pd
 import matplotlib.pyplot as plt
+
 
 def getData(args) -> pd.DataFrame:
     """
     Wrapper function that gets the data and applies the parser args.
     Returns: The pandas DataFrame
     """
-    #cols = PostProcessing.createColumnDict(args)
     plants = Mastrdata(args.source).df
 
     if args.query:
@@ -44,7 +45,23 @@ def getData(args) -> pd.DataFrame:
         plants = PostProcessing.format_manufacturer(plants)
 
     plants = PostProcessing.format_power(plants, args.formatPower)
+    plants = PostProcessing.translate(plants, args.keepColumns)
     return plants
+
+
+def plot(args, plants):
+    cols = list(ColumnDict(args.keepColumns, withGeometry=False).values())
+    if args.plot:
+        if args.plot == "Nettonennleistung":
+            main_col = SELECT_COLS["Nettonennleistung"]
+        if args.plot == "year":
+            main_col = "year"
+            plants["year"] = plants['start_date'].dt.year
+        plotted_map = plants.explore(
+            column=main_col,
+            popup=cols,
+            )
+        plotted_map.save('map.html')
 
 
 if __name__ == "__main__":
@@ -52,19 +69,10 @@ if __name__ == "__main__":
     parser = createParser()
     args = parser.parse_args()
     plants = getData(args)
-    plants = PostProcessing.translate(plants, args)
-    cols_wo_geometry = list(PostProcessing.createColumnDict(args, withGeometry=False).values())
-    if args.plot:
-        #main_col = SELECT_COLS["Nettonennleistung"]
-        main_col = "year"
-        plants["year"] = plants['start_date'].dt.year
-        plotted_map = plants.explore(
-                column=main_col,
-                popup=cols_wo_geometry,
-                )
-        plotted_map.save('map.html')
+    plot(args, plants)
+    cols = list(ColumnDict(args.keepColumns, withGeometry=False).values())
     if args.output:
-        csv = plants[cols_wo_geometry].to_csv(
+        csv = plants[cols].to_csv(
                 args.output,
                 index=False,
                 )
