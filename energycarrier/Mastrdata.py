@@ -1,5 +1,6 @@
 from open_mastr import Mastr
 import pandas as pd
+import geopandas as gpd
 import operator
 
 
@@ -41,7 +42,11 @@ class Mastrdata:
                                        regex='^(?!.*_DROP)')
 
         # filter data before further processing
-        self.df = df.dropna(axis=1, how='all')
+        df = df.dropna(axis=1, how='all')
+        gdf = gpd.GeoDataFrame(
+            df, geometry=gpd.points_from_xy(df.Laengengrad, df.Breitengrad), crs="EPSG:4326"
+        )
+        self.df = gdf
 
     @staticmethod
     def get_dataFrame(db: Mastr, table: str) -> pd.DataFrame:

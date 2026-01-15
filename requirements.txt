@@ -1,3 +1,8 @@
 open_mastr==0.16.1
 pandas==2.3.3
+geopandas==1.1.2
+mapclassify==2.10.0
+matplotlib==3.10.8
+PyQt6==6.10.2
+folium==0.20.0
 pycodestyle==2.14.0

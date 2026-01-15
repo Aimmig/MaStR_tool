@@ -5,7 +5,7 @@ from utils.DataFilter import DataFilter as PlantFilter
 from utils.PostProcessing import PostProcessing
 from utils.PreConfiguredParser import createParser
 import pandas as pd
-
+import matplotlib.pyplot as plt
 
 def getData(args) -> pd.DataFrame:
     """
@@ -52,3 +52,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     plants = getData(args)
     PostProcessing.printData(args, plants)
+    if args.plot:
+        plotted_map = plants.explore(column="Nettonennleistung", popup=["Hersteller", "Typenbezeichnung", "Nettonennleistung", "Inbetriebnahmedatum", "EinheitMastrNummer"], color="red")
+        plotted_map.save('map.html')

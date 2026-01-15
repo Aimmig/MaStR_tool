@@ -102,6 +102,11 @@ def createParser():
         type=str,
         help="Aditional query string \"key='value' and/or key='value' ....\"",
         )
+    parser.add_argument(
+        "--plot",
+        action='store_true',
+        help="wether to plot the data",
+        )
 
     parser.set_defaults(formatPower="kW")
     parser.set_defaults(formatManufacturer=True)

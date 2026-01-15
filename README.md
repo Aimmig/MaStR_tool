@@ -58,3 +58,5 @@ The workflow usage is something like the following:
   
 Some filters can be used (see the help page of script) directly as options,
 others can be added via custom query strings "key1 = 'value1' and/or key2 = 'value2' and/or ...."
+
+Optionally the queried data can plotted on a map, to compare the data with existing OSM data.
