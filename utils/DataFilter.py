@@ -9,18 +9,18 @@ class DataFilter:
     @staticmethod
     def get_EEG(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
-        eegnumber = "EegMastrNummer"
-        if eegnumber not in df.columns.values:
+        eeg_number = "EegMastrNummer"
+        if eeg_number not in df.columns.values:
             return df
-        return df[df[eegnumber].notnull()]
+        return df[df[eeg_number].notnull()]
 
     @staticmethod
     def get_KWK(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
-        kwknumber = "KwKMastrNummer"
-        if kwknumber not in df.columns.values:
+        kwk_number = "KwKMastrNummer"
+        if kwk_number not in df.columns.values:
             return df
-        return df[df[kwknumber].notnull()]
+        return df[df[kwk_number].notnull()]
 
     @staticmethod
     def get_onshore(df: pd.DataFrame) -> pd.DataFrame:
@@ -135,8 +135,8 @@ class DataFilter:
         return df
 
     @staticmethod
-    def get_without_small(df: pd.DataFrame, minPower: int) -> pd.DataFrame:
+    def get_without_small(df: pd.DataFrame, min_power: int) -> pd.DataFrame:
         power_col = "Nettonennleistung"
         if power_col not in df.columns.values:
             return df
-        return df.query(f"{power_col} > {minPower}")
+        return df.query(f"{power_col} > {min_power}")

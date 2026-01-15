@@ -39,7 +39,7 @@ def createParser():
     parser.add_argument(
         "--formatManufacturer", "-m",
         action=argparse.BooleanOptionalAction,
-        help="wether to shorten manufacturer names",
+        help="Whether to shorten manufacturer names",
         )
     parser.add_argument(
         "--startDate", "-start",
@@ -94,13 +94,13 @@ def createParser():
     parser.add_argument(
         "--query", "-q",
         type=str,
-        help="Aditional query string \"key='value' and/or key='value' ....\"",
+        help="Additional query string \"key='value' and/or key='value' ....\"",
         )
     parser.add_argument(
         "--plot",
         type=str,
         nargs='?',
-        help="Wether to plot data and which column to use as colour",
+        help="Whether to plot data and which column to use as colour",
         )
 
     parser.set_defaults(formatPower="kW")

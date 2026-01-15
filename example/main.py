@@ -4,13 +4,12 @@ from energycarrier.Mastrdata import Mastrdata
 from utils.Constants import SELECT_COLS
 from utils.DataFilter import DataFilter as PlantFilter
 from utils.PostProcessing import PostProcessing
-from utils.PostProcessing import ColumnDict
+from utils.PostProcessing import get_cols_without_geometry
 from utils.PreConfiguredParser import createParser
-import pandas as pd
-import matplotlib.pyplot as plt
+import geopandas as gpd
 
 
-def getData(args) -> pd.DataFrame:
+def getData(args) -> gpd.GeoDataFrame:
     """
     Wrapper function that gets the data and applies the parser args.
     Returns: The pandas DataFrame
@@ -49,17 +48,18 @@ def getData(args) -> pd.DataFrame:
     return plants
 
 
-def plot(args, plants):
-    cols = list(ColumnDict(args.keepColumns, withGeometry=False).values())
+def plot(args, plants: gpd.GeoDataFrame):
+    cols_popup = get_cols_without_geometry(args.keepColumns)
+    main_col = None
     if args.plot:
-        if args.plot == "Nettonennleistung":
-            main_col = SELECT_COLS["Nettonennleistung"]
         if args.plot == "year":
             main_col = "year"
             plants["year"] = plants['start_date'].dt.year
+        else:
+            main_col = SELECT_COLS[args.plot]
         plotted_map = plants.explore(
             column=main_col,
-            popup=cols,
+            popup=cols_popup,
             )
         plotted_map.save('map.html')
 
@@ -67,12 +67,12 @@ def plot(args, plants):
 if __name__ == "__main__":
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
     parser = createParser()
-    args = parser.parse_args()
-    plants = getData(args)
-    plot(args, plants)
-    cols = list(ColumnDict(args.keepColumns, withGeometry=False).values())
-    if args.output:
-        csv = plants[cols].to_csv(
-                args.output,
+    arguments = parser.parse_args()
+    mastr_units = getData(arguments)
+    plot(arguments, mastr_units)
+    cols_to_keep = get_cols_without_geometry(arguments.keepColumns)
+    if arguments.output:
+        csv = mastr_units[cols_to_keep].to_csv(
+                arguments.output,
                 index=False,
                 )
