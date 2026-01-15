@@ -7,6 +7,9 @@ from utils.Constants import MANUFACTURERS
 class PostProcessing:
     @staticmethod
     def replace_manufacturer_str(val: str, manufacturer: tuple) -> str | None:
+        """
+        Helper function to return the new value for a manufacturer
+        """
         old = manufacturer[0]
         new = manufacturer[1]
         if val is not None and old in val:
@@ -16,6 +19,9 @@ class PostProcessing:
 
     @staticmethod
     def format_power(df: pd.DataFrame, unit: str) -> pd.DataFrame:
+        """
+        Formats the power value based on the given unit
+        """
         power = "InstallierteLeistung"
         if power not in df.columns.values:
             return df
@@ -27,6 +33,10 @@ class PostProcessing:
 
     @staticmethod
     def format_lambda(df: pd.DataFrame, column: str, manufacturer: tuple):
+        """
+        Helper method to apply the replacment of manufacturer names on one
+        manufacturer
+        """
         df[column] = df[column].apply(
                 lambda x: PostProcessing.replace_manufacturer_str(
                     x, manufacturer)
@@ -35,6 +45,10 @@ class PostProcessing:
 
     @staticmethod
     def format_manufacturer(df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Applies the function for shortening/replacing manufacturerer names
+        to all Manufactueres
+        """
         if "Hersteller" not in df.columns.values:
             return df
         for m in MANUFACTURERS.items():
@@ -43,6 +57,10 @@ class PostProcessing:
 
     @staticmethod
     def translate(df: pd.DataFrame, keep_columns: list[str]) -> pd.DataFrame:
+        """
+        Get all the columns and renames it with the dict, therby translating it.
+        Also throws away columns which should not be kept
+        """
         # generate full dict and then only keep existing ones
         all_cols = get_column_dict(keep_columns, with_geometry=True)
         cols = {k: all_cols[k] for k in all_cols.keys() if k in df.columns.values}
@@ -50,6 +68,12 @@ class PostProcessing:
 
 
 def get_column_dict(keep_columns: list[str], with_geometry: bool) -> dict:
+    """
+    Creates the dict of all columns for translation.
+    Always includes COMMON_COLS
+    If specified includes the geometry column
+    Includes all key-value pairs matching keep_column
+    """
     cols = dict(COMMON_COLS)
     if with_geometry:
         cols.update(GEOMETRY_COLS)
@@ -60,4 +84,21 @@ def get_column_dict(keep_columns: list[str], with_geometry: bool) -> dict:
 
 
 def get_cols_without_geometry(keep_columns: list[str]) -> list[str]:
+    """
+    Wrapper method to get all translated (values) without the geometry column
+    """
     return list(get_column_dict(keep_columns, with_geometry=False).values())
+
+
+def check_cols_in_dataframe(df: pd.DataFrame, columns: list[str]) -> list[str]:
+    """
+    Checks the columns list against df
+    Returns part of columns list that is present in df
+    """
+    existing = []
+    for c in columns:
+        if c in df.columns:
+            existing.append(c)
+        else:
+            print("[INFO] " + c + " does not exist in dataframe. Ignoring column")
+    return existing
