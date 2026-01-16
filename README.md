@@ -2,8 +2,8 @@ This projet is intended to download and preprocess the data for german power pla
 especially renewable energy plants which is available to download from the official
 Markstammdatenregister (see https://www.marktstammdatenregister.de/MaStR ) part of 
 Bundesnetzagentur for a possible import to openstreetmap. The data is downloaded using
-https://github.com/OpenEnergyPlatform/open-MaStR and can processed with pandas e.g.
-like in the given examples using custom query strings.
+https://github.com/OpenEnergyPlatform/open-MaStR and is processed with pandas/geopandas
+https://geopandas.org e.g. like in the given examples using custom query strings.
 Note that most of the detailed data is not acutally used as it's not relevant in this context.
 Since 2023 the data can be used under the OSM licensing terms,
 see https://wiki.openstreetmap.org/wiki/DE:Permissions/Marktstammdatenregister.
@@ -16,9 +16,9 @@ The full data can also be viewed after downloading using e.g. a regular sqlite v
 etc where all columns and possible values can be investigated.
 Also see documention of open-MaStR and of MaStR for reference.
 
-This script mainly uses the german names, but these can be translated if required.
-Refer to OSM wiki and the documentation of
-Markstammdatenregister for matching the names/tags between them.
+This script mainly uses the german names, but these are translated at the end.
+Refer to OSM wiki and the documentation of Markstammdatenregister for matchingthe
+names/tags between them.
 Relevant data is start/end/opening date of a plant, location, power output and
 for wind turbines e.g. manufacturere, height, rotor diameter.
 Others can be added/removed as required.
@@ -55,6 +55,7 @@ The workflow usage is something like the following:
 - using the provided DataFilter to apply general filters not depending on the energy carrier
 - using the provided PostProcessing to e.g. adjust names of manufactureres, format power values
   as needed and in the last step rename the columns to match OSM
+- print data to csv or compare to existing OSM data from local file using geopandas sjoin_nearest.
   
 Some filters can be used (see the help page of script) directly as options,
 others can be added via custom query strings "key1 = 'value1' and/or key2 = 'value2' and/or ...."
