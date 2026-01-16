@@ -82,9 +82,13 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
         max_distance=max_dist,
         distance_col="dist",
         )
+    cols = list(osm_vs_mastr.columns.values).remove("geometry")
+    # here only keep missmatches from sjon_nearest
+    if match_col is None:
+        no_match = osm_vs_mastr[osm_vs_mastr["dist"].isnull()].fillna("dist")
+        return no_match, cols
     # only keep result with non-zero distance. aka only good results
     osm_vs_mastr = osm_vs_mastr.query("dist > 0")
-    cols = list(osm_vs_mastr.columns.values).remove("geometry")
     # rename the column to match namespace
     match_col = SELECT_COLS[match_col]
     # check for strict matches on specified column
@@ -93,8 +97,11 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
 
 def print_test_summary(dist: int, joined, mastr, osm, check_col, power):
     print("----OSM vs MaStR matches, also see generated map------")
-    check_col = SELECT_COLS[check_col]
-    settings = "----Settings: " + str(dist) + " with " + check_col
+    if check_col:
+        check_col = SELECT_COLS[check_col]
+        settings = "----Settings: " + str(dist) + " with " + check_col
+    else:
+        settings = "----Settings: " + str(dist) + " only no matches---"
     if check_col == "generator:output:electricity":
         settings += " with " + power
     print(settings)
@@ -122,13 +129,16 @@ if __name__ == "__main__":
                 )
     if arguments.testagainstOSM:
         osm_pbf = arguments.testagainstOSM[0]
-        check_col = arguments.testagainstOSM[1]
+        check_col = None
+        if len(arguments.testagainstOSM) > 1:
+            check_col = arguments.testagainstOSM[1]
         distance = 50
         osm_units = getPlantsWithinArea(osm_pbf)
+        osm_units["geometry"].to_csv("geometry_osm.csv")
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance)
-        joined["ref:mastr"].to_csv("osm"+check_col+".csv", index=False)
-        # plot("dist", cols, joined)
+        joined["ref:mastr"].to_csv("osm"+str(check_col or '')+".csv", index=False)
+        plot("dist", cols, joined)
         print_test_summary(distance,
                            joined, mastr_units, osm_units,
                            check_col, arguments.formatPower,

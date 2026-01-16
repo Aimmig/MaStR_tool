@@ -105,8 +105,8 @@ def createParser():
     parser.add_argument(
         "--testagainstOSM",
         type=str,
-        nargs=2,
-        help="local osm.pbf file and column to match",
+        nargs='+',
+        help="local osm.pbf file and column to match. No column shows mismatches",
         )
 
     parser.set_defaults(formatPower="kW")

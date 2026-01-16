@@ -20,9 +20,11 @@ def getPlantsWithinArea(area_file: str):
                                         extra_attributes=extra_attributes,
                                         # Keep data matching the criteria above
                                         filter_type="keep",
-                                        # Keep only nodes
+                                        # Keep only nodes and ways
+                                        # Don't know why, but someone mapped
+                                        # wind plants as ways around the foundation
                                         keep_nodes=True,
-                                        keep_ways=False,
+                                        keep_ways=True,
                                         keep_relations=False)
     # Convert column data types
     # Replace errors with NaN for now
