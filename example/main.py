@@ -6,7 +6,9 @@ from utils.DataFilter import DataFilter as PlantFilter
 from utils.PostProcessing import PostProcessing
 from utils.PostProcessing import get_cols_without_geometry
 from utils.PostProcessing import check_cols_in_dataframe
+from utils.PostProcessing import check_strict
 from utils.PreConfiguredParser import createParser
+from utils.PlantsFromOSM import getPlantsWithinArea
 import geopandas as gpd
 
 
@@ -56,6 +58,8 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
         if plot_args == "year":
             main_col = "year"
             plants["year"] = plants['start_date'].dt.year
+        elif plot_args == "dist":
+            main_col = "dist"
         else:
             main_col = SELECT_COLS[plot_args]
         plotted_map = plants.explore(
@@ -63,6 +67,46 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
             popup=cols_popup,
             )
         plotted_map.save('map.html')
+
+
+def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
+                     mastr_units: gpd.GeoDataFrame, max_dist: int):
+    # set proper crs
+    crs_str = "ESRI:102003"
+    osm_to_join = osm_units.to_crs(crs_str)
+    mastr_to_join = mastr_units.to_crs(crs_str)
+    # spatial join with options, keep mastr geometry
+    osm_vs_mastr = mastr_to_join.sjoin_nearest(
+        osm_to_join,
+        how='left',
+        max_distance=max_dist,
+        distance_col="dist",
+        )
+    # only keep result with non-zero distance. aka only good results
+    osm_vs_mastr = osm_vs_mastr.query("dist > 0")
+    cols = list(osm_vs_mastr.columns.values).remove("geometry")
+    # rename the column to match namespace
+    match_col = SELECT_COLS[match_col]
+    # check for strict matches on specified column
+    return check_strict(osm_vs_mastr, match_col), cols
+
+
+def print_test_summary(dist: int, joined, mastr, osm, check_col, power):
+    print("----OSM vs MaStR matches, also see generated map------")
+    check_col = SELECT_COLS[check_col]
+    settings = "----Settings: " + str(dist) + " with " + check_col
+    if check_col == "generator:output:electricity":
+        settings += " with " + power
+    print(settings)
+    print("Size OSM  : " + str(osm.shape[0]))
+    print("Size MaStR: " + str(mastr.shape[0]))
+    print("Matches   : " + str(joined.shape[0]))
+    perc_osm = 100*joined.shape[0]/osm.shape[0]
+    perc_mastr = 100*joined.shape[0]/mastr.shape[0]
+    print("Matches   : " + str(perc_osm) + " %")
+    print("Matches   : " + str(perc_mastr) + " %")
+    print("---Note: Size of MaStR and % is AFTER filtering----")
+    return
 
 
 if __name__ == "__main__":
@@ -76,3 +120,16 @@ if __name__ == "__main__":
                 arguments.output,
                 index=False,
                 )
+    if arguments.testagainstOSM:
+        osm_pbf = arguments.testagainstOSM[0]
+        check_col = arguments.testagainstOSM[1]
+        distance = 50
+        osm_units = getPlantsWithinArea(osm_pbf)
+        joined, cols = test_against_OSM(check_col, osm_units,
+                                        mastr_units, max_dist=distance)
+        joined["ref:mastr"].to_csv("osm"+check_col+".csv", index=False)
+        # plot("dist", cols, joined)
+        print_test_summary(distance,
+                           joined, mastr_units, osm_units,
+                           check_col, arguments.formatPower,
+                           )

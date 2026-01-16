@@ -1,5 +1,4 @@
 import pandas as pd
-
 from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS
 from utils.Constants import MANUFACTURERS
 
@@ -22,12 +21,14 @@ class PostProcessing:
         """
         Formats the power value based on the given unit
         """
-        power = "InstallierteLeistung"
+        power = "Nettonennleistung"
         if power not in df.columns.values:
             return df
         if unit == "kW":
+            print("[INFO] Formating power to kW")
             df[power] = df[power].astype(int).astype(str) + " " + unit
         if unit == "MW":
+            print("[INFO] Formating power MW")
             df[power] = df[power].div(1000).astype(str) + " " + unit
         return df
 
@@ -58,7 +59,8 @@ class PostProcessing:
     @staticmethod
     def translate(df: pd.DataFrame, keep_columns: list[str]) -> pd.DataFrame:
         """
-        Get all the columns and renames it with the dict, therby translating it.
+        Get all the columns and renames it with the dict,
+        thereby translating it.
         Also throws away columns which should not be kept
         """
         # generate full dict and then only keep existing ones
@@ -100,5 +102,12 @@ def check_cols_in_dataframe(df: pd.DataFrame, columns: list[str]) -> list[str]:
         if c in df.columns:
             existing.append(c)
         else:
-            print("[INFO] " + c + " does not exist in dataframe. Ignoring column")
+            print("[INFO] " + c + " does not exist. Ignoring column")
     return existing
+
+
+# TO-DO relax strict assumptions for later imports
+def check_strict(df: pd.DataFrame, col: str) -> pd.DataFrame:
+    left = "`" + col + "_left`"
+    right = "`" + col + "_right`"
+    return df.query(f"{left} == {right}")

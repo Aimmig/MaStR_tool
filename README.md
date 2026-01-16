@@ -60,3 +60,6 @@ Some filters can be used (see the help page of script) directly as options,
 others can be added via custom query strings "key1 = 'value1' and/or key2 = 'value2' and/or ...."
 
 Optionally the queried data can plotted on a map, to compare the data with existing OSM data.
+Another option is to plot the distance of the MaStR-Data compared to existing OSM data
+(this should be a local file prefilterd with osmium to only contain appropriate elements)
+and additionally with matching on a selected column.

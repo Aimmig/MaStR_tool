@@ -102,6 +102,12 @@ def createParser():
         nargs='?',
         help="Whether to plot data and which column to use as colour",
         )
+    parser.add_argument(
+        "--testagainstOSM",
+        type=str,
+        nargs=2,
+        help="local osm.pbf file and column to match",
+        )
 
     parser.set_defaults(formatPower="kW")
     parser.set_defaults(formatManufacturer=True)
