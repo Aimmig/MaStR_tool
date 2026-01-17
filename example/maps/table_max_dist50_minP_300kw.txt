@@ -1,0 +1,23 @@
+MaStR aktuell >300kW	: 28775
+OSM all			: 30911
+-------------------------
+Matches im Radius 50m	: 26486
+-------------------------
+  davon identisch mit ...
+     Typ		:  3092
+     Rotorhöhe		:  3626
+     Nabenhöhe  	:  3560
+     start_date 	:  1925
+     power kw   	:  4492
+     power MW   	:  6095
+     sum ohne dupes     : 12620
+------------------------
+     Hersteller		: 12082
+sum + Herst.ohne dupes	: 15748
+-------------------------
+   davon ohne         	: 10738
+  -> zu verbessern durch
+  relaxed matching ...
+-------------------------
+gar kein Match <50m	: 2144
+

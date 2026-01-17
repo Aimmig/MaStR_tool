@@ -1,12 +1,13 @@
 This projet is intended to download and preprocess the data for german power plants,
 especially renewable energy plants which is available to download from the official
-Markstammdatenregister (see https://www.marktstammdatenregister.de/MaStR ) part of 
-Bundesnetzagentur for a possible import to openstreetmap. The data is downloaded using
-https://github.com/OpenEnergyPlatform/open-MaStR and is processed with pandas/geopandas
-https://geopandas.org e.g. like in the given examples using custom query strings.
+[Markstammdatenregister](https://www.marktstammdatenregister.de/MaStR) part of
+Bundesnetzagentur for a possible import to [OpenStreetMap](https://www.openstreetmap.org/copyright).
+The data is downloaded using [open-MaStR](https://github.com/OpenEnergyPlatform/open-MaStR)
+and is processed with [pandas](https://pandas.pydata.org) and [geopandas](https://geopandas.org)
+e.g. like in the given examples using custom query strings.
 Note that most of the detailed data is not acutally used as it's not relevant in this context.
 Since 2023 the data can be used under the OSM licensing terms,
-see https://wiki.openstreetmap.org/wiki/DE:Permissions/Marktstammdatenregister.
+see [Permission_OSM_MaStR](https://wiki.openstreetmap.org/wiki/DE:Permissions/Marktstammdatenregister).
 As usual, no permission is granted to actually import any data using this tool without
 consulting the community (and me, the author) beforehand.
 
@@ -65,4 +66,4 @@ Another option is to plot the distance of the MaStR-Data compared to existing OS
 This should be a local file prefilterd with osmium to only contain appropriate elements, see
 provided file. There are some weird cases where ways and not nodes were used to map plants.
 Specify column to match on (for now only strict), or if not given show only missmatches
-outside max_distance.
+outside max_distance. Some example maps and a table overiew are included.

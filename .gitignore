@@ -4,3 +4,5 @@ __pycache__/*
 */__pycache__/*
 .idea/*
 *.html
+!example/maps
+!example/maps/*.html

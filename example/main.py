@@ -79,6 +79,8 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
     osm_vs_mastr = mastr_to_join.sjoin_nearest(
         osm_to_join,
         how='left',
+        lsuffix='mastr',
+        rsuffix='osm',
         max_distance=max_dist,
         distance_col="dist",
         )

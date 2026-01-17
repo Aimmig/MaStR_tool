@@ -108,6 +108,6 @@ def check_cols_in_dataframe(df: pd.DataFrame, columns: list[str]) -> list[str]:
 
 # TO-DO relax strict assumptions for later imports
 def check_strict(df: pd.DataFrame, col: str) -> pd.DataFrame:
-    left = "`" + col + "_left`"
-    right = "`" + col + "_right`"
-    return df.query(f"{left} == {right}")
+    mastr = "`" + col + "_mastr`"
+    osm = "`" + col + "_osm`"
+    return df.query(f"({osm} == {mastr})")
