@@ -56,7 +56,10 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
         elif plot_args == "dist":
             main_col = "dist"
         else:
-            main_col = SELECT_COLS[plot_args]
+            if plot_args in SELECT_COLS:
+                main_col = SELECT_COLS[plot_args]
+            else:
+                main_col = plot_args
         plotted_map = plants.explore(
             column=main_col,
             popup=cols_popup,

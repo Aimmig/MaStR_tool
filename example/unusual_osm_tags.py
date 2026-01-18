@@ -1,6 +1,6 @@
 from utils.PreConfiguredParser import createOSMFormatParser
 from utils.PlantsFromOSM import getPlantsWithinArea
-
+from utils.Helper import plot
 
 if __name__ == "__main__":
     parser = createOSMFormatParser()
@@ -18,3 +18,4 @@ if __name__ == "__main__":
                 )
     if csv:
         print(csv)
+    plot('model', print_cols, unusual)
