@@ -1,6 +1,6 @@
 import pandas as pd
-from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS
 from utils.Constants import MANUFACTURERS
+from utils.Helper import get_column_dict
 
 
 class PostProcessing:
@@ -48,8 +48,7 @@ class PostProcessing:
     def format_manufacturer(df: pd.DataFrame,
                             manufacturer_col: str) -> pd.DataFrame:
         """
-        Applies the function for shortening/replacing manufacturerer names
-        to all Manufactueres
+        Applies the function for shortening/replacing manufacturer names to all
         """
         if manufacturer_col not in df.columns.values:
             return df
@@ -68,47 +67,3 @@ class PostProcessing:
         all_cols = get_column_dict(keep_columns, with_geometry=True)
         cols = {k: all_cols[k] for k in all_cols.keys() if k in df.columns.values}
         return df[cols.keys()].rename(columns=cols)
-
-
-def get_column_dict(keep_columns: list[str], with_geometry: bool) -> dict:
-    """
-    Creates the dict of all columns for translation.
-    Always includes COMMON_COLS
-    If specified includes the geometry column
-    Includes all key-value pairs matching keep_column
-    """
-    cols = dict(COMMON_COLS)
-    if with_geometry:
-        cols.update(GEOMETRY_COLS)
-    if keep_columns:
-        cols_to_keep = {k: SELECT_COLS[k] for k in keep_columns}
-        cols.update(cols_to_keep)
-    return cols
-
-
-def get_cols_without_geometry(keep_columns: list[str]) -> list[str]:
-    """
-    Wrapper method to get all translated (values) without the geometry column
-    """
-    return list(get_column_dict(keep_columns, with_geometry=False).values())
-
-
-def check_cols_in_dataframe(df: pd.DataFrame, columns: list[str]) -> list[str]:
-    """
-    Checks the columns list against df
-    Returns part of columns list that is present in df
-    """
-    existing = []
-    for c in columns:
-        if c in df.columns:
-            existing.append(c)
-        else:
-            print("[INFO] " + c + " does not exist. Ignoring column")
-    return existing
-
-
-# TO-DO relax strict assumptions for later imports
-def check_strict(df: pd.DataFrame, col: str) -> pd.DataFrame:
-    mastr = "`" + col + "_mastr`"
-    osm = "`" + col + "_osm`"
-    return df.query(f"({osm} == {mastr})")

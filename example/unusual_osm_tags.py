@@ -1,7 +1,5 @@
-import argparse
 from utils.PreConfiguredParser import createOSMFormatParser
 from utils.PlantsFromOSM import getPlantsWithinArea
-import geopandas as gpd
 
 
 if __name__ == "__main__":
@@ -11,7 +9,8 @@ if __name__ == "__main__":
     osm_pbf = arguments.source
     osm_units = getPlantsWithinArea(osm_pbf)
     test_col = 'generator:output:electricity'
-    unusual = osm_units[~osm_units[test_col].str.contains("MW|kW|yes", na=False)].dropna(subset=[test_col])
+    known_good = "small_installation|MW|kW|yes"
+    unusual = osm_units[~osm_units[test_col].str.contains(known_good, na=False)].dropna(subset=[test_col])
     print_cols = ['id', 'model', 'generator:output:electricity']
     csv = unusual[print_cols].to_csv(
                 output,
@@ -19,4 +18,3 @@ if __name__ == "__main__":
                 )
     if csv:
         print(csv)
-

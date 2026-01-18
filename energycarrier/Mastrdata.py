@@ -1,7 +1,6 @@
 from open_mastr import Mastr
 import pandas as pd
 import geopandas as gpd
-import operator
 
 
 class Mastrdata:

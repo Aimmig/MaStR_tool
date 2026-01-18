@@ -123,7 +123,7 @@ def createParser():
         "--testagainstOSM",
         type=str,
         nargs='+',
-        help="local osm.pbf file and column to match. No column shows mismatches",
+        help="local osm.pbf file and column to match. No column: mismatches",
         )
 
     parser.set_defaults(formatPower="kW")
