@@ -44,7 +44,7 @@ def getData(args) -> gpd.GeoDataFrame:
     if args.kwk:
         plants = PlantFilter.get_KWK(plants)
     if args.formatManufacturer:
-        plants = PostProcessing.format_manufacturer(plants)
+        plants = PostProcessing.format_manufacturer(plants, "Hersteller")
 
     cols_to_keep = check_cols_in_dataframe(plants, args.keepColumns)
     plants = PostProcessing.format_power(plants, args.formatPower)

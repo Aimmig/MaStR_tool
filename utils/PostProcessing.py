@@ -45,15 +45,16 @@ class PostProcessing:
         return df
 
     @staticmethod
-    def format_manufacturer(df: pd.DataFrame) -> pd.DataFrame:
+    def format_manufacturer(df: pd.DataFrame,
+                            manufacturer_col: str) -> pd.DataFrame:
         """
         Applies the function for shortening/replacing manufacturerer names
         to all Manufactueres
         """
-        if "Hersteller" not in df.columns.values:
+        if manufacturer_col not in df.columns.values:
             return df
         for m in MANUFACTURERS.items():
-            df = PostProcessing.format_lambda(df, "Hersteller", m)
+            df = PostProcessing.format_lambda(df, manufacturer_col, m)
         return df
 
     @staticmethod

@@ -1,5 +1,6 @@
 import pyrosm
 import pandas as pd
+from utils.PostProcessing import PostProcessing
 
 
 def getPlantsWithinArea(area_file: str):
@@ -21,8 +22,8 @@ def getPlantsWithinArea(area_file: str):
                                         # Keep data matching the criteria above
                                         filter_type="keep",
                                         # Keep only nodes and ways
-                                        # Don't know why, but someone mapped
-                                        # wind plants as ways around the foundation
+                                        # Don't know why, but some wind plants
+                                        # are mapped around the foundation
                                         keep_nodes=True,
                                         keep_ways=True,
                                         keep_relations=False)
@@ -47,4 +48,5 @@ def getPlantsWithinArea(area_file: str):
             errors='coerce',
             format="%Y-%m-%d",
             )
+    plants = PostProcessing.format_manufacturer(plants, "manufacturer")
     return plants
