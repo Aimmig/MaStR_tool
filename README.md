@@ -56,7 +56,7 @@ The workflow usage is something like the following:
 - using the provided DataFilter to apply general filters not depending on the energy carrier
 - using the provided PostProcessing to e.g. adjust names of manufactureres, format power values
   as needed and in the last step rename the columns to match OSM
-- print data to csv or compare to existing OSM data from local file using geopandas sjoin_nearest.
+- print data or optionally compare to existing OSM data from local file using geopandas sjoin_nearest.
   
 Some filters can be used (see the help page of script) directly as options,
 others can be added via custom query strings "key1 = 'value1' and/or key2 = 'value2' and/or ...."
@@ -67,3 +67,6 @@ This should be a local file prefilterd with osmium to only contain appropriate e
 provided file. There are some weird cases where ways and not nodes were used to map plants.
 Specify column to match on (for now only strict), or if not given show only missmatches
 outside max_distance. Some example maps and a table overiew are included.
+
+A utility to show cases where OSM tags aren't formatted in standard ways is also provided,
+for now it only checks the power values.
