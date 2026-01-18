@@ -2,6 +2,23 @@ import argparse
 from utils.Constants import ENERGY_SOURCES, SELECT_COLS
 
 
+def createOSMFormatParser():
+    parser = argparse.ArgumentParser(
+        usage='%(prog)s [options]',
+        )
+    parser.add_argument(
+        "source",
+        type=str,
+        help="The osm pbf file to test",
+        )
+    parser.add_argument(
+        "--output", "-o",
+        type=str,
+        help="Optional file to write csv data to",
+        )
+    return parser
+
+
 def createParser():
     """
     Create parser for different cmd line options
