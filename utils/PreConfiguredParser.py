@@ -2,6 +2,34 @@ import argparse
 from utils.Constants import ENERGY_SOURCES, SELECT_COLS
 
 
+def createSimpleMastrQueryParser():
+    parser = argparse.ArgumentParser(
+        usage='%(prog)s [options]',
+        )
+    parser.add_argument(
+        "source",
+        choices=ENERGY_SOURCES,
+        help="The energy source to download and search from MaStR",
+        )
+    parser.add_argument(
+        "--keepColumns", "-keep",
+        nargs='*',
+        choices=SELECT_COLS.keys(),
+        help="Which columns to keep, if these exist.",
+        )
+    parser.add_argument(
+        "ref",
+        nargs='+',
+        type=str,
+        help="The MaStR Referenze numbers to search",
+    )
+    parser.add_argument(
+        "--output", "-o",
+        type=str,
+        help="Optional file to write data to",
+        )
+    return parser
+
 def createOSMFormatParser():
     parser = argparse.ArgumentParser(
         usage='%(prog)s [options]',
