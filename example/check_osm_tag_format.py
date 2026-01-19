@@ -28,6 +28,12 @@ def check_meter_values(osm: pd.DataFrame,
     return unusual, print_cols
 
 
+def check_name(osm: pd.DataFrame,
+               test_col: str) -> (pd.DataFrame, list[str]):
+    unusual = osm[osm [test_col].str.contains('MW|kW|KW', na=False)]
+    print_cols = ['id'] + [test_col]
+    return unusual, print_cols
+
 if __name__ == "__main__":
     parser = createOSMFormatParser()
     arguments = parser.parse_args()
@@ -37,12 +43,12 @@ if __name__ == "__main__":
     osm_units = getPlantsWithinArea(osm_pbf)
     if check_col == "generator:output:electricity":
         filtered, cols = check_power_value(osm_units, check_col)
-    if check_col == "height:hub":
+    if check_col in ["height:hub", "rotor:diameter"]:
         filtered, cols = check_meter_values(osm_units, check_col)
-    if check_col == "rotor:diameter":
-        filtered, cols = check_meter_values(osm_units, check_col)
-    if check_col == "start_date":
+    if check_col in ["start_date", "end_date"]:
         filtered, cols = check_date(osm_units, check_col)
+    if check_col in ["name", "description"]:
+        filtered, cols = check_name(osm_units, check_col)
     csv = filtered[cols].to_csv(
                 output,
                 index=False,

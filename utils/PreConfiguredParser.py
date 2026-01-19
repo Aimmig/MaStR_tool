@@ -51,6 +51,8 @@ def createOSMFormatParser():
             "rotor:diameter",
             "height:hub",
             "generator:output:electricity",
+            "name",
+            "description",
             ],
         help="The osm tag to check formatting",
         )
