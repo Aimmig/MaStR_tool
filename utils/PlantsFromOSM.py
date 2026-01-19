@@ -33,11 +33,11 @@ def getPlantsWithinArea(area_file: str):
     plants["height:hub"] = pd.to_numeric(
             plants["height:hub"],
             errors='coerce',
-            )
+            ).fillna(plants["height:hub"])
     plants["rotor:diameter"] = pd.to_numeric(
             plants["rotor:diameter"],
             errors='coerce',
-            )
+            ).fillna(plants["rotor:diameter"])
     plants["start_date"] = pd.to_datetime(
             plants["start_date"],
             errors='coerce',

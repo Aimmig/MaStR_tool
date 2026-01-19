@@ -16,6 +16,16 @@ def createOSMFormatParser():
         type=str,
         help="Optional file to write csv data to",
         )
+    parser.add_argument(
+        "tag",
+        type=str,
+        choices=[
+            "rotor:diameter",
+            "height:hub",
+            "generator:output:electricity",
+            ],
+        help="The osm tag to check formatting",
+        )
     return parser
 
 

@@ -70,7 +70,7 @@ if __name__ == "__main__":
             check_col = arguments.testagainstOSM[1]
         distance = 50
         osm_units = getPlantsWithinArea(osm_pbf)
-        osm_units["geometry"].to_csv("geometry_osm.csv")
+        # osm_units[['id', 'end_date']].to_csv("dates.csv")
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance)
         joined["ref:mastr"].to_csv("osm"+str(check_col or '')+".csv", index=False)
