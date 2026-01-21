@@ -89,8 +89,6 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
         return no_match, cols
     # only keep result with non-zero distance. aka only good results
     osm_vs_mastr = osm_vs_mastr.query("dist > 0")
-    # rename the column to match namespace
-    match_col = SELECT_COLS[match_col]
     # check for strict matches on specified column
     return check_strict(osm_vs_mastr, match_col), cols
 
@@ -98,7 +96,6 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
 def print_test_summary(dist: int, joined, mastr, osm, check_col, power):
     print("----OSM vs MaStR matches, also see generated map------")
     if check_col:
-        check_col = SELECT_COLS[check_col]
         settings = "----Settings: " + str(dist) + " with " + check_col
     else:
         settings = "----Settings: " + str(dist) + " only no matches---"

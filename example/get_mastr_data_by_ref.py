@@ -1,6 +1,6 @@
 import argparse
 import os
-from energycarrier.Mastrdata import Mastrdata
+from utils.Mastrdata import Mastrdata
 from utils.PreConfiguredParser import createSimpleMastrQueryParser
 from utils.Helper import get_cols_without_geometry
 from utils.Helper import check_cols_in_dataframe

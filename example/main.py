@@ -1,6 +1,6 @@
 import argparse
 import os
-from energycarrier.Mastrdata import Mastrdata
+from utils.Mastrdata import Mastrdata
 from utils.DataFilter import DataFilter as PlantFilter
 from utils.PostProcessing import PostProcessing
 from utils.Helper import get_cols_without_geometry
@@ -8,6 +8,7 @@ from utils.Helper import check_cols_in_dataframe
 from utils.Helper import plot, test_against_OSM, print_test_summary
 from utils.PreConfiguredParser import createParser
 from utils.PlantsFromOSM import getPlantsWithinArea
+from utils.Constants import SELECT_COLS
 import geopandas as gpd
 
 
@@ -68,6 +69,7 @@ if __name__ == "__main__":
         check_col = None
         if len(arguments.testagainstOSM) > 1:
             check_col = arguments.testagainstOSM[1]
+            check_col = SELECT_COLS[check_col]
         distance = 50
         osm_units = getPlantsWithinArea(osm_pbf)
         # osm_units[['id', 'end_date']].to_csv("dates.csv")

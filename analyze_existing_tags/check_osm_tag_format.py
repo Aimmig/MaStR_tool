@@ -1,38 +1,40 @@
 from utils.PreConfiguredParser import createOSMFormatParser
 from utils.PlantsFromOSM import getPlantsWithinArea
 from utils.Helper import plot
+from utils.Constants import MANUFACTURERS
 import datetime
 import pandas as pd
 
 
 def check_power_value(osm: pd.DataFrame,
-                      check_col: str) -> (pd.DataFrame, list[str]):
-    known_good = "small_installation|MW|kW|yes"
-    unusual = osm[~osm[check_col].str.contains(known_good, na=False)].dropna(subset=[check_col])
-    print_cols = ['id'] + [check_col]
-    return unusual, print_cols
+                      col: str) -> (pd.DataFrame, list[str]):
+    valid = "small_installation|MW|kW|yes"
+    res = osm[~osm[col].str.contains(valid, na=False)].dropna(subset=[col])
+    return res, ['id'] + [col]
 
 
 def check_start_date(osm: pd.DataFrame,
-                     check_col: str) -> (pd.DataFrame, list[str]):
-    unusual = osm[osm[check_col].astype(str).str.contains(r'[0-9-]', regex=True)]
-    print_cols = ['id'] + [check_col]
-    return unusual, print_cols
+                     col: str) -> (pd.DataFrame, list[str]):
+    res = osm[osm[col].astype(str).str.contains(r'[0-9-]', regex=True)]
+    return res, ['id'] + [col]
 
 
 def check_meter_values(osm: pd.DataFrame,
-                       test_col: str) -> (pd.DataFrame, list[str]):
-    unusual = osm[~osm[test_col].astype(str).str.isdigit()].dropna(subset=[test_col])
-    unusual = unusual[unusual[test_col].astype(str).str.contains(' |,|m|"')]
-    print_cols = ['id'] + ["height:hub", "rotor:diameter"]
-    return unusual, print_cols
+                       col: str) -> (pd.DataFrame, list[str]):
+    res = osm[~osm[col].astype(str).str.isdigit()].dropna(subset=[col])
+    res = res[res[col].astype(str).str.contains(' |,|m|"')]
+    return res, ['id'] + ["height:hub", "rotor:diameter"]
 
 
 def check_name(osm: pd.DataFrame,
-               test_col: str) -> (pd.DataFrame, list[str]):
-    unusual = osm[osm [test_col].str.contains('MW|kW|KW', na=False)]
-    print_cols = ['id'] + [test_col]
-    return unusual, print_cols
+               col: str) -> (pd.DataFrame, list[str]):
+    sep = "|"
+    man_short = sep.join(MANUFACTURERS.values())
+    man_long = sep.join(MANUFACTURERS.keys())
+    search = 'MW|kW|KW|' + man_short + sep + man_long
+    res = osm[osm[col].str.contains(search, na=False)]
+    return res, ['id'] + [col]
+
 
 if __name__ == "__main__":
     parser = createOSMFormatParser()
@@ -47,7 +49,7 @@ if __name__ == "__main__":
         filtered, cols = check_meter_values(osm_units, check_col)
     if check_col in ["start_date", "end_date"]:
         filtered, cols = check_date(osm_units, check_col)
-    if check_col in ["name", "description"]:
+    if check_col in ["name", "description", "note"]:
         filtered, cols = check_name(osm_units, check_col)
     csv = filtered[cols].to_csv(
                 output,

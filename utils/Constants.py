@@ -33,15 +33,15 @@ MANUFACTURERS = {"Nordex": "Nordex",
                  "Adwen": "Adwen",
                  }
 
-MASTR_REFS ={"EEG": "EegMastrNummer",
-             "SEE": "EinheitMastrNummer",
-             "SEL": "LokationMastrNummer",
-             "SGE": "GenMastrNummer",
-             "ABR": "AnlagenbetreiberMastrNummer",
-             "KWK": "KwkMastrNummer",
-             "E"  : "AnlagenschluesselEeg",
-             "A"  : "AnlagenkennzifferAnlagenregister",
-             }
+MASTR_REFS = {"EEG": "EegMastrNummer",
+              "SEE": "EinheitMastrNummer",
+              "SEL": "LokationMastrNummer",
+              "SGE": "GenMastrNummer",
+              "ABR": "AnlagenbetreiberMastrNummer",
+              "KWK": "KwkMastrNummer",
+              "E": "AnlagenschluesselEeg",
+              "A": "AnlagenkennzifferAnlagenregister",
+              }
 
 ENERGY_SOURCES = ["wind", "hydro", "biomass", "gsgk"]
 

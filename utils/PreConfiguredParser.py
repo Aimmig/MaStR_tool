@@ -30,6 +30,7 @@ def createSimpleMastrQueryParser():
         )
     return parser
 
+
 def createOSMFormatParser():
     parser = argparse.ArgumentParser(
         usage='%(prog)s [options]',
@@ -53,6 +54,7 @@ def createOSMFormatParser():
             "generator:output:electricity",
             "name",
             "description",
+            "note",
             ],
         help="The osm tag to check formatting",
         )

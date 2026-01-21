@@ -13,9 +13,10 @@ def getPlantsWithinArea(area_file: str):
                         "rotor:diameter",
                         "height:hub",
                         "ref:eeg",
-                        "ref:MaStR",
+                        "ref:mastr",
                         "name",
                         "description",
+                        "note",
                         ]
     plants = osm.get_data_by_custom_criteria(custom_filter={
                                         "generator:source": ["wind"],
