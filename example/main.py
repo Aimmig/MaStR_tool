@@ -1,4 +1,3 @@
-import argparse
 import os
 from utils.Mastrdata import Mastrdata
 from utils.DataFilter import DataFilter as PlantFilter

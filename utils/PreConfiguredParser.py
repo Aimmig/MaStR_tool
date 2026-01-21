@@ -1,5 +1,6 @@
 import argparse
 from utils.Constants import ENERGY_SOURCES, SELECT_COLS
+from utils.Constants import ROTOR, HUB, POWER
 
 
 def createSimpleMastrQueryParser():
@@ -21,7 +22,7 @@ def createSimpleMastrQueryParser():
         "ref",
         nargs='+',
         type=str,
-        help="The MaStR Referenze numbers to search",
+        help="The MaStR reference numbers to search, e.g. SEExxx, EEGxxx etc.",
     )
     parser.add_argument(
         "--output", "-o",
@@ -38,7 +39,7 @@ def createOSMFormatParser():
     parser.add_argument(
         "source",
         type=str,
-        help="The osm pbf file to test",
+        help="The prefiltered osm pbf file to test",
         )
     parser.add_argument(
         "--output", "-o",
@@ -49,9 +50,9 @@ def createOSMFormatParser():
         "tag",
         type=str,
         choices=[
-            "rotor:diameter",
-            "height:hub",
-            "generator:output:electricity",
+            ROTOR,
+            HUB,
+            POWER,
             "name",
             "description",
             "note",

@@ -3,7 +3,6 @@ from utils.PlantsFromOSM import getPlantsWithinArea
 from utils.Helper import plot
 from utils.Constants import MANUFACTURERS
 from utils.Constants import POWER, ROTOR, HUB, START, END
-import datetime
 import pandas as pd
 
 
@@ -14,7 +13,7 @@ def check_power_value(osm: pd.DataFrame,
     return res, ['id'] + [col]
 
 
-def check_start_date(osm: pd.DataFrame,
+def check_date(osm: pd.DataFrame,
                      col: str) -> (pd.DataFrame, list[str]):
     res = osm[osm[col].astype(str).str.contains(r'[0-9-]', regex=True)]
     return res, ['id'] + [col]
@@ -44,6 +43,8 @@ if __name__ == "__main__":
     osm_pbf = arguments.source
     check_col = arguments.tag
     osm_units = getPlantsWithinArea(osm_pbf)
+    filtered = None
+    cols = None
     if check_col in [POWER]:
         filtered, cols = check_power_value(osm_units, check_col)
     if check_col in [HUB, ROTOR]:
