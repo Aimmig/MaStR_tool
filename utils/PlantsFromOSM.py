@@ -1,19 +1,21 @@
 import pyrosm
 import pandas as pd
 from utils.PostProcessing import PostProcessing
+from utils.Constants import POWER, START, END, MODEL, HUB, ROTOR
+from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
 
 
 def getPlantsWithinArea(area_file: str):
     osm = pyrosm.OSM(area_file)
-    extra_attributes = ["generator:output:electricity",
-                        "start_date",
-                        "end_date",
-                        "manufacturer",
-                        "model",
-                        "rotor:diameter",
-                        "height:hub",
-                        "ref:eeg",
-                        "ref:mastr",
+    extra_attributes = [POWER,
+                        START,
+                        END,
+                        MANUFACTURER,
+                        MODEL,
+                        ROTOR,
+                        HUB,
+                        REF_EEG,
+                        REF_MASTR,
                         "name",
                         "description",
                         "note",
@@ -30,26 +32,37 @@ def getPlantsWithinArea(area_file: str):
                                         keep_nodes=True,
                                         keep_ways=True,
                                         keep_relations=False)
+
+    # Potentially fix these cases in OSM
+    # sanitize inputs from known problems
     # Convert column data types
     # Replace errors with NaN for now
-    # Potentially fix these cases in OSM
-    plants["height:hub"] = pd.to_numeric(
-            plants["height:hub"],
-            errors='coerce',
-            ).fillna(plants["height:hub"])
-    plants["rotor:diameter"] = pd.to_numeric(
-            plants["rotor:diameter"],
-            errors='coerce',
-            ).fillna(plants["rotor:diameter"])
-    plants["start_date"] = pd.to_datetime(
-            plants["start_date"],
-            errors='coerce',
-            format="%Y-%m-%d",
+    if HUB in plants.columns:
+        plants[HUB] = plants[HUB].str.strip(' mM')
+        plants[HUB] = plants[HUB].str.replace(',', '.')
+        plants[HUB] = pd.to_numeric(
+                plants[HUB],
+                # errors='coerce',
+                ).fillna(plants[HUB])
+    if ROTOR in plants.columns:
+        plants[ROTOR] = plants[ROTOR].str.strip(' mM')
+        plants[ROTOR] = plants[ROTOR].str.replace(',', '.')
+        plants[ROTOR] = pd.to_numeric(
+                plants[ROTOR],
+                # errors='coerce',
+                ).fillna(plants[ROTOR])
+    if START in plants.columns:
+        plants[START] = pd.to_datetime(
+                plants[START],
+                errors='coerce',
+                format="%Y-%m-%d",
             )
-    plants["end_date"] = pd.to_datetime(
-            plants["end_date"],
-            errors='coerce',
-            format="%Y-%m-%d",
-            )
-    plants = PostProcessing.format_manufacturer(plants, "manufacturer")
+    if END in plants.columns:
+        plants[END] = pd.to_datetime(
+                plants[END],
+                errors='coerce',
+                format="%Y-%m-%d",
+                )
+    if MANUFACTURER in plants.columns:
+        plants = PostProcessing.format_manufacturer(plants, MANUFACTURER)
     return plants

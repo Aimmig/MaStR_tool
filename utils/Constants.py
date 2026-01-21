@@ -52,7 +52,7 @@ COMMON_COLS = {"Laengengrad": "lon",
                }
 
 SELECT_COLS = {"EegMastrNummer": "ref:eeg",
-               "InstallierteLeistung": "generator:output:electricity",
+               # "InstallierteLeistung": "generator:output:electricity",
                "Nettonennleistung": "generator:output:electricity",
                "Inbetriebnahmedatum": "start_date",
                "GeplantesInbetriebnahmedatum": "opening_date",
@@ -74,3 +74,13 @@ SELECT_COLS = {"EegMastrNummer": "ref:eeg",
                "ArtDerWasserkraftanlage": "technology",
                "VerknuepfteEinheit": "connectedUnit",
                }
+
+HUB = SELECT_COLS["Nabenhoehe"]
+ROTOR = SELECT_COLS["Rotordurchmesser"]
+START = SELECT_COLS["Inbetriebnahmedatum"]
+END = SELECT_COLS["DatumEndgueltigeStilllegung"]
+MANUFACTURER = SELECT_COLS["Hersteller"]
+MODEL = SELECT_COLS["Typenbezeichnung"]
+POWER = SELECT_COLS["Nettonennleistung"]
+REF_EEG = SELECT_COLS["EegMastrNummer"]
+REF_MASTR = COMMON_COLS["EinheitMastrNummer"]

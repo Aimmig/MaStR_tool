@@ -2,6 +2,7 @@ from utils.PreConfiguredParser import createOSMFormatParser
 from utils.PlantsFromOSM import getPlantsWithinArea
 from utils.Helper import plot
 from utils.Constants import MANUFACTURERS
+from utils.Constants import POWER, ROTOR, HUB, START, END
 import datetime
 import pandas as pd
 
@@ -23,7 +24,7 @@ def check_meter_values(osm: pd.DataFrame,
                        col: str) -> (pd.DataFrame, list[str]):
     res = osm[~osm[col].astype(str).str.isdigit()].dropna(subset=[col])
     res = res[res[col].astype(str).str.contains(' |,|m|"')]
-    return res, ['id'] + ["height:hub", "rotor:diameter"]
+    return res, ['id'] + [HUB, ROTOR]
 
 
 def check_name(osm: pd.DataFrame,
@@ -43,11 +44,11 @@ if __name__ == "__main__":
     osm_pbf = arguments.source
     check_col = arguments.tag
     osm_units = getPlantsWithinArea(osm_pbf)
-    if check_col == "generator:output:electricity":
+    if check_col in [POWER]:
         filtered, cols = check_power_value(osm_units, check_col)
-    if check_col in ["height:hub", "rotor:diameter"]:
+    if check_col in [HUB, ROTOR]:
         filtered, cols = check_meter_values(osm_units, check_col)
-    if check_col in ["start_date", "end_date"]:
+    if check_col in [START, END]:
         filtered, cols = check_date(osm_units, check_col)
     if check_col in ["name", "description", "note"]:
         filtered, cols = check_name(osm_units, check_col)

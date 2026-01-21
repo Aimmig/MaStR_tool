@@ -1,6 +1,7 @@
 import pandas as pd
 import geopandas as gpd
 from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS
+from utils.Constants import START
 
 
 def get_column_dict(keep_columns: list[str], with_geometry: bool) -> dict:
@@ -52,7 +53,7 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
     if plot_args:
         if plot_args == "year":
             main_col = "year"
-            plants["year"] = plants['start_date'].dt.year
+            plants["year"] = plants[START].dt.year
         elif plot_args == "dist":
             main_col = "dist"
         else:

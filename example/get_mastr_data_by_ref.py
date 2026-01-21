@@ -9,9 +9,7 @@ from utils.Constants import MASTR_REFS
 import geopandas as gpd
 
 
-def searchref(mastr: gpd.GeoDataFrame, ref: list[str]):
-    key = None
-    ref_len = 0
+def determine_key(ref: list[str]):
     if len(set(map(len, ref))) == 1:
         ref_len = len(ref[0])
     if ref_len == 15:
@@ -33,6 +31,13 @@ def searchref(mastr: gpd.GeoDataFrame, ref: list[str]):
     if ref_len == 14:
         if all(item.startswith('A') for item in ref):
             key = 'E'
+    return key
+
+
+def searchref(mastr: gpd.GeoDataFrame, ref: list[str]):
+    key = None
+    ref_len = 0
+    key = determine_key(ref)
     if key:
         df = mastr[mastr[MASTR_REFS[key]].isin(ref)]
         return df, MASTR_REFS[key]
