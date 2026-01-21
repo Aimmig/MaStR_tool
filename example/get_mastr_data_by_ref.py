@@ -1,15 +1,13 @@
-import argparse
 import os
 from utils.Mastrdata import Mastrdata
 from utils.PreConfiguredParser import createSimpleMastrQueryParser
-from utils.Helper import get_cols_without_geometry
-from utils.Helper import check_cols_in_dataframe
-from utils.PostProcessing import PostProcessing
 from utils.Constants import MASTR_REFS
 import geopandas as gpd
 
 
 def determine_key(ref: list[str]):
+    key = None
+    ref_len = 0
     if len(set(map(len, ref))) == 1:
         ref_len = len(ref[0])
     if ref_len == 15:
@@ -34,9 +32,7 @@ def determine_key(ref: list[str]):
     return key
 
 
-def searchref(mastr: gpd.GeoDataFrame, ref: list[str]):
-    key = None
-    ref_len = 0
+def search_ref(mastr: gpd.GeoDataFrame, ref: list[str]):
     key = determine_key(ref)
     if key:
         df = mastr[mastr[MASTR_REFS[key]].isin(ref)]
@@ -44,38 +40,14 @@ def searchref(mastr: gpd.GeoDataFrame, ref: list[str]):
     return None
 
 
-def getData(args) -> gpd.GeoDataFrame:
+def get_data(args) -> gpd.GeoDataFrame:
     """
     Wrapper function that gets the data and applies the parser args.
     Returns: The pandas DataFrame
     """
     plants = Mastrdata(args.source).df
-
     refs = args.ref
-    plants, ref_col = searchref(plants, refs)
-
-    # cols_to_keep = check_cols_in_dataframe(plants, args.keepColumns)
-    # plants = PostProcessing.translate(plants, cols_to_keep)
-    return plants, args.keepColumns + [ref_col]
-
-    if key:
-        df = mastr[mastr[MASTR_REFS[key]].isin(ref)]
-        return df, MASTR_REFS[key]
-    return None
-
-
-def getData(args) -> gpd.GeoDataFrame:
-    """
-    Wrapper function that gets the data and applies the parser args.
-    Returns: The pandas DataFrame
-    """
-    plants = Mastrdata(args.source).df
-
-    refs = args.ref
-    plants, ref_col = searchref(plants, refs)
-
-    # cols_to_keep = check_cols_in_dataframe(plants, args.keepColumns)
-    # plants = PostProcessing.translate(plants, cols_to_keep)
+    plants, ref_col = search_ref(plants, refs)
     return plants, args.keepColumns + [ref_col]
 
 
@@ -83,7 +55,7 @@ if __name__ == "__main__":
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
     parser = createSimpleMastrQueryParser()
     arguments = parser.parse_args()
-    mastr_units, cols = getData(arguments)
+    mastr_units, cols = get_data(arguments)
     csv = mastr_units[cols].to_csv(
                 arguments.output,
                 index=False,
