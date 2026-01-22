@@ -3,6 +3,7 @@ from utils.PlantsFromOSM import getPlantsWithinArea
 from utils.Helper import plot
 from utils.Constants import MANUFACTURERS
 from utils.Constants import POWER, ROTOR, HUB, START, END
+from utils.Constants import REF_MASTR, REF_EEG
 import pandas as pd
 
 
@@ -14,7 +15,7 @@ def check_power_value(osm: pd.DataFrame,
 
 
 def check_date(osm: pd.DataFrame,
-                     col: str) -> (pd.DataFrame, list[str]):
+               col: str) -> (pd.DataFrame, list[str]):
     res = osm[osm[col].astype(str).str.contains(r'[0-9-]', regex=True)]
     return res, ['id'] + [col]
 
@@ -31,7 +32,9 @@ def check_name(osm: pd.DataFrame,
     sep = "|"
     man_short = sep.join(MANUFACTURERS.values())
     man_long = sep.join(MANUFACTURERS.keys())
-    search = 'MW|kW|KW|' + man_short + sep + man_long
+    search = 'MW|kW|KW|MaStR|' + man_short + sep + man_long
+    if col != REF_MASTR:
+        search = search + sep + "SEE"
     res = osm[osm[col].str.contains(search, na=False)]
     return res, ['id'] + [col]
 
@@ -51,7 +54,7 @@ if __name__ == "__main__":
         filtered, cols = check_meter_values(osm_units, check_col)
     if check_col in [START, END]:
         filtered, cols = check_date(osm_units, check_col)
-    if check_col in ["name", "description", "note"]:
+    if check_col in ["name", "description", "note", "ref", REF_MASTR, REF_EEG, "ref:EEG"]:
         filtered, cols = check_name(osm_units, check_col)
     csv = filtered[cols].to_csv(
                 output,
