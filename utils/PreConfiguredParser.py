@@ -54,7 +54,7 @@ def createOSMFormatParser():
             ROTOR, HUB,
             POWER,
             "name", "description", "note",
-            REF_MASTR, REF_EEG, "ref:EEG", "ref",
+            REF_MASTR, REF_EEG, "ref",
             ],
         help="The osm tag to check formatting",
         )

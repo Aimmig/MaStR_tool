@@ -51,7 +51,7 @@ COMMON_COLS = {"Laengengrad": "lon",
                "EinheitMastrNummer": "ref:mastr",
                }
 
-SELECT_COLS = {"EegMastrNummer": "ref:eeg",
+SELECT_COLS = {"EegMastrNummer": "ref:EEG",
                # "InstallierteLeistung": "generator:output:electricity",
                "Nettonennleistung": "generator:output:electricity",
                "Inbetriebnahmedatum": "start_date",

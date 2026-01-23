@@ -15,7 +15,6 @@ def getPlantsWithinArea(area_file: str, sanitize: bool):
                         ROTOR,
                         HUB,
                         REF_EEG,
-                        "ref:EEG",
                         REF_MASTR,
                         "ref",
                         "name",
