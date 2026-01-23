@@ -68,6 +68,8 @@ def getPlantsWithinArea(area_file: str, sanitize: bool):
                 plants[START],
                 errors='coerce',
                 format="%Y-%m-%d",
+                #format="%d.%m.%Y",
+                #format="%Y/%m",
             )
     if END in plants.columns:
         plants[END] = pd.to_datetime(

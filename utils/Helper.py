@@ -48,6 +48,13 @@ def check_strict(df: pd.DataFrame, col: str) -> pd.DataFrame:
     return df.query(f"({osm} == {mastr})")
 
 
+def check_date(df: pd.DataFrame, col: str, strict: bool = False) -> pd.DataFrame:
+    mastr = col + "_mastr"
+    osm = col + "_osm"
+    if strict:
+        return check_strict(df, col)
+    return df.loc[(df[mastr].dt.month == df[osm].dt.month) & (df[mastr].dt.year == df[osm].dt.year)]
+
 def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
     main_col = None
     if plot_args:
@@ -90,6 +97,8 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
         return no_match, cols
     # only keep result with non-zero distance. aka only good results
     osm_vs_mastr = osm_vs_mastr.query("dist > 0")
+    if "date" in match_col:
+        return check_date(osm_vs_mastr, match_col, strict=False), cols
     # check for strict matches on specified column
     return check_strict(osm_vs_mastr, match_col), cols
 

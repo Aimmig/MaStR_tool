@@ -2,6 +2,7 @@ import argparse
 from utils.Constants import ENERGY_SOURCES, SELECT_COLS
 from utils.Constants import ROTOR, HUB, POWER
 from utils.Constants import REF_EEG, REF_MASTR
+from utils.Constants import START
 
 
 def createSimpleMastrQueryParser():
@@ -55,6 +56,7 @@ def createOSMFormatParser():
             POWER,
             "name", "description", "note",
             REF_MASTR, REF_EEG, "ref",
+            START,
             ],
         help="The osm tag to check formatting",
         )

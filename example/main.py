@@ -74,9 +74,17 @@ if __name__ == "__main__":
         # osm_units[['id', 'end_date']].to_csv("dates.csv")
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance)
-        joined["ref:mastr"].to_csv("osm"+str(check_col or '')+".csv", index=False)
         plot("dist", cols, joined)
+        # print(list(joined))
+        mastr_diff = joined[~(joined["ref:mastr_osm"] == joined["ref:mastr_mastr"])]
+        mastr_diff = mastr_diff[["ref:mastr_osm", "ref:mastr_mastr", "id"]][mastr_diff["ref:mastr_osm"].notnull()]
+        mastr_diff["id"] = mastr_diff["id"].astype(int)
+        mastr_diff["ref:mastr_osm"] = mastr_diff["ref:mastr_osm"].astype(str)
+        mastr_diff["ref:mastr_mastr"] = mastr_diff["ref:mastr_mastr"].astype(str)
+        # print(mastr_diff)
+        # print(mastr_diff.shape[0])
         print_test_summary(distance,
                            joined, mastr_units, osm_units,
                            check_col, arguments.formatPower,
                            )
+        joined[["lat_mastr", "lon_mastr", "ref:mastr_mastr", check_col+"_mastr", check_col+"_osm"]].to_csv("result.csv", index=False)
