@@ -51,7 +51,7 @@ COMMON_COLS = {"Laengengrad": "lon",
                "EinheitMastrNummer": "ref:mastr",
                }
 
-SELECT_COLS = {"EegMastrNummer": "ref:EEG",
+SELECT_COLS = {"AnlagenschluesselEeg": "ref:EEG",
                # "InstallierteLeistung": "generator:output:electricity",
                "Nettonennleistung": "generator:output:electricity",
                "Inbetriebnahmedatum": "start_date",
@@ -82,5 +82,5 @@ END = SELECT_COLS["DatumEndgueltigeStilllegung"]
 MANUFACTURER = SELECT_COLS["Hersteller"]
 MODEL = SELECT_COLS["Typenbezeichnung"]
 POWER = SELECT_COLS["Nettonennleistung"]
-REF_EEG = SELECT_COLS["EegMastrNummer"]
+REF_EEG = SELECT_COLS["AnlagenschluesselEeg"]
 REF_MASTR = COMMON_COLS["EinheitMastrNummer"]
