@@ -45,7 +45,7 @@ if __name__ == "__main__":
     output = arguments.output
     osm_pbf = arguments.source
     check_col = arguments.tag
-    osm_units = getPlantsWithinArea(osm_pbf)
+    osm_units = getPlantsWithinArea(osm_pbf, sanitize=False)
     filtered = None
     cols = None
     if check_col in [POWER]:

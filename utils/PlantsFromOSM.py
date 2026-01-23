@@ -5,7 +5,7 @@ from utils.Constants import POWER, START, END, MODEL, HUB, ROTOR
 from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
 
 
-def getPlantsWithinArea(area_file: str):
+def getPlantsWithinArea(area_file: str, sanitize: bool):
     osm = pyrosm.OSM(area_file)
     extra_attributes = [POWER,
                         START,
@@ -40,19 +40,30 @@ def getPlantsWithinArea(area_file: str):
     # Convert column data types
     # Replace errors with NaN for now
     if HUB in plants.columns:
-        plants[HUB] = plants[HUB].str.strip(' mM')
-        plants[HUB] = plants[HUB].str.replace(',', '.')
-        plants[HUB] = pd.to_numeric(
-                plants[HUB],
-                # errors='coerce',
-                ).fillna(plants[HUB])
+        if sanitize:
+            plants[HUB] = plants[HUB].str.strip(' mM')
+            plants[HUB] = plants[HUB].str.replace(',', '.')
+            plants[HUB] = pd.to_numeric(
+                    plants[HUB],
+                    ).fillna(plants[HUB])
+        else:
+            plants[HUB] = pd.to_numeric(
+                    plants[HUB],
+                    errors='coerce',
+                    ).fillna(plants[HUB])
+
     if ROTOR in plants.columns:
-        plants[ROTOR] = plants[ROTOR].str.strip(' mM')
-        plants[ROTOR] = plants[ROTOR].str.replace(',', '.')
-        plants[ROTOR] = pd.to_numeric(
-                plants[ROTOR],
-                # errors='coerce',
-                ).fillna(plants[ROTOR])
+        if sanitize:
+            plants[ROTOR] = plants[ROTOR].str.strip(' mM')
+            plants[ROTOR] = plants[ROTOR].str.replace(',', '.')
+            plants[ROTOR] = pd.to_numeric(
+                    plants[ROTOR],
+                    ).fillna(plants[ROTOR])
+        else:
+            plants[ROTOR] = pd.to_numeric(
+                    plants[ROTOR],
+                    errors='coerce',
+                    ).fillna(plants[ROTOR])
     if START in plants.columns:
         plants[START] = pd.to_datetime(
                 plants[START],
