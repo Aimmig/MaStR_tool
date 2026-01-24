@@ -2,6 +2,7 @@ import pandas as pd
 import geopandas as gpd
 from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS
 from utils.Constants import START
+from utils.Constants import REF_MASTR
 
 
 def get_column_dict(keep_columns: list[str], with_geometry: bool) -> dict:
@@ -41,6 +42,22 @@ def check_cols_in_dataframe(df: pd.DataFrame, columns: list[str]) -> list[str]:
     return existing
 
 
+def get_existing_ref_missmatch(df: pd.DataFrame):
+    REF_MASTR_OSM = REF_MASTR + "_osm"
+    REF_MASTR_MASTR = REF_MASTR + "_mastr"
+    diff = df[~(df[REF_MASTR_OSM] == df[REF_MASTR_MASTR])]
+    diff = diff[[REF_MASTR_MASTR, REF_MASTR_OSM, "id"]][diff[REF_MASTR_OSM].notnull()]
+    diff["id"] = diff["id"].astype(int)
+    diff[REF_MASTR_OSM] = diff[REF_MASTR_OSM].astype(str)
+    diff[REF_MASTR_MASTR] = diff[REF_MASTR_MASTR].astype(str)
+    return diff
+
+
+def get_without_osm_ref(df: pd.DataFrame):
+    REF_MASTR_OSM = REF_MASTR + "_osm"
+    return df[df[REF_MASTR_OSM].isna()]
+
+
 # TO-DO relax strict assumptions for later imports
 def check_strict(df: pd.DataFrame, col: str) -> pd.DataFrame:
     mastr = "`" + col + "_mastr`"
@@ -54,6 +71,7 @@ def check_date(df: pd.DataFrame, col: str, strict: bool) -> pd.DataFrame:
     if strict:
         return check_strict(df, col)
     return df.loc[(df[mastr].dt.month == df[osm].dt.month) & (df[mastr].dt.year == df[osm].dt.year)]
+
 
 def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
     main_col = None
@@ -77,7 +95,7 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
 
 def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
                      mastr_units: gpd.GeoDataFrame, max_dist: int,
-                     date_strict: bool =True):
+                     date_strict: bool = True):
     # set proper crs
     crs_str = "ESRI:102003"
     osm_to_join = osm.to_crs(crs_str)

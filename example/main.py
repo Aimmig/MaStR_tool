@@ -5,6 +5,8 @@ from utils.PostProcessing import PostProcessing
 from utils.Helper import get_cols_without_geometry
 from utils.Helper import check_cols_in_dataframe
 from utils.Helper import plot, test_against_OSM, print_test_summary
+from utils.Helper import get_existing_ref_missmatch
+from utils.Helper import get_without_osm_ref
 from utils.PreConfiguredParser import createParser
 from utils.PlantsFromOSM import getPlantsWithinArea
 from utils.Constants import SELECT_COLS
@@ -76,13 +78,11 @@ if __name__ == "__main__":
         osm_units = getPlantsWithinArea(osm_pbf, sanitize=True, date_format=date_format)
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance,
-                                        date_strict = False)
+                                        date_strict=False)
         plot("dist", cols, joined)
-        mastr_diff = joined[~(joined["ref:mastr_osm"] == joined["ref:mastr_mastr"])]
-        mastr_diff = mastr_diff[["ref:mastr_osm", "ref:mastr_mastr", "id"]][mastr_diff["ref:mastr_osm"].notnull()]
-        mastr_diff["id"] = mastr_diff["id"].astype(int)
-        mastr_diff["ref:mastr_osm"] = mastr_diff["ref:mastr_osm"].astype(str)
-        mastr_diff["ref:mastr_mastr"] = mastr_diff["ref:mastr_mastr"].astype(str)
+        mastr_diff = get_existing_ref_missmatch(joined)
+        print(mastr_diff)
+        joined = get_without_osm_ref(joined)
         print_test_summary(distance,
                            joined, mastr_units, osm_units,
                            check_col, arguments.formatPower,
