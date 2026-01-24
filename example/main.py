@@ -70,19 +70,19 @@ if __name__ == "__main__":
             check_col = arguments.testagainstOSM[1]
             check_col = SELECT_COLS[check_col]
         distance = 50
-        osm_units = getPlantsWithinArea(osm_pbf, sanitize=True)
-        # osm_units[['id', 'end_date']].to_csv("dates.csv")
+        date_format = "%Y/%m"
+        # date_format = "%d.%m.%Y"
+        # date_format = "%Y-%m-%d"
+        osm_units = getPlantsWithinArea(osm_pbf, sanitize=True, date_format=date_format)
         joined, cols = test_against_OSM(check_col, osm_units,
-                                        mastr_units, max_dist=distance)
+                                        mastr_units, max_dist=distance,
+                                        date_strict = False)
         plot("dist", cols, joined)
-        # print(list(joined))
         mastr_diff = joined[~(joined["ref:mastr_osm"] == joined["ref:mastr_mastr"])]
         mastr_diff = mastr_diff[["ref:mastr_osm", "ref:mastr_mastr", "id"]][mastr_diff["ref:mastr_osm"].notnull()]
         mastr_diff["id"] = mastr_diff["id"].astype(int)
         mastr_diff["ref:mastr_osm"] = mastr_diff["ref:mastr_osm"].astype(str)
         mastr_diff["ref:mastr_mastr"] = mastr_diff["ref:mastr_mastr"].astype(str)
-        # print(mastr_diff)
-        # print(mastr_diff.shape[0])
         print_test_summary(distance,
                            joined, mastr_units, osm_units,
                            check_col, arguments.formatPower,

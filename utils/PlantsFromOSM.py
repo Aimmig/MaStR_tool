@@ -5,7 +5,7 @@ from utils.Constants import POWER, START, END, MODEL, HUB, ROTOR
 from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
 
 
-def getPlantsWithinArea(area_file: str, sanitize: bool):
+def getPlantsWithinArea(area_file: str, sanitize: bool, date_format: str = "%Y-%m-%d"):
     osm = pyrosm.OSM(area_file)
     extra_attributes = [POWER,
                         START,
@@ -67,15 +67,13 @@ def getPlantsWithinArea(area_file: str, sanitize: bool):
         plants[START] = pd.to_datetime(
                 plants[START],
                 errors='coerce',
-                format="%Y-%m-%d",
-                #format="%d.%m.%Y",
-                #format="%Y/%m",
+                format=date_format,
             )
     if END in plants.columns:
         plants[END] = pd.to_datetime(
                 plants[END],
                 errors='coerce',
-                format="%Y-%m-%d",
+                format=date_format,
                 )
     if MANUFACTURER in plants.columns:
         plants = PostProcessing.format_manufacturer(plants, MANUFACTURER)
