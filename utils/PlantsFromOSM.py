@@ -5,8 +5,8 @@ from utils.Constants import POWER, START, END, MODEL, HUB, ROTOR
 from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
 
 
-def getPlantsWithinArea(area_file: str, sanitize: bool,
-                        date_format: str = "%Y-%m-%d"):
+def getPlantsWithinArea(area_file: str, gen_source: str, gen_method: str,
+                        sanitize: bool, date_format: str = "%Y-%m-%d"):
     osm = pyrosm.OSM(area_file)
     extra_attributes = [POWER,
                         START,
@@ -23,8 +23,8 @@ def getPlantsWithinArea(area_file: str, sanitize: bool,
                         "note",
                         ]
     plants = osm.get_data_by_custom_criteria(custom_filter={
-                                        "generator:source": ["wind"],
-                                        "generator:method": ["wind_turbine"]},
+                                        "generator:source": [gen_source],
+                                        "generator:method": [gen_method]},
                                         extra_attributes=extra_attributes,
                                         # Keep data matching the criteria above
                                         filter_type="keep",

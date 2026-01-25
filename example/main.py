@@ -75,7 +75,10 @@ if __name__ == "__main__":
         date_format = "%Y/%m"
         # date_format = "%d.%m.%Y"
         # date_format = "%Y-%m-%d"
-        osm_units = getPlantsWithinArea(osm_pbf, sanitize=True, date_format=date_format)
+        gen_source = "wind"
+        gen_method = "wind_turbine"
+        osm_units = getPlantsWithinArea(osm_pbf, gen_source, gen_method,
+                                        sanitize=True, date_format=date_format)
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance,
                                         date_strict=False)
@@ -87,4 +90,6 @@ if __name__ == "__main__":
                            joined, mastr_units, osm_units,
                            check_col, arguments.formatPower,
                            )
-        joined[["lat_mastr", "lon_mastr", "ref:mastr_mastr", check_col+"_mastr", check_col+"_osm"]].to_csv("result.csv", index=False)
+        mastr_col_sel = ["lat_mastr", "lon_mastr", "ref:mastr_mastr",
+                         check_col+"_mastr", check_col+"_osm"]
+        joined[mastr_col_sel].to_csv("result.csv", index=False)

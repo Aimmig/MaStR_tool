@@ -45,7 +45,10 @@ if __name__ == "__main__":
     output = arguments.output
     osm_pbf = arguments.source
     check_col = arguments.tag
-    osm_units = getPlantsWithinArea(osm_pbf, sanitize=False)
+    gen_source = "wind"
+    gen_method = "wind_turbine"
+    osm_units = getPlantsWithinArea(osm_pbf, gen_source,
+                                    gen_method, sanitize=False)
     filtered = None
     cols = None
     if check_col in [POWER]:
