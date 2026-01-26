@@ -2,9 +2,8 @@ import pandas as pd
 import geopandas as gpd
 import numpy as np
 from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS
-from utils.Constants import START
-from utils.Constants import REF_MASTR
-from utils.Constants import HUB, ROTOR
+from utils.Constants import START, END, REF_MASTR, HUB, ROTOR
+from utils.Constants import MANUFACTURER, MODEL, POWER, REF_EEG
 
 
 def get_column_dict(keep_columns: list[str], with_geometry: bool) -> dict:
@@ -78,6 +77,7 @@ def check_length(df: pd.DataFrame, col: str) -> pd.DataFrame:
     osm = col + "_osm"
     return df[df[mastr].between(np.floor(df[osm]-1), np.ceil(df[osm])+1)]
 
+
 def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
     main_col = None
     if plot_args:
@@ -121,13 +121,16 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
         return no_match, cols
     # only keep result with non-zero distance. aka only good results
     osm_vs_mastr = osm_vs_mastr.query("dist > 0")
-    # check for strict matches on specified column
-    if strict: # or match_col in []:
+    # some columns are for now only strict, so ignore flag
+    if strict or match_col in [MANUFACTURER, MODEL, POWER, REF_EEG]:
         return check_strict(osm_vs_mastr, match_col), cols
-    if "date" in match_col:
+    # start/end can be relaxed
+    if match_col in [START, END]:
         return check_date(osm_vs_mastr, match_col), cols
+    # length values can be relaxed
     if match_col in [HUB, ROTOR]:
         return check_length(osm_vs_mastr, match_col), cols
+
 
 def print_test_summary(dist: int, joined, mastr, osm, check_col, power):
     print("----OSM vs MaStR matches, also see generated map------")

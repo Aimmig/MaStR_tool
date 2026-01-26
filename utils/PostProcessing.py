@@ -35,7 +35,7 @@ class PostProcessing:
     @staticmethod
     def format_lambda(df: pd.DataFrame, column: str, manufacturer: tuple):
         """
-        Helper method to apply the replacment of manufacturer names on one
+        Helper method to apply the replacement of manufacturer names on one
         manufacturer
         """
         df[column] = df[column].apply(
@@ -54,6 +54,13 @@ class PostProcessing:
             return df
         for m in MANUFACTURERS.items():
             df = PostProcessing.format_lambda(df, manufacturer_col, m)
+        return df
+
+    @staticmethod
+    def format_model(df: pd.DataFrame, model_col: str):
+        if model_col not in df.columns.values:
+            return df
+        df[model_col] = df[model_col].str.replace(r'[ .,-\/]', '', regex=True)
         return df
 
     @staticmethod

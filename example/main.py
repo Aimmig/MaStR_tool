@@ -49,6 +49,7 @@ def getData(args) -> gpd.GeoDataFrame:
 
     cols_to_keep = check_cols_in_dataframe(plants, args.keepColumns)
     plants = PostProcessing.format_power(plants, args.formatPower)
+    plants = PostProcessing.format_model(plants, "Typenbezeichnung")
     plants = PostProcessing.translate(plants, cols_to_keep)
     return plants, get_cols_without_geometry(cols_to_keep)
 
