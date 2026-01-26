@@ -43,7 +43,11 @@ def check_cols_in_dataframe(df: pd.DataFrame, columns: list[str]) -> list[str]:
     return existing
 
 
-def get_existing_ref_missmatch(df: pd.DataFrame):
+def get_existing_ref_missmatch(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Return cases where after join the ref:mastr is unexpectedly different
+    Only keep the id and refs
+    """
     REF_MASTR_OSM = REF_MASTR + "_osm"
     REF_MASTR_MASTR = REF_MASTR + "_mastr"
     diff = df[~(df[REF_MASTR_OSM] == df[REF_MASTR_MASTR])]
@@ -55,30 +59,50 @@ def get_existing_ref_missmatch(df: pd.DataFrame):
 
 
 def get_without_osm_ref(df: pd.DataFrame):
+    """
+    Return the part of df where ref:mastr is not present in osm
+    """
     REF_MASTR_OSM = REF_MASTR + "_osm"
     return df[df[REF_MASTR_OSM].isna()]
 
 
-# TO-DO relax strict assumptions for later imports
 def check_strict(df: pd.DataFrame, col: str) -> pd.DataFrame:
+    """
+    Compare the col from osm and mastr in df
+    based on strict equality
+    Returns the matching part of df
+    """
     mastr = "`" + col + "_mastr`"
     osm = "`" + col + "_osm`"
     return df.query(f"({osm} == {mastr})")
 
 
 def check_date(df: pd.DataFrame, col: str) -> pd.DataFrame:
+    """
+    Compare date from osm and mastr in df
+    based on wether month and year are identical
+    Returns the matching part of df
+    """
     mastr = col + "_mastr"
     osm = col + "_osm"
     return df.loc[(df[mastr].dt.month == df[osm].dt.month) & (df[mastr].dt.year == df[osm].dt.year)]
 
 
 def check_length(df: pd.DataFrame, col: str) -> pd.DataFrame:
+    """
+    Compare length values from osm and mastr in df
+    based on wether one is in a small range around the other
+    Returns the matching part of df
+    """
     mastr = col + "_mastr"
     osm = col + "_osm"
     return df[df[mastr].between(np.floor(df[osm]-1), np.ceil(df[osm])+1)]
 
 
 def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
+    """
+    Plots the data based on the given arguments
+    """
     main_col = None
     if plot_args:
         if plot_args == "year":
@@ -101,6 +125,11 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
 def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
                      mastr_units: gpd.GeoDataFrame, max_dist: int,
                      strict: bool = True):
+    """
+    Sjoins the given osm and mastr dfs
+    Then checks wether the resulting rows match on the given
+    column either strict or for some columns relaxed.
+    """
     # set proper crs
     crs_str = "ESRI:102003"
     osm_to_join = osm.to_crs(crs_str)
@@ -133,6 +162,9 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
 
 
 def print_test_summary(dist: int, joined, mastr, osm, check_col, power):
+    """
+    Print summary of the found matches
+    """
     print("----OSM vs MaStR matches, also see generated map------")
     if check_col:
         settings = "----Settings: " + str(dist) + " with " + check_col

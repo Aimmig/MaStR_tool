@@ -33,6 +33,7 @@ MANUFACTURERS = {"Nordex": "Nordex",
                  "Adwen": "Adwen",
                  }
 
+# constant dict for different MaStR refs
 MASTR_REFS = {"EEG": "EegMastrNummer",
               "SEE": "EinheitMastrNummer",
               "SEL": "LokationMastrNummer",
@@ -44,13 +45,14 @@ MASTR_REFS = {"EEG": "EegMastrNummer",
               }
 
 ENERGY_SOURCES = ["wind", "hydro", "biomass", "gsgk"]
-
 GEOMETRY_COLS = {"geometry": "geometry"}
+# constant dict from mastr -> osm for required columns
 COMMON_COLS = {"Laengengrad": "lon",
                "Breitengrad": "lat",
                "EinheitMastrNummer": "ref:mastr",
                }
 
+# constant dict from mastr -> osm for optional columns
 SELECT_COLS = {"AnlagenschluesselEeg": "ref:EEG",
                # "InstallierteLeistung": "generator:output:electricity",
                "Nettonennleistung": "generator:output:electricity",
@@ -75,6 +77,7 @@ SELECT_COLS = {"AnlagenschluesselEeg": "ref:EEG",
                "VerknuepfteEinheit": "connectedUnit",
                }
 
+# individual constants from mastr -> osm
 HUB = SELECT_COLS["Nabenhoehe"]
 ROTOR = SELECT_COLS["Rotordurchmesser"]
 START = SELECT_COLS["Inbetriebnahmedatum"]

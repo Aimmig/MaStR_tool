@@ -7,6 +7,13 @@ from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
 
 def getPlantsWithinArea(area_file: str, gen_source: str, gen_method: str,
                         sanitize: bool, date_format: str = "%Y-%m-%d"):
+    """
+    Extracts the ways/nodes with given method/source from
+    given osm pbf area file (Should be pre-filtered).
+    Applies some basic type conversion, like date, int etc.
+    Optionaly sanitzes some of the inputs.
+    Returns gpd containing the data
+    """
     osm = pyrosm.OSM(area_file)
     extra_attributes = [POWER,
                         START,
@@ -78,6 +85,7 @@ def getPlantsWithinArea(area_file: str, gen_source: str, gen_method: str,
                 )
     if MANUFACTURER in plants.columns:
         plants = PostProcessing.format_manufacturer(plants, MANUFACTURER)
+    # sanitze model from some often used chars
     if MODEL in plants.columns:
         if sanitize:
             plants[MODEL] = plants[MODEL].str.replace(r'[ .,-\/]', '', regex=True)

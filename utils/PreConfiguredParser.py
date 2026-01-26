@@ -6,6 +6,10 @@ from utils.Constants import START, END
 
 
 def createSimpleMastrQueryParser():
+    """
+    Custom parser for quering details based on a list
+    of some MaStR ref numbers
+    """
     parser = argparse.ArgumentParser(
         usage='%(prog)s [options]',
         )
@@ -35,6 +39,11 @@ def createSimpleMastrQueryParser():
 
 
 def createOSMFormatParser():
+    """
+    Custom parser for reading the osm pbf file
+    and check tags for potentially malformed or
+    suspicous things
+    """
     parser = argparse.ArgumentParser(
         usage='%(prog)s [options]',
         )
@@ -65,7 +74,8 @@ def createOSMFormatParser():
 
 def createParser():
     """
-    Create parser for different cmd line options
+    Custom parser for the main programm.
+    Different cmd line options
     Returns: the preconfigured parser
     """
     parser = argparse.ArgumentParser(

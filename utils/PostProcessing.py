@@ -33,7 +33,8 @@ class PostProcessing:
         return df
 
     @staticmethod
-    def format_lambda(df: pd.DataFrame, column: str, manufacturer: tuple):
+    def format_lambda(df: pd.DataFrame, column: str,
+                      manufacturer: tuple) -> pd.DataFrame:
         """
         Helper method to apply the replacement of manufacturer names on one
         manufacturer
@@ -57,7 +58,10 @@ class PostProcessing:
         return df
 
     @staticmethod
-    def format_model(df: pd.DataFrame, model_col: str):
+    def format_model(df: pd.DataFrame, model_col: str) -> pd.DataFrame:
+        """
+        Sanitizes the model column from some commonly used chars
+        """
         if model_col not in df.columns.values:
             return df
         df[model_col] = df[model_col].str.replace(r'[ .,-\/]', '', regex=True)

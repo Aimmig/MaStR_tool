@@ -9,6 +9,9 @@ import pandas as pd
 
 def check_power_value(osm: pd.DataFrame,
                       col: str) -> (pd.DataFrame, list[str]):
+    """
+    Get part of df where power tag is potentially malformed.
+    """
     valid = "small_installation|MW|kW|yes"
     res = osm[~osm[col].str.contains(valid, na=False)].dropna(subset=[col])
     return res, ['id'] + [col]
@@ -16,12 +19,18 @@ def check_power_value(osm: pd.DataFrame,
 
 def check_date(osm: pd.DataFrame,
                col: str) -> (pd.DataFrame, list[str]):
+    """
+    Get part of df where date contains something else than [0-9] and dash.
+    """
     res = osm[osm[col].astype(str).str.contains(r'[0-9-]', regex=True)]
     return res, ['id'] + [col]
 
 
 def check_meter_values(osm: pd.DataFrame,
                        col: str) -> (pd.DataFrame, list[str]):
+    """
+    Get part of df where length tags are potentially malformed.
+    """
     res = osm[~osm[col].astype(str).str.isdigit()].dropna(subset=[col])
     res = res[res[col].astype(str).str.contains(' |,|m|"')]
     return res, ['id'] + [HUB, ROTOR]
@@ -29,6 +38,10 @@ def check_meter_values(osm: pd.DataFrame,
 
 def check_name(osm: pd.DataFrame,
                col: str) -> (pd.DataFrame, list[str]):
+    """
+    Get part of df where tags like name/ref/descripton ect..
+    contains some things that potentially shouldn't be in these tags.
+    """
     sep = "|"
     man_short = sep.join(MANUFACTURERS.values())
     man_long = sep.join(MANUFACTURERS.keys())

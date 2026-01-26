@@ -20,6 +20,7 @@ def getData(args) -> gpd.GeoDataFrame:
     """
     plants = Mastrdata(args.source).df
 
+    # evaluate all args and apply the correct funtions
     if args.query:
         plants = plants.query(args.query)
     if args.discardSmall:
@@ -47,6 +48,7 @@ def getData(args) -> gpd.GeoDataFrame:
     if args.formatManufacturer:
         plants = PostProcessing.format_manufacturer(plants, "Hersteller")
 
+    # always apply column filter, power and model formating and tranlation
     cols_to_keep = check_cols_in_dataframe(plants, args.keepColumns)
     plants = PostProcessing.format_power(plants, args.formatPower)
     plants = PostProcessing.format_model(plants, "Typenbezeichnung")
@@ -66,6 +68,7 @@ if __name__ == "__main__":
                 )
     if csv:
         print(csv)
+    # TO-DO Decouple the following from the previous
     if arguments.testagainstOSM:
         osm_pbf = arguments.testagainstOSM[0]
         check_col = None
