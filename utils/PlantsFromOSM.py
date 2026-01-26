@@ -45,7 +45,7 @@ def getPlantsWithinArea(area_file: str, gen_source: str, gen_method: str,
             plants[HUB] = plants[HUB].str.replace(',', '.')
             plants[HUB] = pd.to_numeric(
                     plants[HUB],
-                    ).fillna(plants[HUB])
+                    )#.fillna(plants[HUB])
         else:
             plants[HUB] = pd.to_numeric(
                     plants[HUB],
@@ -58,7 +58,7 @@ def getPlantsWithinArea(area_file: str, gen_source: str, gen_method: str,
             plants[ROTOR] = plants[ROTOR].str.replace(',', '.')
             plants[ROTOR] = pd.to_numeric(
                     plants[ROTOR],
-                    ).fillna(plants[ROTOR])
+                    )#.fillna(plants[ROTOR])
         else:
             plants[ROTOR] = pd.to_numeric(
                     plants[ROTOR],

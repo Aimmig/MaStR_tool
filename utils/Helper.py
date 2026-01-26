@@ -1,8 +1,10 @@
 import pandas as pd
 import geopandas as gpd
+import numpy as np
 from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS
 from utils.Constants import START
 from utils.Constants import REF_MASTR
+from utils.Constants import HUB, ROTOR
 
 
 def get_column_dict(keep_columns: list[str], with_geometry: bool) -> dict:
@@ -65,13 +67,16 @@ def check_strict(df: pd.DataFrame, col: str) -> pd.DataFrame:
     return df.query(f"({osm} == {mastr})")
 
 
-def check_date(df: pd.DataFrame, col: str, strict: bool) -> pd.DataFrame:
+def check_date(df: pd.DataFrame, col: str) -> pd.DataFrame:
     mastr = col + "_mastr"
     osm = col + "_osm"
-    if strict:
-        return check_strict(df, col)
     return df.loc[(df[mastr].dt.month == df[osm].dt.month) & (df[mastr].dt.year == df[osm].dt.year)]
 
+
+def check_length(df: pd.DataFrame, col: str) -> pd.DataFrame:
+    mastr = col + "_mastr"
+    osm = col + "_osm"
+    return df[df[mastr].between(np.floor(df[osm]-1), np.ceil(df[osm])+1)]
 
 def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
     main_col = None
@@ -95,7 +100,7 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
 
 def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
                      mastr_units: gpd.GeoDataFrame, max_dist: int,
-                     date_strict: bool = True):
+                     strict: bool = True):
     # set proper crs
     crs_str = "ESRI:102003"
     osm_to_join = osm.to_crs(crs_str)
@@ -116,11 +121,13 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
         return no_match, cols
     # only keep result with non-zero distance. aka only good results
     osm_vs_mastr = osm_vs_mastr.query("dist > 0")
-    if "date" in match_col:
-        return check_date(osm_vs_mastr, match_col, strict=date_strict), cols
     # check for strict matches on specified column
-    return check_strict(osm_vs_mastr, match_col), cols
-
+    if strict: # or match_col in []:
+        return check_strict(osm_vs_mastr, match_col), cols
+    if "date" in match_col:
+        return check_date(osm_vs_mastr, match_col), cols
+    if match_col in [HUB, ROTOR]:
+        return check_length(osm_vs_mastr, match_col), cols
 
 def print_test_summary(dist: int, joined, mastr, osm, check_col, power):
     print("----OSM vs MaStR matches, also see generated map------")

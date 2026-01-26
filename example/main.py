@@ -81,7 +81,7 @@ if __name__ == "__main__":
                                         sanitize=True, date_format=date_format)
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance,
-                                        date_strict=False)
+                                        strict=False)
         plot("dist", cols, joined)
         mastr_diff = get_existing_ref_missmatch(joined)
         print(mastr_diff)
