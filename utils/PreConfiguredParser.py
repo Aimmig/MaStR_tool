@@ -1,5 +1,5 @@
 import argparse
-from utils.Constants import ENERGY_SOURCES, SELECT_COLS
+from utils.Constants import ENERGY_SOURCES, SELECT_COLS, COMMON_COLS
 from utils.Constants import ROTOR, HUB, POWER
 from utils.Constants import REF_EEG, REF_MASTR
 from utils.Constants import START, END
@@ -21,7 +21,7 @@ def createSimpleMastrQueryParser():
     parser.add_argument(
         "--keepColumns", "-keep",
         nargs='*',
-        choices=SELECT_COLS.keys(),
+        choices=list(SELECT_COLS.keys()) + list(COMMON_COLS.keys()),
         help="Which columns to keep, if these exist.",
         )
     parser.add_argument(
