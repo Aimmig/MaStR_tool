@@ -50,8 +50,9 @@ def check_name(osm: pd.DataFrame,
         search = search + sep + "SEE"
     res = osm[osm[col].str.contains(search, na=False)]
     # Find where matches with Exxxxxx ref number exits and add those, too
-    ref_res = osm[(osm[col].str.len() == 33) & (osm[col].str.startswith('E'))]
-    res = pd.concat([res, ref_res])
+    if col != REF_EEG:
+        ref_res = osm[(osm[col].str.len() == 33) & (osm[col].str.startswith('E'))]
+        res = pd.concat([res, ref_res])
     return res, ['id'] + [col]
 
 
