@@ -45,10 +45,13 @@ def check_name(osm: pd.DataFrame,
     sep = "|"
     man_short = sep.join(MANUFACTURERS.values())
     man_long = sep.join(MANUFACTURERS.keys())
-    search = 'MW|kW|KW|MaStR|' + man_short + sep + man_long
+    search = 'MW|kW|KW|MaStR|EEG' + man_short + sep + man_long
     if col != REF_MASTR:
         search = search + sep + "SEE"
     res = osm[osm[col].str.contains(search, na=False)]
+    # Find where matches with Exxxxxx ref number exits and add those, too
+    ref_res = osm[(osm[col].str.len() == 33) & (osm[col].str.startswith('E'))]
+    res = pd.concat([res, ref_res])
     return res, ['id'] + [col]
 
 
