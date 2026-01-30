@@ -109,5 +109,6 @@ def getPlantsWithinArea(area_file: str, gen_source: str, gen_method: str,
     # sanitze model from some often used chars
     if MODEL in plants.columns:
         if sanitize:
-            plants[MODEL] = plants[MODEL].str.replace(r'[ .,-\/]', '', regex=True)
+            plants[MODEL] = plants[MODEL].str.replace(
+                    r'[ .,-\/]', '', regex=True)
     return plants

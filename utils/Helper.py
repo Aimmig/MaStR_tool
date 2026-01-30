@@ -85,7 +85,8 @@ def check_date(df: pd.DataFrame, col: str) -> pd.DataFrame:
     """
     mastr = col + "_mastr"
     osm = col + "_osm"
-    return df.loc[(df[mastr].dt.month == df[osm].dt.month) & (df[mastr].dt.year == df[osm].dt.year)]
+    return df.loc[(df[mastr].dt.month == df[osm].dt.month) &
+                  (df[mastr].dt.year == df[osm].dt.year)]
 
 
 def check_length(df: pd.DataFrame, col: str) -> pd.DataFrame:

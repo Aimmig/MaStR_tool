@@ -28,7 +28,7 @@ def createSimpleMastrQueryParser():
         "ref",
         nargs='+',
         type=str,
-        help="The MaStR reference numbers to search, e.g. SEExxx, EEGxxx etc.",
+        help="The MaStR reference to search, e.g. SEExxx, EEGxxx etc.",
     )
     parser.add_argument(
         "--output", "-o",
@@ -50,12 +50,12 @@ def createOSMFormatParser():
     parser.add_argument(
         "source",
         type=str,
-        help="The prefiltered osm pbf file to test",
+        help="osm pbf file to test",
         )
     parser.add_argument(
         "--output", "-o",
         type=str,
-        help="Optional file to write csv data to",
+        help="optional file to write csv data",
         )
     parser.add_argument(
         "tag",
@@ -67,7 +67,7 @@ def createOSMFormatParser():
             REF_MASTR, REF_EEG, "ref",
             START, END
             ],
-        help="The osm tag to check formatting",
+        help="osm tag to check formatting",
         )
     return parser
 
@@ -85,22 +85,22 @@ def createParser():
     parser.add_argument(
         "source",
         choices=ENERGY_SOURCES,
-        help="The energy source for which to download the data from MaStR",
+        help="energy source for which to download the data from MaStR",
         )
     parser.add_argument(
         "--output", "-o",
         type=str,
-        help="Optional file to write csv data to",
+        help="optional file to write csv data",
         )
     parser.add_argument(
         "--keepColumns", "-keep",
         nargs='*',
         choices=SELECT_COLS.keys(),
-        help="Which columns to keep, if these exist.")
+        help="columns to keep, if these exist.")
     parser.add_argument(
         "--discardSmall",
         type=int,
-        help="Discard small installations")
+        help="discard small installations")
     parser.add_argument(
         "--formatPower", "-power",
         nargs='?',
@@ -177,7 +177,7 @@ def createParser():
         "--testagainstOSM",
         type=str,
         nargs='+',
-        help="local osm.pbf file and column to match. No column: mismatches",
+        help="osm.pbf file and column to match. No column: mismatches",
         )
 
     parser.set_defaults(formatPower="kW")

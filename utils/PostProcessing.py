@@ -76,5 +76,6 @@ class PostProcessing:
         """
         # generate full dict and then only keep existing ones
         all_cols = get_column_dict(keep_columns, with_geometry=True)
-        cols = {k: all_cols[k] for k in all_cols.keys() if k in df.columns.values}
+        cols = {k: all_cols[k] for k in all_cols.keys()
+                if k in df.columns.values}
         return df[cols.keys()].rename(columns=cols)
