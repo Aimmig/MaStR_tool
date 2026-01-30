@@ -76,9 +76,6 @@ if __name__ == "__main__":
         if len(arguments.testagainstOSM) > 1:
             check_col = arguments.testagainstOSM[1]
             check_col = SELECT_COLS[check_col]
-        # pre filter file with osmium
-        tmp_area = "/tmp/area-filtered.osm.pbf"
-        filter_and_write(osm_pbf, tmp_area, invalidate_cache=False)
         # settings
         distance = 50
         date_format = "%Y/%m"
@@ -86,8 +83,10 @@ if __name__ == "__main__":
         # date_format = "%Y-%m-%d"
         gen_source = "wind"
         gen_method = "wind_turbine"
-        osm_units = getPlantsWithinArea(tmp_area, gen_source, gen_method,
-                                        sanitize=True, date_format=date_format)
+        osm_units = getPlantsWithinArea(osm_pbf,
+                                        gen_source, gen_method,
+                                        sanitize=True, invalidate_cache=False,
+                                        date_format=date_format)
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance,
                                         strict=False)

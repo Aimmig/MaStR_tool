@@ -1,4 +1,5 @@
 import argparse
+from pyrosm.data import sources
 from utils.Constants import ENERGY_SOURCES, SELECT_COLS, COMMON_COLS
 from utils.Constants import ROTOR, HUB, POWER
 from utils.Constants import REF_EEG, REF_MASTR
@@ -48,9 +49,10 @@ def createOSMFormatParser():
         usage='%(prog)s [options]',
         )
     parser.add_argument(
-        "source",
+        "area",
         type=str,
-        help="osm pbf file to test",
+        choices=["germany"] + sources.subregions.germany.available,
+        help="are to investigate",
         )
     parser.add_argument(
         "--output", "-o",
@@ -177,7 +179,8 @@ def createParser():
         "--testagainstOSM",
         type=str,
         nargs='+',
-        help="osm.pbf file and column to match. No column: mismatches",
+        choices=["germany"] + sources.subregions.germany.available + list(SELECT_COLS.keys()),
+        help="Select one area and one column to match. No column: mismatches",
         )
 
     parser.set_defaults(formatPower="kW")

@@ -62,14 +62,12 @@ if __name__ == "__main__":
     parser = createOSMFormatParser()
     arguments = parser.parse_args()
     output = arguments.output
-    osm_pbf = arguments.source
+    area = arguments.area
     check_col = arguments.tag
-    tmp_area = "/tmp/area-filtered.osm.pbf"
-    filter_and_write(osm_pbf, tmp_area, invalidate_cache=False)
     gen_source = "wind"
     gen_method = "wind_turbine"
-    osm_units = getPlantsWithinArea(tmp_area, gen_source,
-                                    gen_method, sanitize=False)
+    osm_units = getPlantsWithinArea(area, gen_source, gen_method,
+                                    sanitize=True, invalidate_cache=True)
     filtered = None
     cols = None
     if check_col in [POWER]:

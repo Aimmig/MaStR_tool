@@ -7,13 +7,34 @@ from utils.Constants import POWER, START, END, MODEL, HUB, ROTOR
 from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
 
 
+def getPlantsWithinArea(area: str, gen_source: str, gen_method: str,
+                        sanitize: bool = False, invalidate_cache: bool = False,
+                        date_format: str = "%Y-%m-%d"):
+    """
+    Wrapper function to download, pre-filter and then read and prepare
+    data from osm pbf
+    """
+    fp_base = "/tmp/pyrosm/" + area
+    suffix = ".osm.pbf"
+    fp_full = fp_base + "-latest" + suffix
+    fp_filtered = fp_base + "-latest-filtered" + suffix
+    if invalidate_cache or not os.path.isfile(fp_full):
+        fp = pyrosm.get_data(area, update=True)
+    else:
+        print("[INFO]: Using existing base file " + fp_full)
+    filter_and_write(fp_full, fp_filtered, invalidate_cache=invalidate_cache)
+    return read_and_prepare(fp_filtered, gen_source, gen_method,
+                            sanitize=sanitize, date_format=date_format)
+
+
 def filter_and_write(osm_pbf_in: str, tmp_file: str,
-                     invalidate_cache: bool = False):
+                     invalidate_cache: bool):
     """
     Filters the osm pbf for useful tags and writes output
     to tmp file. This tmp file should be used after that.
     """
     if invalidate_cache or not os.path.isfile(tmp_file):
+        print("[INFO]: Recreating filtered file " + tmp_file)
         gen_tag_filter = osmium.filter.TagFilter(
                 ("generator:source", "wind"),
                 ("generator:method", "wind_turbine"))
@@ -24,18 +45,20 @@ def filter_and_write(osm_pbf_in: str, tmp_file: str,
                                         overwrite=True) as writer:
             for obj in fp:
                 writer.add(obj)
+    else:
+        print("[INFO]: Using existing filtered file " + tmp_file)
 
 
-def getPlantsWithinArea(area_file: str, gen_source: str, gen_method: str,
-                        sanitize: bool, date_format: str = "%Y-%m-%d"):
+def read_and_prepare(file: str, gen_source: str, gen_method: str,
+                     sanitize: bool, date_format: str):
     """
     Extracts the ways/nodes with given method/source from
     given osm pbf area file (Should be pre-filtered).
     Applies some basic type conversion, like date, int etc.
-    Optionaly sanitzes some of the inputs.
+    Optionaly sanitizes some of the inputs.
     Returns gpd containing the data
     """
-    osm = pyrosm.OSM(area_file)
+    osm = pyrosm.OSM(file)
     extra_attributes = [POWER,
                         START,
                         END,
@@ -62,7 +85,10 @@ def getPlantsWithinArea(area_file: str, gen_source: str, gen_method: str,
                                         keep_nodes=True,
                                         keep_ways=True,
                                         keep_relations=False)
+    return prepare(plants, sanitize, date_format)
 
+
+def prepare(plants: pd.DataFrame, sanitize: bool, date_format: str):
     # Potentially fix these cases in OSM
     # sanitize inputs from known problems
     # Convert column data types
@@ -106,7 +132,7 @@ def getPlantsWithinArea(area_file: str, gen_source: str, gen_method: str,
                 )
     if MANUFACTURER in plants.columns:
         plants = PostProcessing.format_manufacturer(plants, MANUFACTURER)
-    # sanitze model from some often used chars
+    # sanitize model from some often used chars
     if MODEL in plants.columns:
         if sanitize:
             plants[MODEL] = plants[MODEL].str.replace(
