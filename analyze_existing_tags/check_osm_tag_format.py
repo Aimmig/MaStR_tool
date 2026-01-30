@@ -1,5 +1,6 @@
 from utils.PreConfiguredParser import createOSMFormatParser
 from utils.PlantsFromOSM import getPlantsWithinArea
+from utils.PlantsFromOSM import filter_and_write
 from utils.Helper import plot
 from utils.Constants import MANUFACTURERS
 from utils.Constants import POWER, ROTOR, HUB, START, END
@@ -51,7 +52,8 @@ def check_name(osm: pd.DataFrame,
     res = osm[osm[col].str.contains(search, na=False)]
     # Find where matches with Exxxxxx ref number exits and add those, too
     if col != REF_EEG:
-        ref_res = osm[(osm[col].str.len() == 33) & (osm[col].str.startswith('E'))]
+        ref_res = osm[(osm[col].str.len() == 33) &
+                      (osm[col].str.startswith('E'))]
         res = pd.concat([res, ref_res])
     return res, ['id'] + [col]
 
@@ -62,9 +64,11 @@ if __name__ == "__main__":
     output = arguments.output
     osm_pbf = arguments.source
     check_col = arguments.tag
+    tmp_area = "/tmp/area-filtered.osm.pbf"
+    filter_and_write(osm_pbf, tmp_area, invalidate_cache=False)
     gen_source = "wind"
     gen_method = "wind_turbine"
-    osm_units = getPlantsWithinArea(osm_pbf, gen_source,
+    osm_units = getPlantsWithinArea(tmp_area, gen_source,
                                     gen_method, sanitize=False)
     filtered = None
     cols = None

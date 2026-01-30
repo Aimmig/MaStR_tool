@@ -1,8 +1,29 @@
 import pyrosm
+import osmium
 import pandas as pd
+import os.path
 from utils.PostProcessing import PostProcessing
 from utils.Constants import POWER, START, END, MODEL, HUB, ROTOR
 from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
+
+
+def filter_and_write(osm_pbf_in: str, tmp_file: str,
+                     invalidate_cache: bool = False):
+    """
+    Filters the osm pbf for useful tags and writes output
+    to tmp file. This tmp file should be used after that.
+    """
+    if invalidate_cache or not os.path.isfile(tmp_file):
+        gen_tag_filter = osmium.filter.TagFilter(
+                ("generator:source", "wind"),
+                ("generator:method", "wind_turbine"))
+        fp = osmium.FileProcessor(osm_pbf_in).with_filter(
+                osmium.filter.EmptyTagFilter()).with_filter(gen_tag_filter)
+        with osmium.BackReferenceWriter(tmp_file,
+                                        ref_src=osm_pbf_in,
+                                        overwrite=True) as writer:
+            for obj in fp:
+                writer.add(obj)
 
 
 def getPlantsWithinArea(area_file: str, gen_source: str, gen_method: str,

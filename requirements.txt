@@ -7,3 +7,4 @@ pyrosm==0.6.2
 PyQt6==6.10.2
 folium==0.20.0
 pycodestyle==2.14.0
+osmium==4.2.0
