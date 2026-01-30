@@ -10,6 +10,7 @@ Since 2023 the data can be used under the OSM licensing terms,
 see [Permission_OSM_MaStR](https://wiki.openstreetmap.org/wiki/DE:Permissions/Marktstammdatenregister).
 As usual, no permission is granted to actually import any data using this tool without
 consulting the community (and me, the author) beforehand.
+OSM data is downloaded and filtered using [pyrosm](https://pyrosm.readthedocs.io) and [osmium](https://osmcode.org/pyosmium).
 
 Note that the dataset for solar and storage is very large and takes a long time to download,
 because it also includes millions of small home installations.
@@ -51,22 +52,24 @@ export PYTHONPATH=/path/to/cloned_dir
 
 The workflow usage is something like the following:
 - Download data for one energy carrier using the provided Mastrdata class
-- define additional columns and their translations as dict depending on the energy carrier
-- define and apply custom query string filter depending on the energy carrier
+- optionally define additional columns and their translations as dict depending on the energy carrier
+- optionally define and apply custom query string filter depending on the energy carrier
 - using the provided DataFilter to apply general filters not depending on the energy carrier
 - using the provided PostProcessing to e.g. adjust names of manufactureres, format power values
   as needed and in the last step rename the columns to match OSM
-- print data or optionally compare to existing OSM data from local file using geopandas sjoin_nearest.
+- print data, plot map etc.
+- compare to existing OSM data of some area using geopandas sjoin_nearest and matching on
+  some existing osm key=value for confirmation.
   
 Some filters can be used (see the help page of script) directly as options,
 others can be added via custom query strings "key1 = 'value1' and/or key2 = 'value2' and/or ...."
 
 Optionally the queried data can plotted on a map, to compare the data with existing OSM data.
 Another option is to plot the distance of the MaStR-Data compared to existing OSM data. 
-This should be a local file prefilterd with osmium to only contain appropriate elements, see
-provided file. There are some weird cases where ways and not nodes were used to map plants.
-Specify column to match on (for now only strict), or if not given show only missmatches
+There are some weird cases where ways and not nodes were used to map plants.
+Specify column to match on, or if not given show only missmatches
 outside max_distance. Some example maps and a table overiew are included.
 
-A utility to show cases where OSM tags aren't formatted in standard ways is also provided,
-for now it only checks the power values.
+A utility to show cases where OSM tags aren't formatted in standard ways is also provided.
+Further a small utility for directly querying selected values from the downloaded MaStR
+database by known ref numbers (e.g. Exxxx, SEExxxx ,KWKxxx) is also provided.

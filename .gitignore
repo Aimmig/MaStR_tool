@@ -1,6 +1,7 @@
 env/*
 *.csv
 *.txt
+!/example/*.txt
 *.json
 __pycache__/*
 */__pycache__/*
