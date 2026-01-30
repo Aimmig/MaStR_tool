@@ -128,7 +128,7 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
                      strict: bool = True):
     """
     Sjoins the given osm and mastr dfs
-    Then checks wether the resulting rows match on the given
+    Then checks whether the resulting rows match on the given
     column either strict or for some columns relaxed.
     """
     # set proper crs

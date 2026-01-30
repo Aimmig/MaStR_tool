@@ -8,8 +8,7 @@ from utils.Helper import plot, test_against_OSM, print_test_summary
 from utils.Helper import get_existing_ref_missmatch
 from utils.Helper import get_without_osm_ref
 from utils.PreConfiguredParser import createParser
-from utils.PlantsFromOSM import getPlantsWithinArea
-from utils.PlantsFromOSM import filter_and_write
+from utils.PlantsFromOSM import getWindPlantsInArea
 from utils.Constants import SELECT_COLS
 import geopandas as gpd
 
@@ -81,11 +80,8 @@ if __name__ == "__main__":
         date_format = "%Y/%m"
         # date_format = "%d.%m.%Y"
         # date_format = "%Y-%m-%d"
-        gen_source = "wind"
-        gen_method = "wind_turbine"
-        osm_units = getPlantsWithinArea(osm_pbf,
-                                        gen_source, gen_method,
-                                        sanitize=True, invalidate_cache=False,
+        osm_units = getWindPlantsInArea(osm_pbf,
+                                        sanitize=True, invalidate_cache=True,
                                         date_format=date_format)
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance,

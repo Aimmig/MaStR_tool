@@ -7,6 +7,31 @@ from utils.Constants import POWER, START, END, MODEL, HUB, ROTOR
 from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
 
 
+def get_fixed_area_fps(area: str):
+    # Fix cases where _ in selectable regions
+    # is replaced with - in downloaded file name
+    area = area.replace("_", "-")
+    # Capitalize cities which are states
+    if area in ["berlin", "hamburg", "bremen"]:
+        area = area.title()
+    # assemble file paths
+    fp_base = "/tmp/pyrosm/" + area
+    suffix = ".osm.pbf"
+    fp_full = fp_base + "-latest" + suffix
+    fp_filtered = fp_base + "-latest-filtered" + suffix
+    # cities which are states don't have "latest"
+    if area in ["Berlin", "Hamburg", "Bremen"]:
+        fp_full = fp_full.replace("-latest", "")
+        fp_filtered = fp_filtered.replace("-latest", "")
+    return fp_full, fp_filtered
+
+
+def getWindPlantsInArea(area: str, sanitize: bool, invalidate_cache: bool = False,
+                        date_format: str = "%Y-%m-%d"):
+    return getPlantsWithinArea(area, "wind", "wind_turbine", sanitize,
+                               invalidate_cache, date_format)
+
+
 def getPlantsWithinArea(area: str, gen_source: str, gen_method: str,
                         sanitize: bool = False, invalidate_cache: bool = False,
                         date_format: str = "%Y-%m-%d"):
@@ -14,20 +39,20 @@ def getPlantsWithinArea(area: str, gen_source: str, gen_method: str,
     Wrapper function to download, pre-filter and then read and prepare
     data from osm pbf
     """
-    fp_base = "/tmp/pyrosm/" + area
-    suffix = ".osm.pbf"
-    fp_full = fp_base + "-latest" + suffix
-    fp_filtered = fp_base + "-latest-filtered" + suffix
+    fp_full, fp_filtered = get_fixed_area_fps(area)
     if invalidate_cache or not os.path.isfile(fp_full):
         fp = pyrosm.get_data(area, update=True)
     else:
         print("[INFO]: Using existing base file " + fp_full)
-    filter_and_write(fp_full, fp_filtered, invalidate_cache=invalidate_cache)
+    filter_and_write(fp_full, fp_filtered,
+                     gen_source, gen_method,
+                     invalidate_cache=invalidate_cache)
     return read_and_prepare(fp_filtered, gen_source, gen_method,
                             sanitize=sanitize, date_format=date_format)
 
 
 def filter_and_write(osm_pbf_in: str, tmp_file: str,
+                     gen_source: str, gen_method: str,
                      invalidate_cache: bool):
     """
     Filters the osm pbf for useful tags and writes output
@@ -36,13 +61,16 @@ def filter_and_write(osm_pbf_in: str, tmp_file: str,
     if invalidate_cache or not os.path.isfile(tmp_file):
         print("[INFO]: Recreating filtered file " + tmp_file)
         gen_tag_filter = osmium.filter.TagFilter(
-                ("generator:source", "wind"),
-                ("generator:method", "wind_turbine"))
+                ("generator:source", gen_source),
+                ("generator:method", gen_method))
         fp = osmium.FileProcessor(osm_pbf_in).with_filter(
                 osmium.filter.EmptyTagFilter()).with_filter(gen_tag_filter)
         with osmium.BackReferenceWriter(tmp_file,
                                         ref_src=osm_pbf_in,
                                         overwrite=True) as writer:
+            # caution this can make problems when no further data on node
+            # aka no further useful tags exists
+            # maybe fix here or fix when preparing/sanitizing pandas df
             for obj in fp:
                 writer.add(obj)
     else:
@@ -55,7 +83,7 @@ def read_and_prepare(file: str, gen_source: str, gen_method: str,
     Extracts the ways/nodes with given method/source from
     given osm pbf area file (Should be pre-filtered).
     Applies some basic type conversion, like date, int etc.
-    Optionaly sanitizes some of the inputs.
+    Optionally sanitizes some of the inputs.
     Returns gpd containing the data
     """
     osm = pyrosm.OSM(file)
