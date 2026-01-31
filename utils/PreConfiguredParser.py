@@ -52,12 +52,7 @@ def createOSMFormatParser():
         "area",
         type=str,
         choices=["germany"] + sources.subregions.germany.available,
-        help="are to investigate",
-        )
-    parser.add_argument(
-        "--output", "-o",
-        type=str,
-        help="optional file to write csv data",
+        help="area to investigate",
         )
     parser.add_argument(
         "tag",

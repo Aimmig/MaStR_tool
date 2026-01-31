@@ -1,5 +1,5 @@
 from utils.Constants import MANUFACTURERS
-from utils.Constants import ROTOR, HUB
+from utils.Constants import POWER, ROTOR, HUB, START, END
 from utils.Constants import REF_MASTR, REF_EEG
 import pandas as pd
 
@@ -57,3 +57,15 @@ def check_name(osm: pd.DataFrame,
                       (osm[col].str.startswith('E'))]
         res = pd.concat([res, ref_res])
     return res, ['id'] + [col]
+
+
+def check_tags(osm_units, check_col: str):
+    if check_col in [POWER]:
+        return check_power_value(osm_units, check_col)
+    if check_col in [HUB, ROTOR]:
+        return check_meter_values(osm_units, check_col)
+    if check_col in [START, END]:
+        return check_date(osm_units, check_col)
+    if check_col in ["name", "description", "note", "ref", REF_MASTR, REF_EEG]:
+        return check_name(osm_units, check_col)
+    return None, None
