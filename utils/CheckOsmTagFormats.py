@@ -19,7 +19,9 @@ def check_date(osm: pd.DataFrame,
     """
     Get part of df where date contains something else than [0-9] and dash.
     """
-    res = osm[osm[col].astype(str).str.contains(r'[0-9-]', regex=True)]
+    col_raw = col + "_raw"
+    res = osm[osm[col_raw].str.contains(r'[.\\/]', regex=True, na=False)]
+    res[col] = res[col_raw]
     return res, ['id'] + [col]
 
 
@@ -41,11 +43,12 @@ def check_name(osm: pd.DataFrame,
     """
     man_short = list(MANUFACTURERS.values())
     man_long = list(MANUFACTURERS.keys())
-    words_lifecycle = ["abgebaut", "dismantled", "removed", "demolished", "zurückgebaut",
-                          "im Bau", "geplant", "construction"]
+    words_lifecycle = ["abgebaut", "dismantled", "removed", "demolished",
+                       "zurückgebaut", "im Bau", "geplant", "construction"]
     words_power = ["MW", "kW", "KW"]
     words_ref = ["MaStR", "EEG"]
-    search_list = man_short + man_long + words_lifecycle + words_power + words_ref
+    search_list = [*man_short, *man_long,
+                   *words_lifecycle, *words_power, *words_ref]
     sep = "|"
     search = sep.join(search_list)
     if col != REF_MASTR:
@@ -59,7 +62,8 @@ def check_name(osm: pd.DataFrame,
     return res, ['id'] + [col]
 
 
-def check_tags(osm_units, check_col: str):
+def check_tags(osm_units: pd.DataFrame,
+               check_col: str) -> (pd.DataFrame, list[str]):
     if check_col in [POWER]:
         return check_power_value(osm_units, check_col)
     if check_col in [HUB, ROTOR]:

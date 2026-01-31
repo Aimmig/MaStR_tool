@@ -6,10 +6,10 @@ from utils.Helper import plot
 
 if __name__ == "__main__":
     parser = createOSMFormatParser()
-    arguments = parser.parse_args()
-    area = arguments.area
-    check_col = arguments.tag
-    osm_units = getWindPlantsInArea(area, sanitize=True,
+    args = parser.parse_args()
+    check_col = args.tag
+    osm_units = getWindPlantsInArea(args.area,
+                                    sanitize=True,
                                     invalidate_cache=False)
     filtered, cols = check_tags(osm_units, check_col)
     output = None
