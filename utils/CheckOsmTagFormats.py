@@ -39,10 +39,15 @@ def check_name(osm: pd.DataFrame,
     Get part of df where tags like name/ref/description etc.
     contains some things that potentially shouldn't be in these tags.
     """
+    man_short = list(MANUFACTURERS.values())
+    man_long = list(MANUFACTURERS.keys())
+    words_lifecycle = ["abgebaut", "dismantled", "removed", "demolished", "zurückgebaut",
+                          "im Bau", "geplant", "construction"]
+    words_power = ["MW", "kW", "KW"]
+    words_ref = ["MaStR", "EEG"]
+    search_list = man_short + man_long + words_lifecycle + words_power + words_ref
     sep = "|"
-    man_short = sep.join(MANUFACTURERS.values())
-    man_long = sep.join(MANUFACTURERS.keys())
-    search = 'MW|kW|KW|MaStR|EEG' + man_short + sep + man_long
+    search = sep.join(search_list)
     if col != REF_MASTR:
         search = search + sep + "SEE"
     res = osm[osm[col].str.contains(search, na=False)]
