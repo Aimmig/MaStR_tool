@@ -1,6 +1,11 @@
 from open_mastr import Mastr
 import pandas as pd
 import geopandas as gpd
+from utils.DataFilter import DataFilter as PlantFilter
+from utils.PostProcessing import PostProcessing
+from utils.Helper import get_cols_without_geometry
+from utils.Helper import check_cols_in_dataframe
+import geopandas as gpd
 
 
 class Mastrdata:
@@ -68,3 +73,67 @@ def download(source: str) -> pd.DataFrame:
     Returns: The pandas DataFrame
     """
     return Mastrdata(source).df
+
+
+def get_filtered_mastr_from_args(args):
+    return get_filtered_mastr_data(args.source, args.keepColumns, args.query, args.discardSmall,
+                                   args.startDate, args.endDate,
+                                   args.openingDate, args.openingDatePast,
+                                   args.openingDateFuture, args.currentlyOperational,
+                                   args.onshore, args.offshore,
+                                   args.eeg, args.kwk,
+                                   args.formatManufacturer, args.formatPower,
+                                   )
+
+
+def get_filtered_mastr_data(source, keepColumns, query=None, discardSmall=None,
+                            startDate=False, endDate=False,
+                            openingDate=False, openingDatePast=False,
+                            openingDateFuture=False, currentlyOperational=False,
+                            onshore=False, offshore=False,
+                            eeg=False, kwk=False,
+                            formatManufacturer=False, formatPower=False,
+                            ) -> gpd.GeoDataFrame:
+    """
+    Wrapper function that gets the data and applies the parser args.
+    Returns: The pandas DataFrame
+    """
+    plants = download(source)
+
+    # evaluate all args and apply the correct functions
+    if query:
+        plants = plants.query(query)
+    if discardSmall:
+        plants = PlantFilter.get_without_small(plants, discardSmall)
+    if startDate:
+        plants = PlantFilter.get_plants_with_start_date(plants)
+    if endDate:
+        plants = PlantFilter.get_plants_with_end_date(plants)
+    if openingDate:
+        plants = PlantFilter.get_plants_with_opening_date(plants)
+    if openingDatePast:
+        plants = PlantFilter.get_plants_with_past_opening_date(plants)
+    if openingDateFuture:
+        plants = PlantFilter.get_plants_with_future_opening_date(plants)
+    if currentlyOperational:
+        plants = PlantFilter.get_plants_currently_operational(plants)
+    if onshore:
+        plants = PlantFilter.get_onshore(plants)
+    if offshore:
+        plants = PlantFilter.get_offshore(plants)
+    if eeg:
+        plants = PlantFilter.get_EEG(plants)
+    if kwk:
+        plants = PlantFilter.get_KWK(plants)
+    if formatManufacturer:
+        plants = PostProcessing.format_manufacturer(plants, "Hersteller")
+    if formatPower:
+        plants = PostProcessing.format_power(plants, formatPower)
+
+    plants = PostProcessing.format_model(plants, "Typenbezeichnung")
+    if keepColumns:
+        cols_to_keep = check_cols_in_dataframe(plants, keepColumns)
+    else:
+        cols_to_keep = None
+    plants = PostProcessing.translate(plants, cols_to_keep)
+    return plants, get_cols_without_geometry(cols_to_keep)

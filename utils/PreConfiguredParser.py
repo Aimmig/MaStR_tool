@@ -31,11 +31,6 @@ def createSimpleMastrQueryParser():
         type=str,
         help="The MaStR reference to search, e.g. SEExxx, EEGxxx etc.",
     )
-    parser.add_argument(
-        "--output", "-o",
-        type=str,
-        help="Optional file to write data to",
-        )
     return parser
 
 
@@ -83,11 +78,6 @@ def createParser():
         "source",
         choices=ENERGY_SOURCES,
         help="energy source for which to download the data from MaStR",
-        )
-    parser.add_argument(
-        "--output", "-o",
-        type=str,
-        help="optional file to write csv data",
         )
     parser.add_argument(
         "--keepColumns", "-keep",
@@ -173,9 +163,9 @@ def createParser():
     parser.add_argument(
         "--testagainstOSM",
         type=str,
-        nargs='+',
-        choices=["germany"] + sources.subregions.germany.available + list(SELECT_COLS.keys()),
-        help="Select one area and one column to match. No column: mismatches",
+        nargs='?',
+        choices=["germany"] + sources.subregions.germany.available,
+        help="Select area to test",
         )
 
     parser.set_defaults(formatPower="kW")

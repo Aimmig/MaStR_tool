@@ -21,7 +21,7 @@ if __name__ == "__main__":
     arguments = parser.parse_args()
     mastr_units, cols = get_data_selection(arguments)
     csv = mastr_units[cols].to_csv(
-                arguments.output,
+                None,
                 index=False,
                 )
     if csv:
