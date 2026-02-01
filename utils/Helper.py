@@ -49,21 +49,26 @@ def get_existing_ref_missmatch(df: pd.DataFrame) -> pd.DataFrame:
     Return cases where after join the ref:mastr is unexpectedly different
     Only keep the id and refs
     """
-
-    diff = df[~(df[REF_MASTR_OSM] == df[REF_MASTR_MASTR])]
-    diff = diff[[REF_MASTR_MASTR, REF_MASTR_OSM, "id"]][diff[REF_MASTR_OSM].notnull()]
-    diff["id"] = diff["id"].astype(int)
-    diff[REF_MASTR_OSM] = diff[REF_MASTR_OSM].astype(str)
-    diff[REF_MASTR_MASTR] = diff[REF_MASTR_MASTR].astype(str)
-    return diff
+    try:
+        diff = df[~(df[REF_MASTR_OSM] == df[REF_MASTR_MASTR])]
+        diff = diff[[REF_MASTR_MASTR, REF_MASTR_OSM, "id"]][diff[REF_MASTR_OSM].notnull()]
+        diff["id"] = diff["id"].astype(int)
+        diff[REF_MASTR_OSM] = diff[REF_MASTR_OSM].astype(str)
+        diff[REF_MASTR_MASTR] = diff[REF_MASTR_MASTR].astype(str)
+        return diff
+    except KeyError:
+        print("[WARNING] Shouldn't happen. Propably no match was found if dataset was small")
+        return None
 
 
 def get_without_osm_ref(df: pd.DataFrame):
     """
     Return the part of df where ref:mastr is not present in osm
     """
-    return df[df[REF_MASTR_OSM].isna()]
-
+    try:
+        return df[df[REF_MASTR_OSM].isna()]
+    except KeyError:
+        return df
 
 def check_strict(df: pd.DataFrame, col: str) -> pd.DataFrame:
     """

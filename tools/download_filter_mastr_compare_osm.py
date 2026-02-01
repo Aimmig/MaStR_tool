@@ -48,7 +48,11 @@ if __name__ == "__main__":
         #                   joined, mastr_units, osm_units,
         #                   check_col, arguments.formatPower,
         #                   )
-        mastr_col_sel = [LAT+MASTR_SUFFIX, LON+MASTR_SUFFIX, REF_MASTR_MASTR]
+
+        if REF_MASTR_MASTR in list(joined.columns.values):
+            mastr_col_sel = [LAT+MASTR_SUFFIX, LON+MASTR_SUFFIX, REF_MASTR_MASTR]
+        else:
+            mastr_col_sel = [LAT+MASTR_SUFFIX, LON+MASTR_SUFFIX]
         if check_col:
             mastr_col_sel += [check_col+MASTR_SUFFIX, check_col+OSM_SUFFIX]
         csv = joined[mastr_col_sel].to_csv(None, index=False)

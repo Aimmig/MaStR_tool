@@ -165,6 +165,7 @@ def prepare(plants: pd.DataFrame, sanitize: bool, date_format: str):
                 format=date_format,
                 )
     if MANUFACTURER in plants.columns:
+        # plants[[MANUFACTURER, "id"]].to_csv("bla.csv", index=False)
         plants = PostProcessing.format_manufacturer(plants, MANUFACTURER)
     # sanitize model from some often used chars
     if MODEL in plants.columns:

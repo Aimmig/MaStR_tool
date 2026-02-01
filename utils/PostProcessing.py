@@ -9,11 +9,15 @@ class PostProcessing:
         """
         Helper function to return the new value for a manufacturer
         """
+        # print(val, manufacturer)
         old = manufacturer[0]
         new = manufacturer[1]
-        if val is not None and old in val:
-            return new
-        else:
+        try:
+            if val is not None and old in val:
+                return new
+            else:
+                return val
+        except TypeError:
             return val
 
     @staticmethod
