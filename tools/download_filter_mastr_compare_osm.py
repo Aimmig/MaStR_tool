@@ -5,7 +5,8 @@ from utils.Helper import get_existing_ref_missmatch
 from utils.Helper import get_without_osm_ref
 from utils.PreConfiguredParser import createParser
 from utils.PlantsFromOSM import getWindPlantsInArea
-from utils.Constants import SELECT_COLS
+from utils.Constants import SELECT_COLS, LON, LAT
+from utils.Constants import REF_MASTR_MASTR, MASTR_SUFFIX, OSM_SUFFIX
 import geopandas as gpd
 
 
@@ -47,9 +48,9 @@ if __name__ == "__main__":
         #                   joined, mastr_units, osm_units,
         #                   check_col, arguments.formatPower,
         #                   )
-        mastr_col_sel = ["lat_mastr", "lon_mastr", "ref:mastr_mastr"]
+        mastr_col_sel = [LAT+MASTR_SUFFIX, LON+MASTR_SUFFIX, REF_MASTR_MASTR]
         if check_col:
-            mastr_col_sel += [check_col+"_mastr", check_col+"_osm"]
+            mastr_col_sel += [check_col+MASTR_SUFFIX, check_col+OSM_SUFFIX]
         csv = joined[mastr_col_sel].to_csv(None, index=False)
         if csv:
             print(csv)

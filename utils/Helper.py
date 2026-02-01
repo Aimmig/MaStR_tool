@@ -1,7 +1,8 @@
 import pandas as pd
 import geopandas as gpd
 import numpy as np
-from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS
+from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS, MASTR_SUFFIX, OSM_SUFFIX
+from utils.Constants import REF_MASTR_MASTR, REF_MASTR_OSM
 from utils.Constants import START, END, REF_MASTR, HUB, ROTOR
 from utils.Constants import MANUFACTURER, MODEL, POWER, REF_EEG
 
@@ -48,8 +49,7 @@ def get_existing_ref_missmatch(df: pd.DataFrame) -> pd.DataFrame:
     Return cases where after join the ref:mastr is unexpectedly different
     Only keep the id and refs
     """
-    REF_MASTR_OSM = REF_MASTR + "_osm"
-    REF_MASTR_MASTR = REF_MASTR + "_mastr"
+
     diff = df[~(df[REF_MASTR_OSM] == df[REF_MASTR_MASTR])]
     diff = diff[[REF_MASTR_MASTR, REF_MASTR_OSM, "id"]][diff[REF_MASTR_OSM].notnull()]
     diff["id"] = diff["id"].astype(int)
@@ -62,7 +62,6 @@ def get_without_osm_ref(df: pd.DataFrame):
     """
     Return the part of df where ref:mastr is not present in osm
     """
-    REF_MASTR_OSM = REF_MASTR + "_osm"
     return df[df[REF_MASTR_OSM].isna()]
 
 
@@ -80,11 +79,11 @@ def check_strict(df: pd.DataFrame, col: str) -> pd.DataFrame:
 def check_date(df: pd.DataFrame, col: str) -> pd.DataFrame:
     """
     Compare date from osm and mastr in df
-    based on wether month and year are identical
+    based on whether month and year are identical
     Returns the matching part of df
     """
-    mastr = col + "_mastr"
-    osm = col + "_osm"
+    mastr = col + MASTR_SUFFIX
+    osm = col + OSM_SUFFIX
     return df.loc[(df[mastr].dt.month == df[osm].dt.month) &
                   (df[mastr].dt.year == df[osm].dt.year)]
 
@@ -92,7 +91,7 @@ def check_date(df: pd.DataFrame, col: str) -> pd.DataFrame:
 def check_length(df: pd.DataFrame, col: str) -> pd.DataFrame:
     """
     Compare length values from osm and mastr in df
-    based on wether one is in a small range around the other
+    based on whether one is in a small range around the other
     Returns the matching part of df
     """
     mastr = col + "_mastr"

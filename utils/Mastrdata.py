@@ -5,7 +5,6 @@ from utils.DataFilter import DataFilter as PlantFilter
 from utils.PostProcessing import PostProcessing
 from utils.Helper import get_cols_without_geometry
 from utils.Helper import check_cols_in_dataframe
-import geopandas as gpd
 
 
 class Mastrdata:

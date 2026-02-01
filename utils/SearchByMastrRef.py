@@ -4,7 +4,7 @@ import geopandas as gpd
 
 def determine_key(ref: list[str]):
     """
-    Determines which short-hand key for ref should be used.
+    Determines which shorthand key for ref should be used.
     Matches length and start of different MaStR ref keys.
     All ref in list should be from same sort.
 

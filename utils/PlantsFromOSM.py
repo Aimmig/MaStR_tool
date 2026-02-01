@@ -147,7 +147,7 @@ def prepare(plants: pd.DataFrame, sanitize: bool, date_format: str):
                     errors='coerce',
                     ).fillna(plants[ROTOR])
     if START in plants.columns:
-        # copy raw date for date for checking str later
+        # copy raw date for checking str later
         plants[START + "_raw"] = plants[START]
         plants = plants.copy()
         plants[START] = pd.to_datetime(
@@ -156,7 +156,7 @@ def prepare(plants: pd.DataFrame, sanitize: bool, date_format: str):
                 format=date_format,
             )
     if END in plants.columns:
-        # copy raw date for date for checking str later
+        # copy raw date for checking str later
         plants[END + "_raw"] = plants[END]
         plants = plants.copy()
         plants[END] = pd.to_datetime(
