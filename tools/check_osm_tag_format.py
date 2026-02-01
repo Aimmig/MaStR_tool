@@ -19,4 +19,3 @@ if __name__ == "__main__":
                 )
     if csv:
         print(csv)
-    plot(check_col, cols, filtered)

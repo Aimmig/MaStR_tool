@@ -57,7 +57,7 @@ def search_ref(mastr: gpd.GeoDataFrame, ref: list[str]):
     return None
 
 
-def get_data(args) -> gpd.GeoDataFrame:
+def get_data_selection(args) -> gpd.GeoDataFrame:
     """
     Wrapper function that gets the data and applies the parser args.
     Returns: The pandas DataFrame
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
     parser = createSimpleMastrQueryParser()
     arguments = parser.parse_args()
-    mastr_units, cols = get_data(arguments)
+    mastr_units, cols = get_data_selection(arguments)
     csv = mastr_units[cols].to_csv(
                 arguments.output,
                 index=False,
