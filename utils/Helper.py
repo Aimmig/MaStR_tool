@@ -147,7 +147,8 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
     cols = list(osm_vs_mastr.columns.values).remove("geometry")
     # here only keep mismatches from sjon_nearest
     if match_col is None:
-        no_match = osm_vs_mastr[osm_vs_mastr["dist"].isnull()].fillna("dist")
+        no_match = osm_vs_mastr[osm_vs_mastr["dist"].isnull()]
+        no_match["dist"] = 0
         return no_match, cols
     # only keep result with non-zero distance. aka only good results
     osm_vs_mastr = osm_vs_mastr.query("dist > 0")

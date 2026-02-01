@@ -94,6 +94,7 @@ if __name__ == "__main__":
                            joined, mastr_units, osm_units,
                            check_col, arguments.formatPower,
                            )
-        mastr_col_sel = ["lat_mastr", "lon_mastr", "ref:mastr_mastr",
-                         check_col+"_mastr", check_col+"_osm"]
+        mastr_col_sel = ["lat_mastr", "lon_mastr", "ref:mastr_mastr"]
+        if check_col:
+            mastr_col_sel += [check_col+"_mastr", check_col+"_osm"]
         joined[mastr_col_sel].to_csv("result.csv", index=False)
