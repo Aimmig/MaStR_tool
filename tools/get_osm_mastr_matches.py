@@ -13,6 +13,7 @@ from utils.Constants import SELECT_COLS
 import geopandas as gpd
 
 
+# TO-DO: Move these methods to seperate file
 def getData(args) -> gpd.GeoDataFrame:
     """
     Wrapper function that gets the data and applies the parser args.
@@ -77,9 +78,9 @@ if __name__ == "__main__":
             check_col = SELECT_COLS[check_col]
         # settings
         distance = 50
-        date_format = "%Y/%m"
+        # date_format = "%Y/%m"
         # date_format = "%d.%m.%Y"
-        # date_format = "%Y-%m-%d"
+        date_format = "%Y-%m-%d"
         osm_units = getWindPlantsInArea(osm_pbf,
                                         sanitize=True, invalidate_cache=True,
                                         date_format=date_format)
