@@ -1,7 +1,6 @@
 from utils.PreConfiguredParser import createOSMFormatParser
 from utils.PlantsFromOSM import getWindPlantsInArea
 from utils.CheckOsmTagFormats import check_tags
-from utils.Helper import plot
 
 
 if __name__ == "__main__":

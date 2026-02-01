@@ -60,3 +60,11 @@ class Mastrdata:
             con=db.engine)
         df = pd.read_sql(sql=table, con=db.engine)
         return df
+
+
+def download(source: str) -> pd.DataFrame:
+    """
+    Wrapper function that only downloads the MaStR data.
+    Returns: The pandas DataFrame
+    """
+    return Mastrdata(source).df

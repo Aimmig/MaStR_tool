@@ -1,5 +1,5 @@
 import os
-from utils.Mastrdata import Mastrdata
+from utils.Mastrdata import download
 from utils.DataFilter import DataFilter as PlantFilter
 from utils.PostProcessing import PostProcessing
 from utils.Helper import get_cols_without_geometry
@@ -18,7 +18,7 @@ def getData(args) -> gpd.GeoDataFrame:
     Wrapper function that gets the data and applies the parser args.
     Returns: The pandas DataFrame
     """
-    plants = Mastrdata(args.source).df
+    plants = download(args.source)
 
     # evaluate all args and apply the correct funtions
     if args.query:
