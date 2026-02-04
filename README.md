@@ -47,8 +47,8 @@ on the ground this might be included, too (e.g. biomass plants often have multip
 in the same building).
 These plants have multiple "SEExxx" numbers attached to it in the dataset.
 
-To execute the examples provided first add the cloned directory to your path e.g.
-export PYTHONPATH=/path/to/cloned_dir
+To execute install the locally using `pip install -e .`
+This installs the requirements and the provided utilities in editable mode locally.
 
 The workflow usage is something like the following:
 - Download data for one energy carrier using the provided Mastrdata class

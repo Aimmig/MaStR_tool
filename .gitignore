@@ -9,3 +9,4 @@ __pycache__/*
 *.html
 !example_maps/*.html
 proposal
+*.egg-info

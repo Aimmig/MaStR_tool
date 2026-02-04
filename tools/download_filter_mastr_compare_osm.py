@@ -54,7 +54,7 @@ if __name__ == "__main__":
         else:
             mastr_col_sel = [LAT+MASTR_SUFFIX, LON+MASTR_SUFFIX]
         if check_col:
-            mastr_col_sel += [check_col+MASTR_SUFFIX, check_col+OSM_SUFFIX]
+            mastr_col_sel += [check_col+MASTR_SUFFIX, check_col+OSM_SUFFIX, "id"]
         csv = joined[mastr_col_sel].to_csv(None, index=False)
         if csv:
             print(csv)
