@@ -4,6 +4,7 @@ from utils.Constants import ENERGY_SOURCES, SELECT_COLS, COMMON_COLS
 from utils.Constants import ROTOR, HUB, POWER
 from utils.Constants import REF_EEG, REF_MASTR
 from utils.Constants import START, END
+from utils.Constants import OTHER_OSM
 
 
 def createSimpleMastrQueryParser():
@@ -52,13 +53,9 @@ def createOSMFormatParser():
     parser.add_argument(
         "tag",
         type=str,
-        choices=[
-            ROTOR, HUB,
-            POWER,
-            "name", "description", "note", "fixme",
-            REF_MASTR, REF_EEG, "ref",
-            START, END
-            ],
+        choices=[ROTOR, HUB, POWER,
+            REF_MASTR, REF_EEG,
+            START, END] + OTHER_OSM,
         help="osm tag to check formatting",
         )
     return parser

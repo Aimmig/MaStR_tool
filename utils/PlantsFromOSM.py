@@ -5,6 +5,7 @@ import os.path
 from utils.PostProcessing import PostProcessing
 from utils.Constants import POWER, START, END, MODEL, HUB, ROTOR
 from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
+from utils.Constants import OTHER_OSM
 
 
 def get_fixed_area_fps(area: str):
@@ -95,13 +96,7 @@ def read_and_prepare(file: str, gen_source: str, gen_method: str,
                         ROTOR,
                         HUB,
                         REF_EEG,
-                        REF_MASTR,
-                        "ref",
-                        "name",
-                        "fixme",
-                        "description",
-                        "note",
-                        ]
+                        REF_MASTR] + OTHER_OSM
     plants = osm.get_data_by_custom_criteria(custom_filter={
                                         "generator:source": [gen_source],
                                         "generator:method": [gen_method]},

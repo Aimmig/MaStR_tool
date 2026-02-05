@@ -93,3 +93,4 @@ OSM_SUFFIX = "_osm"
 MASTR_SUFFIX = "_mastr"
 REF_MASTR_OSM = REF_MASTR + OSM_SUFFIX
 REF_MASTR_MASTR = REF_MASTR + MASTR_SUFFIX
+OTHER_OSM = ["name", "description", "note", "ref", "fixme", "manufacturer:type"]

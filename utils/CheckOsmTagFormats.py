@@ -1,6 +1,7 @@
 from utils.Constants import MANUFACTURERS
 from utils.Constants import POWER, ROTOR, HUB, START, END
 from utils.Constants import REF_MASTR, REF_EEG
+from utils.Constants import OTHER_OSM
 import pandas as pd
 
 
@@ -70,6 +71,6 @@ def check_tags(osm_units: pd.DataFrame,
         return check_meter_values(osm_units, check_col)
     if check_col in [START, END]:
         return check_date(osm_units, check_col)
-    if check_col in ["name", "description", "note", "ref", "fixme", REF_MASTR, REF_EEG]:
+    if check_col in OTHER_OSM + [REF_MASTR, REF_EEG]:
         return check_name(osm_units, check_col)
     return None, None
