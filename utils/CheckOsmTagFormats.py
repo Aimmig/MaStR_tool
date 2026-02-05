@@ -43,7 +43,7 @@ def check_name(osm: pd.DataFrame,
     """
     man_short = list(MANUFACTURERS.values())
     man_long = list(MANUFACTURERS.keys())
-    words_lifecycle = ["abgebaut", "dismantled", "removed", "demolished",
+    words_lifecycle = ["WKA", "WEA", "abgebaut", "dismantled", "removed", "demolished",
                        "zurückgebaut", "im Bau", "geplant", "construction"]
     words_power = ["MW", "kW", "KW"]
     words_ref = ["MaStR", "EEG"]
@@ -70,6 +70,6 @@ def check_tags(osm_units: pd.DataFrame,
         return check_meter_values(osm_units, check_col)
     if check_col in [START, END]:
         return check_date(osm_units, check_col)
-    if check_col in ["name", "description", "note", "ref", REF_MASTR, REF_EEG]:
+    if check_col in ["name", "description", "note", "ref", "fixme", REF_MASTR, REF_EEG]:
         return check_name(osm_units, check_col)
     return None, None

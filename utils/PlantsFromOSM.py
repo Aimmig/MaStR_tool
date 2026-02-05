@@ -98,6 +98,7 @@ def read_and_prepare(file: str, gen_source: str, gen_method: str,
                         REF_MASTR,
                         "ref",
                         "name",
+                        "fixme",
                         "description",
                         "note",
                         ]

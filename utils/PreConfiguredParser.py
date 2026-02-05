@@ -55,7 +55,7 @@ def createOSMFormatParser():
         choices=[
             ROTOR, HUB,
             POWER,
-            "name", "description", "note",
+            "name", "description", "note", "fixme",
             REF_MASTR, REF_EEG, "ref",
             START, END
             ],
