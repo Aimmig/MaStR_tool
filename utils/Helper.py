@@ -121,6 +121,7 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
             else:
                 main_col = plot_args
         plotted_map = plants.explore(
+            tiles="CartoDB Positron",
             column=main_col,
             popup=cols_popup,
             )
