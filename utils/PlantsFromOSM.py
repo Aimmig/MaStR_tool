@@ -8,7 +8,7 @@ from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
 from utils.Constants import OTHER_OSM
 
 
-def get_fixed_area_fps(area: str):
+def get_fixed_area_fps(tmp_folder: str, area: str):
     # Fix cases where _ in selectable regions
     # is replaced with - in downloaded file name
     area = area.replace("_", "-")
@@ -16,7 +16,7 @@ def get_fixed_area_fps(area: str):
     if area in ["berlin", "hamburg", "bremen"]:
         area = area.title()
     # assemble file paths
-    fp_base = "/tmp/pyrosm/" + area
+    fp_base = tmp_folder + area
     suffix = ".osm.pbf"
     fp_full = fp_base + "-latest" + suffix
     fp_filtered = fp_base + "-latest-filtered" + suffix
@@ -27,20 +27,21 @@ def get_fixed_area_fps(area: str):
     return fp_full, fp_filtered
 
 
-def getWindPlantsInArea(area: str, sanitize: bool, invalidate_cache: bool = False,
+def getWindPlantsInArea(area: str, sanitize: bool, tmp_folder: str = "/tmp/pyrosm/",
+                        invalidate_cache: bool = False,
                         date_format: str = "%Y-%m-%d"):
-    return getPlantsWithinArea(area, "wind", "wind_turbine", sanitize,
+    return getPlantsWithinArea(area, "wind", "wind_turbine", tmp_folder, sanitize,
                                invalidate_cache, date_format)
 
 
-def getPlantsWithinArea(area: str, gen_source: str, gen_method: str,
+def getPlantsWithinArea(area: str, gen_source: str, gen_method: str, tmp_folder: str,
                         sanitize: bool = False, invalidate_cache: bool = False,
                         date_format: str = "%Y-%m-%d"):
     """
     Wrapper function to download, pre-filter and then read and prepare
     data from osm pbf
     """
-    fp_full, fp_filtered = get_fixed_area_fps(area)
+    fp_full, fp_filtered = get_fixed_area_fps(tmp_folder, area)
     if invalidate_cache or not os.path.isfile(fp_full):
         fp = pyrosm.get_data(area, update=True)
     else:
