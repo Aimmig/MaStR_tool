@@ -10,7 +10,7 @@ if __name__ == "__main__":
     osm_units = getWindPlantsInArea(args.area,
                                     sanitize=True,
                                     invalidate_cache=False)
-    filtered, cols = check_tags(osm_units, check_col)
+    filtered, cols = check_tags(osm_units, check_col, strict=True)
     output = None
     csv = filtered[cols].to_csv(
                 output,

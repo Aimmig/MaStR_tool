@@ -63,14 +63,21 @@ def check_name(osm: pd.DataFrame,
     return res, ['id'] + [col]
 
 
+def get_non_empty(osm: pd.DataFrame,
+                  col: str) -> (pd.DataFrame, list[str]):
+    return osm.dropna(subset=[col]), ['id'] + [col]
+
+
 def check_tags(osm_units: pd.DataFrame,
-               check_col: str) -> (pd.DataFrame, list[str]):
+               check_col: str, strict=False) -> (pd.DataFrame, list[str]):
     if check_col in [POWER]:
         return check_power_value(osm_units, check_col)
     if check_col in [HUB, ROTOR]:
         return check_meter_values(osm_units, check_col)
     if check_col in [START, END]:
         return check_date(osm_units, check_col)
+    if check_col in ["designation", "description", "note", "name"] and strict:
+        return get_non_empty(osm_units, check_col)
     if check_col in OTHER_OSM + [REF_MASTR, REF_EEG]:
         return check_name(osm_units, check_col)
     return None, None
