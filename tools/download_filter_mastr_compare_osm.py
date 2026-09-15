@@ -25,10 +25,13 @@ if __name__ == "__main__":
     # TO-DO Decouple the following from the previous
     if arguments.testagainstOSM:
         osm_pbf = arguments.testagainstOSM
-        if arguments.keepColumns is None or len(arguments.keepColumns) != 1:
+        if arguments.keepColumns is not None and len(arguments.keepColumns) != 1:
             raise ValueError("Only exactly one column supported when testosm is set")
-        check_col = "".join(arguments.keepColumns)
-        check_col = SELECT_COLS[check_col]
+        if arguments.keepColumns is None:
+            check_col = None
+        else:
+            check_col = "".join(arguments.keepColumns)
+            check_col = SELECT_COLS[check_col]
         # settings
         distance = 50
         # date_format = "%Y/%m"
@@ -41,6 +44,8 @@ if __name__ == "__main__":
                                         mastr_units, max_dist=distance,
                                         strict=True)
         plot("dist", cols, joined, CARTO_KEY)
+        if arguments.keepColumns is None:
+            exit
         mastr_diff = get_existing_ref_missmatch(joined)
         # print(mastr_diff)
         joined = get_without_osm_ref(joined)
