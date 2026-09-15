@@ -1,6 +1,7 @@
 import pandas as pd
 import geopandas as gpd
 import numpy as np
+import xyzservices.providers as xyz
 from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS, MASTR_SUFFIX, OSM_SUFFIX
 from utils.Constants import REF_MASTR_MASTR, REF_MASTR_OSM
 from utils.Constants import START, END, REF_MASTR, HUB, ROTOR
@@ -104,7 +105,7 @@ def check_length(df: pd.DataFrame, col: str) -> pd.DataFrame:
     return df[df[mastr].between(np.floor(df[osm]-1), np.ceil(df[osm])+1)]
 
 
-def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
+def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame, key: str):
     """
     Plots the data based on the given arguments
     """
@@ -121,7 +122,7 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
             else:
                 main_col = plot_args
         plotted_map = plants.explore(
-            tiles="CartoDB Positron",
+            tiles=xyz.CartoDB.Positron(apikey=key),
             column=main_col,
             popup=cols_popup,
             )

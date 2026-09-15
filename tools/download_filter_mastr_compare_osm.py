@@ -15,7 +15,7 @@ if __name__ == "__main__":
     parser = createParser()
     arguments = parser.parse_args()
     mastr_units, cols = get_filtered_mastr_from_args(arguments)
-    plot(arguments.plot, cols, mastr_units)
+    plot(arguments.plot, cols, mastr_units, CARTO_KEY)
     csv = mastr_units[cols].to_csv(
                 None,
                 index=False,
@@ -39,8 +39,8 @@ if __name__ == "__main__":
                                         date_format=date_format)
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance,
-                                        strict=False)
-        plot("dist", cols, joined)
+                                        strict=True)
+        plot("dist", cols, joined, CARTO_KEY)
         mastr_diff = get_existing_ref_missmatch(joined)
         # print(mastr_diff)
         joined = get_without_osm_ref(joined)
