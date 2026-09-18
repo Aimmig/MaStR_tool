@@ -22,26 +22,16 @@ class Mastrdata:
         """
 
         # download relevant data with api
+        # TO-DO: use_cache via enviornment variable
         if not use_cache:
             db = Mastr()
             db.download(data=energy_carrier, api_data_types=["unit_data"],
                     api_location_type=["location_elec_generation"])
-
-        # TO-DO: REFACTORING and use_cache via enviornment variable
+        else:
+            db = ""
         # get the required tables
-        table = energy_carrier + "_extended"
-        if use_cache:
-            path = os.environ.get("SQLITE_DATABASE_PATH")
-            df_extended = pd.read_sql_table(table, 'sqlite:///'+path)
-        else:
-            df_extended = Mastrdata.get_dataFrame(db, table)
-
-        table = energy_carrier + "_eeg"
-        if use_cache:
-            path = os.environ.get("SQLITE_DATABASE_PATH")
-            df_eeg = pd.read_sql_table(table, 'sqlite:///'+path)
-        else:
-            df_eeg = Mastrdata.get_dataFrame(db, table)
+        df_extended = Mastrdata.get_single_tables(db, energy_carrier + "_extended", use_cache)
+        df_eeg = Mastrdata.get_single_tables(db, energy_carrier + "_eeg", use_cache)
 
         key = 'EegMastrNummer'
         # TO-DO:
@@ -62,6 +52,16 @@ class Mastrdata:
             crs="EPSG:4326",
         )
         self.df = gdf
+
+    @staticmethod
+    # TO-DO: This is ugly fix cache ...
+    def get_single_tables(db: Mastr, table: str, use_cache: bool):
+        if use_cache:
+            path = os.environ.get("SQLITE_DATABASE_PATH")
+            df = pd.read_sql_table(table, 'sqlite:///'+path)
+        else:
+            df = Mastrdata.get_dataFrame(db, table)
+        return df
 
     @staticmethod
     def get_dataFrame(db: Mastr, table: str) -> pd.DataFrame:
