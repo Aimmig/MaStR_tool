@@ -1,5 +1,6 @@
 from open_mastr import Mastr
 import pandas as pd
+import os
 import geopandas as gpd
 from utils.DataFilter import DataFilter as PlantFilter
 from utils.PostProcessing import PostProcessing
@@ -9,7 +10,7 @@ from utils.Helper import check_cols_in_dataframe
 
 class Mastrdata:
 
-    def __init__(self, energy_carrier: str):
+    def __init__(self, energy_carrier: str, use_cache = True):
 
         """
         Downloads the Mastr unit data and filters for the given technology.
@@ -21,16 +22,26 @@ class Mastrdata:
         """
 
         # download relevant data with api
-        db = Mastr()
-        db.download(data=energy_carrier, api_data_types=["unit_data"],
+        if not use_cache:
+            db = Mastr()
+            db.download(data=energy_carrier, api_data_types=["unit_data"],
                     api_location_type=["location_elec_generation"])
 
+        # TO-DO: REFACTORING and use_cache via enviornment variable
         # get the required tables
         table = energy_carrier + "_extended"
-        df_extended = Mastrdata.get_dataFrame(db, table)
+        if use_cache:
+            path = os.environ.get("SQLITE_DATABASE_PATH")
+            df_extended = pd.read_sql_table(table, 'sqlite:///'+path)
+        else:
+            df_extended = Mastrdata.get_dataFrame(db, table)
 
         table = energy_carrier + "_eeg"
-        df_eeg = Mastrdata.get_dataFrame(db, table)
+        if use_cache:
+            path = os.environ.get("SQLITE_DATABASE_PATH")
+            df_eeg = pd.read_sql_table(table, 'sqlite:///'+path)
+        else:
+            df_eeg = Mastrdata.get_dataFrame(db, table)
 
         key = 'EegMastrNummer'
         # TO-DO:
