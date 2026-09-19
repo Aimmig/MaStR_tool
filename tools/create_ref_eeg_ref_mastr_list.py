@@ -1,7 +1,11 @@
 from utils.Mastrdata import download
 from utils.Constants import MASTR_REFS, SELECT_COLS, COMMON_COLS
+import os
 
 if __name__ == "__main__":
+    #FIX THIS STUFF
+    os.environ['USE_CACHE'] = 'True'
+    os.environ['SQLITE_DATABASE_PATH']="XXX"
 
     df_full = download("wind")
     ref_list = df_full[[MASTR_REFS['E'], MASTR_REFS['SEE']]]

@@ -16,7 +16,10 @@ def get_data_selection(args):
 
 
 if __name__ == "__main__":
+    # FIX THIS
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
+    os.environ['USE_CACHE'] = 'True'
+    os.environ['SQLITE_DATABASE_PATH']="XXX"
     parser = createSimpleMastrQueryParser()
     arguments = parser.parse_args()
     mastr_units, cols = get_data_selection(arguments)

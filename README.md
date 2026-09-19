@@ -80,3 +80,10 @@ Some functionality should be configured via config.ini
 - SQLITE_PATH absolute path to open_mastr_database,
   default should be $HOME/.open-MaStR/data/sqlite/open-mastr.db
 - MAP_PATH PATH_TO_STORE_MAP.html
+
+Some example usages for basic tools
+python tools/get_mastr_data_by_ref.py wind "SEE940146675093" -k Nettonennleistung
+python tools/create_ref_eeg_ref_mastr_list.py
+python check_osm_tag_format.py saarland note
+
+TO-DO: basic usage of full tool download_filter_mastr_compare_osm.py
