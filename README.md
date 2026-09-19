@@ -73,3 +73,8 @@ outside max_distance. Some example maps and a table overiew are included.
 A utility to show cases where OSM tags aren't formatted in standard ways is also provided.
 Further a small utility for directly querying selected values from the downloaded MaStR
 database by known ref numbers (e.g. Exxxx, SEExxxx ,KWKxxx) is also provided.
+
+Some functionality should be configured via config.ini
+- CARTO_API_KEY
+- USE_CACHE True/False
+- SQLITE_PATH absolute path to open_mastr_database, default should be $HOME/.open-MaStR/data/sqlite/open-mastr.db

@@ -14,13 +14,13 @@ import geopandas as gpd
 if __name__ == "__main__":
     os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
     conf = read_config('config.ini')
-    CARTO_KEY = conf["CARTO_KEY"]
+    os.environ['CARTO_KEY'] = conf["CARTO_KEY"]
     os.environ['SQLITE_DATABASE_PATH'] = conf["SQLITE_PATH"]
 
     parser = createParser()
     arguments = parser.parse_args()
     mastr_units, cols = get_filtered_mastr_from_args(arguments)
-    plot(arguments.plot, cols, mastr_units, CARTO_KEY)
+    plot(arguments.plot, cols, mastr_units)
     csv = mastr_units[cols].to_csv(
                 None,
                 index=False,
@@ -48,7 +48,7 @@ if __name__ == "__main__":
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance,
                                         strict=True)
-        plot("dist", cols, joined, CARTO_KEY)
+        plot("dist", cols, joined)
         if arguments.keepColumns is None:
             exit
         mastr_diff = get_existing_ref_missmatch(joined)
