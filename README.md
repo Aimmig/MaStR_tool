@@ -77,4 +77,6 @@ database by known ref numbers (e.g. Exxxx, SEExxxx ,KWKxxx) is also provided.
 Some functionality should be configured via config.ini
 - CARTO_API_KEY
 - USE_CACHE True/False
-- SQLITE_PATH absolute path to open_mastr_database, default should be $HOME/.open-MaStR/data/sqlite/open-mastr.db
+- SQLITE_PATH absolute path to open_mastr_database,
+  default should be $HOME/.open-MaStR/data/sqlite/open-mastr.db
+- MAP_PATH PATH_TO_STORE_MAP.html

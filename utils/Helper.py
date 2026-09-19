@@ -129,7 +129,8 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
             column=main_col,
             popup=cols_popup,
             )
-        plotted_map.save('map.html')
+        map_file = os.environ.get("MAP_PATH")
+        plotted_map.save(map_file)
 
 
 def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
