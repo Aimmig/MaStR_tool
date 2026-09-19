@@ -31,7 +31,7 @@ if __name__ == "__main__":
     if arguments.testagainstOSM:
         osm_pbf = arguments.testagainstOSM
         if arguments.keepColumns is not None and len(arguments.keepColumns) != 1:
-            raise ValueError("Only exactly one column supported when testosm is set")
+            raise ValueError("Only exactly one colum with testosm")
         if arguments.keepColumns is None:
             check_col = None
         else:

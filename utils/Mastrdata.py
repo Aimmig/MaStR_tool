@@ -10,7 +10,7 @@ from utils.Helper import check_cols_in_dataframe
 
 class Mastrdata:
 
-    def __init__(self, energy_carrier: str, use_cache = True):
+    def __init__(self, energy_carrier: str, use_cache=True):
 
         """
         Downloads the Mastr unit data and filters for the given technology.

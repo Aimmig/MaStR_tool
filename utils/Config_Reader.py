@@ -1,5 +1,6 @@
 import configparser
 
+
 def read_config(file: str):
     config = configparser.ConfigParser(allow_unnamed_section=True)
     config.read(file)
