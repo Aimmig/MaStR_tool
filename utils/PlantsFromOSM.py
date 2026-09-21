@@ -8,7 +8,7 @@ from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
 from utils.Constants import OTHER_OSM
 
 
-def get_fixed_area_fps(tmp_folder: str, area: str):
+def get_fixed_area_fps(area: str):
     # Fix cases where _ in selectable regions
     # is replaced with - in downloaded file name
     area = area.replace("_", "-")
@@ -16,7 +16,11 @@ def get_fixed_area_fps(tmp_folder: str, area: str):
     if area in ["berlin", "hamburg", "bremen"]:
         area = area.title()
     # assemble file paths
-    fp_base = tmp_folder + area
+    if not os.getenv("OSM_TMP_PATH").endswith('/'):
+        fp_path = os.getenv("OSM_TMP_PATH") + '/'
+    else:
+        fp_path = os.getenv("OSM_TMP_PATH")
+    fp_base = fp_path + area
     suffix = ".osm.pbf"
     fp_full = fp_base + "-latest" + suffix
     fp_filtered = fp_base + "-latest-filtered" + suffix
@@ -27,40 +31,35 @@ def get_fixed_area_fps(tmp_folder: str, area: str):
     return fp_full, fp_filtered
 
 
-def getWindPlantsInArea(area: str, sanitize: bool, tmp_folder: str = "/tmp/pyrosm/",
-                        invalidate_cache: bool = False,
+def getWindPlantsInArea(area: str, sanitize: bool,
                         date_format: str = "%Y-%m-%d"):
-    return getPlantsWithinArea(area, "wind", "wind_turbine", tmp_folder, sanitize,
-                               invalidate_cache, date_format)
+    return getPlantsWithinArea(area, "wind", "wind_turbine", sanitize,
+                               date_format)
 
 
-def getPlantsWithinArea(area: str, gen_source: str, gen_method: str, tmp_folder: str,
-                        sanitize: bool = False, invalidate_cache: bool = False,
-                        date_format: str = "%Y-%m-%d"):
+def getPlantsWithinArea(area: str, gen_source: str, gen_method: str,
+                        sanitize: bool = False, date_format: str = "%Y-%m-%d"):
     """
     Wrapper function to download, pre-filter and then read and prepare
     data from osm pbf
     """
-    fp_full, fp_filtered = get_fixed_area_fps(tmp_folder, area)
-    if invalidate_cache or not os.path.isfile(fp_full):
+    fp_full, fp_filtered = get_fixed_area_fps(area)
+    if not os.path.isfile(fp_full):
         fp = pyrosm.get_data(area, update=True)
     else:
         print("[INFO]: Using existing base file " + fp_full)
     filter_and_write(fp_full, fp_filtered,
-                     gen_source, gen_method,
-                     invalidate_cache=invalidate_cache)
+                     gen_source, gen_method)
     return read_and_prepare(fp_filtered, gen_source, gen_method,
                             sanitize=sanitize, date_format=date_format)
 
 
-def filter_and_write(osm_pbf_in: str, tmp_file: str,
-                     gen_source: str, gen_method: str,
-                     invalidate_cache: bool):
+def filter_and_write(osm_pbf_in: str, tmp_file: str, gen_source: str, gen_method: str):
     """
     Filters the osm pbf for useful tags and writes output
     to tmp file. This tmp file should be used after that.
     """
-    if invalidate_cache or not os.path.isfile(tmp_file):
+    if not os.path.isfile(tmp_file):
         print("[INFO]: Recreating filtered file " + tmp_file)
         gen_tag_filter = osmium.filter.TagFilter(
                 ("generator:source", gen_source),

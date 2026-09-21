@@ -40,7 +40,7 @@ if __name__ == "__main__":
         # date_format = "%d.%m.%Y"
         date_format = "%Y-%m-%d"
         osm_units = getWindPlantsInArea(osm_pbf,
-                                        sanitize=True, invalidate_cache=True,
+                                        sanitize=True,
                                         date_format=date_format)
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance,

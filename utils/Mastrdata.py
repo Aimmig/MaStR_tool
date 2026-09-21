@@ -10,7 +10,7 @@ from utils.Helper import check_cols_in_dataframe
 
 class Mastrdata:
 
-    def __init__(self, energy_carrier: str, use_cache=True):
+    def __init__(self, energy_carrier: str):
 
         """
         Downloads the Mastr unit data and filters for the given technology.
@@ -22,16 +22,15 @@ class Mastrdata:
         """
 
         # download relevant data with api
-        # TO-DO: use_cache via enviornment variable
-        if not use_cache:
+        if not os.getenv("USE_MASTR_CACHE"):
             db = Mastr()
             db.download(data=energy_carrier, api_data_types=["unit_data"],
                     api_location_type=["location_elec_generation"])
         else:
             db = ""
         # get the required tables
-        df_extended = Mastrdata.get_single_tables(db, energy_carrier + "_extended", use_cache)
-        df_eeg = Mastrdata.get_single_tables(db, energy_carrier + "_eeg", use_cache)
+        df_extended = Mastrdata.get_single_tables(db, energy_carrier + "_extended")
+        df_eeg = Mastrdata.get_single_tables(db, energy_carrier + "_eeg")
 
         key = 'EegMastrNummer'
         # TO-DO:
@@ -54,9 +53,8 @@ class Mastrdata:
         self.df = gdf
 
     @staticmethod
-    # TO-DO: This is ugly fix cache ...
-    def get_single_tables(db: Mastr, table: str, use_cache: bool):
-        if use_cache:
+    def get_single_tables(db: Mastr, table: str):
+        if os.getenv("USE_MASTR_CACHE"):
             path = os.getenv("SQLITE_PATH")
             df = pd.read_sql_table(table, 'sqlite:///'+path)
         else:
