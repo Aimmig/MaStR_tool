@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="mastr_osm_utils",
-    version="0.0.1",
+    version="0.0.2",
     description="Download, filter MaStRData and compare to existing osm data",
     packages=find_packages(),
     install_requires=requirements
