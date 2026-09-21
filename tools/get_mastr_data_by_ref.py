@@ -2,6 +2,7 @@ import os
 from utils.Mastrdata import download
 from utils.PreConfiguredParser import createSimpleMastrQueryParser
 from utils.SearchByMastrRef import search_ref
+from dotenv import load_dotenv
 
 
 def get_data_selection(args):
@@ -16,10 +17,7 @@ def get_data_selection(args):
 
 
 if __name__ == "__main__":
-    # FIX THIS
-    os.environ['USE_RECOMMENDED_NUMBER_OF_PROCESSES'] = 'True'
-    os.environ['USE_CACHE'] = 'True'
-    os.environ['SQLITE_DATABASE_PATH']="XXX"
+    load_dotenv("env_conf/.get_by_ref_env")
     parser = createSimpleMastrQueryParser()
     arguments = parser.parse_args()
     mastr_units, cols = get_data_selection(arguments)

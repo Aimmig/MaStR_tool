@@ -1,12 +1,10 @@
 from utils.Mastrdata import download
 from utils.Constants import MASTR_REFS, SELECT_COLS, COMMON_COLS
-import os
+from dotenv import load_dotenv
+
 
 if __name__ == "__main__":
-    #FIX THIS STUFF
-    os.environ['USE_CACHE'] = 'True'
-    os.environ['SQLITE_DATABASE_PATH']="XXX"
-
+    load_dotenv("env_conf/.get_by_ref_env")
     df_full = download("wind")
     ref_list = df_full[[MASTR_REFS['E'], MASTR_REFS['SEE']]]
     ref_list = ref_list.dropna(subset=[MASTR_REFS['E']])
