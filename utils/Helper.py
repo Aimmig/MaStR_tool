@@ -123,7 +123,7 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
                 main_col = SELECT_COLS[plot_args]
             else:
                 main_col = plot_args
-        key = os.environ.get("CARTO_KEY")
+        key = os.getenv("CARTO_KEY")
         plotted_map = plants.explore(
             tiles=xyz.CartoDB.Positron(apikey=key),
             column=main_col,

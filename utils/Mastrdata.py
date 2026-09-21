@@ -57,7 +57,7 @@ class Mastrdata:
     # TO-DO: This is ugly fix cache ...
     def get_single_tables(db: Mastr, table: str, use_cache: bool):
         if use_cache:
-            path = os.environ.get("SQLITE_DATABASE_PATH")
+            path = os.getenv("SQLITE_PATH")
             df = pd.read_sql_table(table, 'sqlite:///'+path)
         else:
             df = Mastrdata.get_dataFrame(db, table)
