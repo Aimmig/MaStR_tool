@@ -4,7 +4,7 @@ from utils.CheckOsmTagFormats import check_tags
 from dotenv import load_dotenv
 
 if __name__ == "__main__":
-    load_dotenv("env_conf/.chech_osm_env")
+    load_dotenv("env_conf/.check_osm_env")
     parser = createOSMFormatParser()
     args = parser.parse_args()
     check_col = args.tag

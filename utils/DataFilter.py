@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import date
-from utils.Constans import MASTR_REFS
+from utils.Constants import MASTR_REFS
 import operator
 
 today = date.today().isoformat()
