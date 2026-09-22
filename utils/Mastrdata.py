@@ -6,6 +6,7 @@ from utils.DataFilter import DataFilter as PlantFilter
 from utils.PostProcessing import PostProcessing
 from utils.Helper import get_cols_without_geometry
 from utils.Helper import check_cols_in_dataframe
+from utils.Constants import MASTR_REFS
 
 
 class Mastrdata:
@@ -32,7 +33,7 @@ class Mastrdata:
         df_extended = Mastrdata.get_single_tables(db, energy_carrier + "_extended")
         df_eeg = Mastrdata.get_single_tables(db, energy_carrier + "_eeg")
 
-        key = 'EegMastrNummer'
+        key = MASTR_REFS["EEG"]
         # TO-DO:
         # Adapt this join to also work properly with plants
         # where no 1 to 1 matching exists between both tables.

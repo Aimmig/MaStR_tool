@@ -1,5 +1,6 @@
 import pandas as pd
 from datetime import date
+from utils.Constans import MASTR_REFS
 import operator
 
 today = date.today().isoformat()
@@ -9,7 +10,7 @@ class DataFilter:
     @staticmethod
     def get_EEG(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
-        eeg_number = "EegMastrNummer"
+        eeg_number = MASTR_REFS["EEG"]
         if eeg_number not in df.columns.values:
             return df
         return df[df[eeg_number].notnull()]
@@ -17,7 +18,7 @@ class DataFilter:
     @staticmethod
     def get_KWK(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
-        kwk_number = "KwKMastrNummer"
+        kwk_number = MASTR_REFS["KWK"]
         if kwk_number not in df.columns.values:
             return df
         return df[df[kwk_number].notnull()]

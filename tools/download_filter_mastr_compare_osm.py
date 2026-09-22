@@ -49,12 +49,7 @@ if __name__ == "__main__":
         if arguments.keepColumns is None:
             exit
         mastr_diff = get_existing_ref_missmatch(joined)
-        # print(mastr_diff)
         joined = get_without_osm_ref(joined)
-        # print_test_summary(distance,
-        #                   joined, mastr_units, osm_units,
-        #                   check_col, arguments.formatPower,
-        #                   )
 
         if REF_MASTR_MASTR in list(joined.columns.values):
             mastr_col_sel = [LAT+MASTR_SUFFIX, LON+MASTR_SUFFIX, REF_MASTR_MASTR]

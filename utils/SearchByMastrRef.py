@@ -16,18 +16,9 @@ def determine_key(ref: list[str]):
         ref_len = len(ref[0])
     # 3 char refs have all length 15
     if ref_len == 15:
-        if all(item.startswith('SEE') for item in ref):
-            key = 'SEE'
-        if all(item.startswith('SEL') for item in ref):
-            key = 'SEL'
-        if all(item.startswith('SGE') for item in ref):
-            key = 'SGE'
-        if all(item.startswith('EEG') for item in ref):
-            key = 'EEG'
-        if all(item.startswith('ABR') for item in ref):
-            key = 'ABR'
-        if all(item.startswith('KWK') for item in ref):
-            key = 'KWK'
+        for k in [x for x in MASTR_REFS.keys() if len(x) == 3]:
+            if all(item.startswith(k) for item in ref):
+                key = k
     # Exxx is 33 length
     if ref_len == 33:
         if all(item.startswith('E') for item in ref):
