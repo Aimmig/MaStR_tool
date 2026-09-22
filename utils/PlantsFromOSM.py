@@ -31,14 +31,12 @@ def get_fixed_area_fps(area: str):
     return fp_full, fp_filtered
 
 
-def getWindPlantsInArea(area: str, sanitize: bool,
-                        date_format: str = "%Y-%m-%d"):
-    return getPlantsWithinArea(area, "wind", "wind_turbine", sanitize,
-                               date_format)
+def getWindPlantsInArea(area: str, sanitize: bool):
+    return getPlantsWithinArea(area, "wind", "wind_turbine", sanitize)
 
 
 def getPlantsWithinArea(area: str, gen_source: str, gen_method: str,
-                        sanitize: bool = False, date_format: str = "%Y-%m-%d"):
+                        sanitize: bool = False):
     """
     Wrapper function to download, pre-filter and then read and prepare
     data from osm pbf
@@ -51,7 +49,7 @@ def getPlantsWithinArea(area: str, gen_source: str, gen_method: str,
     filter_and_write(fp_full, fp_filtered,
                      gen_source, gen_method)
     return read_and_prepare(fp_filtered, gen_source, gen_method,
-                            sanitize=sanitize, date_format=date_format)
+                            sanitize=sanitize)
 
 
 def filter_and_write(osm_pbf_in: str, tmp_file: str, gen_source: str, gen_method: str):
@@ -79,7 +77,7 @@ def filter_and_write(osm_pbf_in: str, tmp_file: str, gen_source: str, gen_method
 
 
 def read_and_prepare(file: str, gen_source: str, gen_method: str,
-                     sanitize: bool, date_format: str):
+                     sanitize: bool):
     """
     Extracts the ways/nodes with given method/source from
     given osm pbf area file (Should be pre-filtered).
@@ -109,10 +107,10 @@ def read_and_prepare(file: str, gen_source: str, gen_method: str,
                                         keep_nodes=True,
                                         keep_ways=True,
                                         keep_relations=False)
-    return prepare(plants, sanitize, date_format)
+    return prepare(plants, sanitize)
 
 
-def prepare(plants: pd.DataFrame, sanitize: bool, date_format: str):
+def prepare(plants: pd.DataFrame, sanitize: bool):
     # Potentially fix these cases in OSM
     # sanitize inputs from known problems
     # Convert column data types
@@ -142,6 +140,9 @@ def prepare(plants: pd.DataFrame, sanitize: bool, date_format: str):
                     plants[ROTOR],
                     errors='coerce',
                     ).fillna(plants[ROTOR])
+    date_format = os.getenv("DATE_FORMAT")
+    if not date_format:
+        date_format = "%Y-%m-%d"
     if START in plants.columns:
         # copy raw date for checking str later
         plants[START + "_raw"] = plants[START]

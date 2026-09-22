@@ -38,10 +38,9 @@ if __name__ == "__main__":
         distance = 50
         # date_format = "%Y/%m"
         # date_format = "%d.%m.%Y"
-        date_format = "%Y-%m-%d"
+        # date_format = "%Y-%m-%d"
         osm_units = getWindPlantsInArea(osm_pbf,
-                                        sanitize=True,
-                                        date_format=date_format)
+                                        sanitize=True)
         joined, cols = test_against_OSM(check_col, osm_units,
                                         mastr_units, max_dist=distance,
                                         strict=True)
