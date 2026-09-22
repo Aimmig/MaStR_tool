@@ -86,7 +86,11 @@ def read_and_prepare(file: str, gen_source: str, gen_method: str,
     Returns gpd containing the data
     """
     osm = pyrosm.OSM(file)
-    extra_attributes = [POWER,
+    extra_attributes = ["construction:power",
+                        "planned:power",
+                        "disused:power",
+                        "razed:power",
+                        POWER,
                         START,
                         END,
                         MANUFACTURER,
