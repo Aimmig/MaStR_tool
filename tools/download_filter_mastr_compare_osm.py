@@ -12,8 +12,8 @@ import geopandas as gpd
 
 
 if __name__ == "__main__":
-
-    load_dotenv("env_conf/.env")
+    enf_file = "env_conf/.env"
+    load_dotenv(enf_file)
     parser = createParser()
     arguments = parser.parse_args()
     mastr_units, cols = get_filtered_mastr_from_args(arguments)

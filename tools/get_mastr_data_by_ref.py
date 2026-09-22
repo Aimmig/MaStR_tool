@@ -17,7 +17,8 @@ def get_data_selection(args):
 
 
 if __name__ == "__main__":
-    load_dotenv("env_conf/.get_by_ref_env")
+    enf_file = "env_conf/.get_by_ref_env"
+    load_dotenv(enf_file)
     parser = createSimpleMastrQueryParser()
     arguments = parser.parse_args()
     mastr_units, cols = get_data_selection(arguments)

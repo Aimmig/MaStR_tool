@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 
 
 if __name__ == "__main__":
-    load_dotenv("env_conf/.get_by_ref_env")
+    enf_file = "env_conf/.get_by_ref_env"
+    load_dotenv(enf_file)
     df_full = download("wind")
     ref_list = df_full[[MASTR_REFS['E'], MASTR_REFS['SEE']]]
     ref_list = ref_list.dropna(subset=[MASTR_REFS['E']])
