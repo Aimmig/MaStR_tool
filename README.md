@@ -86,4 +86,6 @@ python tools/get_mastr_data_by_ref.py wind "SEE940146675093" -k Nettonennleistun
 python tools/create_ref_eeg_ref_mastr_list.py
 python check_osm_tag_format.py saarland note
 
-TO-DO: basic usage of full tool download_filter_mastr_compare_osm.py
+TO-DO:
+example usage for check_life_cyle and fix parser...
+basic usage of full tool download_filter_mastr_compare_osm.py
