@@ -54,8 +54,8 @@ def createOSMFormatParser():
         "tag",
         type=str,
         choices=[ROTOR, HUB, POWER,
-            REF_MASTR, REF_EEG,
-            START, END] + OTHER_OSM,
+                 REF_MASTR, REF_EEG,
+                 START, END] + OTHER_OSM,
         help="osm tag to check formatting",
         )
     return parser

@@ -1,6 +1,5 @@
-import os
 from utils.Mastrdata import get_filtered_mastr_from_args
-from utils.Helper import plot, test_against_OSM, print_test_summary
+from utils.Helper import plot, test_against_OSM
 from utils.Helper import get_existing_ref_missmatch
 from utils.Helper import get_without_osm_ref
 from utils.PreConfiguredParser import createParser
@@ -8,7 +7,6 @@ from utils.PlantsFromOSM import getWindPlantsInArea
 from utils.Constants import SELECT_COLS, LON, LAT
 from utils.Constants import REF_MASTR_MASTR, MASTR_SUFFIX, OSM_SUFFIX
 from dotenv import load_dotenv
-import geopandas as gpd
 
 
 if __name__ == "__main__":

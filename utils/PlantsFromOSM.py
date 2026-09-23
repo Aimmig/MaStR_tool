@@ -5,7 +5,7 @@ import os.path
 from utils.PostProcessing import PostProcessing
 from utils.Constants import POWER, START, END, MODEL, HUB, ROTOR
 from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
-from utils.Constants import OTHER_OSM
+from utils.Constants import OTHER_OSM, PREFIX_POWER
 
 
 def get_fixed_area_fps(area: str):
@@ -43,6 +43,7 @@ def getPlantsWithinArea(area: str, gen_source: str, gen_method: str,
     """
     fp_full, fp_filtered = get_fixed_area_fps(area)
     if not os.path.isfile(fp_full):
+        # ???
         fp = pyrosm.get_data(area, update=True)
     else:
         print("[INFO]: Using existing base file " + fp_full)
@@ -86,11 +87,7 @@ def read_and_prepare(file: str, gen_source: str, gen_method: str,
     Returns gpd containing the data
     """
     osm = pyrosm.OSM(file)
-    extra_attributes = ["construction:power",
-                        "planned:power",
-                        "disused:power",
-                        "razed:power",
-                        POWER,
+    extra_attributes = [POWER,
                         START,
                         END,
                         MANUFACTURER,
@@ -98,7 +95,7 @@ def read_and_prepare(file: str, gen_source: str, gen_method: str,
                         ROTOR,
                         HUB,
                         REF_EEG,
-                        REF_MASTR] + OTHER_OSM
+                        REF_MASTR] + OTHER_OSM + PREFIX_POWER
     plants = osm.get_data_by_custom_criteria(custom_filter={
                                         "generator:source": [gen_source],
                                         "generator:method": [gen_method]},

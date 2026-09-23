@@ -77,6 +77,15 @@ SELECT_COLS = {"AnlagenschluesselEeg": "ref:EEG",
                "VerknuepfteEinheit": "connectedUnit",
                }
 
+# power prefixes considered valid
+CONSTRUCTION_POWER = "construction:power"
+PLANNED_POWER = "planned:power"
+RAZED_POWER = "razed:power"
+REMOVED_POWER = "removed:power"
+DEMOLISHED_POWER = "demolished:power"
+PREFIX_POWER = [CONSTRUCTION_POWER, PLANNED_POWER, RAZED_POWER,
+                REMOVED_POWER, DEMOLISHED_POWER]
+
 # individual constants from mastr -> osm
 HUB = SELECT_COLS["Nabenhoehe"]
 ROTOR = SELECT_COLS["Rotordurchmesser"]

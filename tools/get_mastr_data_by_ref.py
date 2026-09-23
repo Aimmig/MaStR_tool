@@ -1,4 +1,3 @@
-import os
 from utils.Mastrdata import download
 from utils.PreConfiguredParser import createSimpleMastrQueryParser
 from utils.SearchByMastrRef import search_ref

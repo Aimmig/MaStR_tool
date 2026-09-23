@@ -5,7 +5,7 @@ import os
 import xyzservices.providers as xyz
 from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS, MASTR_SUFFIX, OSM_SUFFIX
 from utils.Constants import REF_MASTR_MASTR, REF_MASTR_OSM
-from utils.Constants import START, END, REF_MASTR, HUB, ROTOR
+from utils.Constants import START, END, HUB, ROTOR
 from utils.Constants import MANUFACTURER, MODEL, POWER, REF_EEG
 
 

@@ -26,7 +26,7 @@ class Mastrdata:
         if not os.getenv("USE_MASTR_CACHE"):
             db = Mastr()
             db.download(data=energy_carrier, api_data_types=["unit_data"],
-                    api_location_type=["location_elec_generation"])
+                        api_location_type=["location_elec_generation"])
         else:
             db = ""
         # get the required tables

@@ -5,6 +5,5 @@ matplotlib>=3.10.8
 pyrosm>=0.6.2
 folium>=0.20.0
 xyzservices>=2026.9.1
-pycodestyle>=2.14.0
 python-dotenv>=1.2.3
 osmium>=4.2.0
