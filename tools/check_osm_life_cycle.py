@@ -14,7 +14,7 @@ def filter_for_construction(df):
     return tags[REF_MASTR].dropna().to_list()
 
 if __name__ == "__main__":
-    env_file = "env_conf/.check_osm_life_cyle_env"
+    env_file = "env_conf/.check_osm_life_cycle_env"
     load_dotenv(env_file)
     parser = createOSMFormatParser()
     args = parser.parse_args()
