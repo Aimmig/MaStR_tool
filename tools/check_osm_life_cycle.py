@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from get_mastr_data_by_ref import get_data
 from utils.Constants import REF_MASTR
 from utils.Constants import CONSTRUCTION_POWER, PLANNED_POWER
+from io import StringIO
+import pandas as pd
 
 DESC_CONSTR = "under construction"
 GEN = "generator"
@@ -28,9 +30,9 @@ def get_construction_refs_osm(df):
 def get_osm_potentially_open(area):
     osm_units = getWindPlantsInArea(area, sanitize=True)
     cols = ["Inbetriebnahmedatum", "Laengengrad", "Breitengrad"]
-    refs = get_construction_refs_osm(osm_units)
-    return get_data("wind", refs, cols)
-
+    constr_refs = get_construction_refs_osm(osm_units)
+    maybe_open = pd.read_table(StringIO(get_data("wind", constr_refs, cols)), sep=',')
+    return maybe_open.dropna(subset=["Inbetriebnahmedatum"])
 
 if __name__ == "__main__":
     env_file = "env_conf/.check_osm_life_cycle_env"
