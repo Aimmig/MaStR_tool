@@ -4,7 +4,11 @@ from utils.CheckOsmTagFormats import check_tags
 from dotenv import load_dotenv
 
 
-def get_filtered_tags(area, check_col):
+def get_filtered_tags(area: str, check_col):
+    """
+    Gets oms wind plants in area
+    Checks specified tag for potentially dubious things
+    """
     osm_units = getWindPlantsInArea(area, sanitize=True)
     filtered, cols = check_tags(osm_units, check_col, strict=True)
     output = None

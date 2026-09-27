@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from get_mastr_data_by_ref import get_data
 from utils.Constants import REF_MASTR
 from utils.Constants import CONSTRUCTION_POWER, PLANNED_POWER
-from io import StringIO
 import pandas as pd
 
 DESC_CONSTR = "under construction"
@@ -57,7 +56,7 @@ def get_and_read_mastr(refs: list[str], cols: list[str]):
     Gets the MaStR data for the refs
     """
     fixed_refs = fix_refs(refs)
-    return pd.read_table(StringIO(get_data("wind", fixed_refs, cols)), sep=',')
+    return get_data("wind", fixed_refs, cols)
 
 
 def get_osm_potentially_open(area: str):
@@ -103,6 +102,6 @@ if __name__ == "__main__":
     load_dotenv(env_file)
     parser = createOSMFormatParser()
     args = parser.parse_args()
-    # life_cycle = "construction"
-    life_cycle = "disused"
+    life_cycle = "construction"
+    # life_cycle = "disused"
     print(get_by_life_cyle(life_cycle, args.area))
