@@ -7,7 +7,7 @@ from utils.PlantsFromOSM import getWindPlantsInArea
 from utils.Constants import SELECT_COLS, LON, LAT
 from utils.Constants import REF_MASTR_MASTR, MASTR_SUFFIX, OSM_SUFFIX
 from dotenv import load_dotenv
-
+import pandas as pd
 
 if __name__ == "__main__":
     enf_file = "env_conf/.env"
@@ -56,7 +56,7 @@ if __name__ == "__main__":
             mastr_col_sel += [check_col+MASTR_SUFFIX, check_col+OSM_SUFFIX, "id"]
         try:
             joined['id'] = joined['id'].astype(int)
-        except:
+        except pd.errors.IntCastingNaNError:
             pass
         csv = joined[mastr_col_sel].to_csv(None, index=False)
         if csv:

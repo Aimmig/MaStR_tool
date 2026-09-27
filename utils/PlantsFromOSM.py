@@ -43,7 +43,7 @@ def getPlantsWithinArea(area: str, gen_source: str, gen_method: str,
     """
     fp_full, fp_filtered = get_fixed_area_fps(area)
     if not os.path.isfile(fp_full):
-        # ???
+        # Why is this not used ???
         fp = pyrosm.get_data(area, update=True)
     else:
         print("[INFO]: Using existing base file " + fp_full)

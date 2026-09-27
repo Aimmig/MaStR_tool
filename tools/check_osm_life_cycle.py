@@ -69,6 +69,6 @@ if __name__ == "__main__":
     load_dotenv(env_file)
     parser = createOSMFormatParser()
     args = parser.parse_args()
-    #life_cycle = "construction"
+    # life_cycle = "construction"
     life_cycle = "disused"
     print(get_by_life_cyle(life_cycle, args.area))
