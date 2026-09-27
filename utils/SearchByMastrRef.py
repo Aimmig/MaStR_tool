@@ -7,6 +7,8 @@ def determine_key(ref: list[str]):
     Determines which shorthand key for ref should be used.
     Matches length and start of different MaStR ref keys.
     All ref in list should be from same sort.
+    This is known to break if some malformed/unexpected
+    occure
 
     Returns: The key or None if not all are matching.
     """

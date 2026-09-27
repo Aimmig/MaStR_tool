@@ -83,7 +83,7 @@ PLANNED_POWER = "planned:power"
 RAZED_POWER = "razed:power"
 REMOVED_POWER = "removed:power"
 DEMOLISHED_POWER = "demolished:power"
-PREFIX_POWER = [CONSTRUCTION_POWER, PLANNED_POWER, RAZED_POWER,
+PREFIX_POWER = ["power", CONSTRUCTION_POWER, PLANNED_POWER, RAZED_POWER,
                 REMOVED_POWER, DEMOLISHED_POWER]
 
 # individual constants from mastr -> osm

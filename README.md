@@ -84,7 +84,8 @@ Some functionality should be configured via config.ini
 Some example usages for basic tools
 python tools/get_mastr_data_by_ref.py wind "SEE940146675093" -k Nettonennleistung
 python tools/create_ref_eeg_ref_mastr_list.py
-python check_osm_tag_format.py saarland note
+python tools/check_osm_tag_format.py saarland note
+python tools/check_osm_life_cycle.py germany note
 
 TO-DO:
 example usage for check_life_cyle and fix parser...
