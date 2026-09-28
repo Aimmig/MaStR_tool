@@ -143,6 +143,7 @@ def test_against_OSM(match_col: str, osm: gpd.GeoDataFrame,
     """
     # set proper crs
     crs_str = "ESRI:102003"
+    mastr_units.dropna(subset=["lon", "lat"], inplace=True)
     osm_to_join = osm.to_crs(crs_str)
     mastr_to_join = mastr_units.to_crs(crs_str)
     # spatial join with options, keep mastr geometry
