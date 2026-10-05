@@ -127,7 +127,7 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
         if key:
             selected_tiles = xyz.CartoDB.Positron(apikey=key)
         else:
-            selected_tiles = xyz.OpenTopoMap,
+            selected_tiles = xyz.OpenTopoMap
         plotted_map = plants.explore(
             tiles=selected_tiles,
             column=main_col,
