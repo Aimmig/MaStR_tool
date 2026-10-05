@@ -124,8 +124,12 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
             else:
                 main_col = plot_args
         key = os.getenv("CARTO_KEY")
+        if key:
+            selected_tiles = xyz.CartoDB.Positron(apikey=key)
+        else:
+            selected_tiles = xyz.OpenTopoMap,
         plotted_map = plants.explore(
-            tiles=xyz.CartoDB.Positron(apikey=key),
+            tiles=selected_tiles,
             column=main_col,
             popup=cols_popup,
             )
