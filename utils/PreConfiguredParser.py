@@ -180,15 +180,18 @@ def createParser():
         nargs='?',
         help="Whether to plot data and which column to use as colour",
         )
-    parser.add_argument(
-        "--testagainstOSM",
-        type=str,
-        nargs='?',
-        choices=["germany"] + sources.subregions.germany.available,
-        help="Select area to test",
-        )
 
     parser.set_defaults(formatPower="kW")
     parser.set_defaults(formatManufacturer=True)
     parser.set_defaults(discardSmall=30)
+    return parser
+
+
+def createDownloadFilterParser():
+    parser = createParser()
+    parser.add_argument(
+        "testagainstOSM",
+        choices=["germany"] + sources.subregions.germany.available,
+        help="Select area to test",
+        )
     return parser
