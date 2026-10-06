@@ -92,22 +92,21 @@ python tools/check_osm_life_cycle.py germany
 
 -----
 
-Plot all MaStR-Units where NOTHING was found within max-distance in OSM
-python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Niedersachsen'" --testagainst niedersachsen --plot
+Plot all MaStR-Units matching the query criteria and where NOTHING was found within max-distance in OSM
+python tools/download_filter_mastr_compare_osm.py wind niedersachsen --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Niedersachsen' and Inbetriebnahmedatum >= '2020-01-01'" --plot
 
 -----
 
-Plot all MaStR-Units within max-distance where ...
-... manufacturer matches
-python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Hersteller --testagainst schleswig_holstein --plot
-... start_date matches
-python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Inbetriebnahmedatum --testagainst schleswig_holstein --plot
-... power value matches
-python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Nettonennleistung --testagainst schleswig_holstein --plot
+Plot all MaStR-Units in a region where in max-distance there is a match with ...
+... manufacturer
+python tools/download_filter_mastr_compare_osm.py wind schleswig_holstein --discardSmall 50 -m --onshore -currently --plot --keep Hersteller
+... start_date
+python tools/download_filter_mastr_compare_osm.py wind schleswig_holstein --discardSmall 50 -power MW -currently --plot --keep Inbetriebnahmedatum
+... power output
+python tools/download_filter_mastr_compare_osm.py wind schleswig_holstein --discardSmall 50 -power MW -currently --plot --keep Nettonennleistung
 
 -----
 
-TO-DO: This should probably be a seperate utility ...
 Plot only MaStR-Units groubed by ...
 python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Hersteller --plot Hersteller
 python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Nettonennleistung --plot Nettonennleistung
