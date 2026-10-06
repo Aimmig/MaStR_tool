@@ -74,12 +74,15 @@ A utility to show cases where OSM tags aren't formatted in standard ways is also
 Further a small utility for directly querying selected values from the downloaded MaStR
 database by known ref numbers (e.g. Exxxx, SEExxxx ,KWKxxx) is also provided.
 
-Some functionality should be configured via config.ini
-- CARTO_API_KEY
+Some functionality (depending on the utility used) should be configured via env file
+- CARTO_API_KEY optional
 - USE_CACHE True/False
 - SQLITE_PATH absolute path to open_mastr_database,
   default should be $HOME/.open-MaStR/data/sqlite/open-mastr.db
-- MAP_PATH PATH_TO_STORE_MAP.html
+- MAP_PATH file where map should be saved
+- DATE_FORMAT
+- OSM_TMP_PATH absolute path where osm extracts are downloaded
+-----
 
 Some example usages for basic tools
 python tools/get_mastr_data_by_ref.py wind "SEE940146675093" -k Nettonennleistung
@@ -87,6 +90,27 @@ python tools/create_ref_eeg_ref_mastr_list.py
 python tools/check_osm_tag_format.py saarland note
 python tools/check_osm_life_cycle.py germany note
 
+-----
+
+Plot all MaStR-Units where NOTHING was found within max-distance in OSM
+python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Niedersachsen'" --testagainst niedersachsen --plot
+
+-----
+
+Plot all MaStR-Units within max-distance where ...
+... manufacturer matches
+python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Hersteller --testagainst schleswig_holstein --plot
+... start_date matches
+python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Inbetriebnahmedatum --testagainst schleswig_holstein --plot
+... power value matches
+python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Nettonennleistung --testagainst schleswig_holstein --plot
+
+-----
+
+TO-DO: This should probably be a seperate utility ...
+Plot only MaStR-Units groubed by ...
+python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Hersteller --plot Hersteller
+python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Nettonennleistung --plot Nettonennleistung
+
 TO-DO:
-example usage for check_life_cyle and fix parser...
-basic usage of full tool download_filter_mastr_compare_osm.py
+Fix check_life_cycle parser...

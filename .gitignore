@@ -1,5 +1,7 @@
 osm_extracts/*
 env/*
+build/*
+env_conf/*
 config.ini
 *.csv
 *.txt
