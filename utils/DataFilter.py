@@ -27,7 +27,7 @@ class DataFilter:
     def get_onshore(df: pd.DataFrame) -> pd.DataFrame:
         """Returns: pd.DataFrame: filtered Dataframe"""
         col_key = 'WindAnLandOderAufSee'
-        on_or_offshore = 'Windkraft an Land'
+        on_or_offshore = 'Windenergie an Land'
         if col_key not in df.columns.values:
             return df
         return df.query(f"{col_key} == '{on_or_offshore}'")
