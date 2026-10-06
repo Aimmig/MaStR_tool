@@ -1,4 +1,4 @@
-from utils.PreConfiguredParser import createOSMFormatParser
+from utils.PreConfiguredParser import createOSMLifecycleParser
 from utils.PlantsFromOSM import getWindPlantsInArea
 from dotenv import load_dotenv
 from get_mastr_data_by_ref import get_data
@@ -87,7 +87,7 @@ def get_osm_potentially_closed(area: str):
     return active.dropna(subset=["DatumEndgueltigeStilllegung"])
 
 
-def get_by_life_cyle(life_cyle: str, area: str):
+def get_by_life_cyle(life_cycle: str, area: str):
     """
     Get units for specified lifecyle
     """
@@ -100,8 +100,6 @@ def get_by_life_cyle(life_cyle: str, area: str):
 if __name__ == "__main__":
     env_file = "env_conf/.check_osm_life_cycle_env"
     load_dotenv(env_file)
-    parser = createOSMFormatParser()
+    parser = createOSMLifecycleParser()
     args = parser.parse_args()
-    life_cycle = "construction"
-    # life_cycle = "disused"
-    print(get_by_life_cyle(life_cycle, args.area))
+    print(get_by_life_cyle(args.lifecycle, args.area))

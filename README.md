@@ -88,7 +88,7 @@ Some example usages for basic tools
 python tools/get_mastr_data_by_ref.py wind "SEE940146675093" -k Nettonennleistung
 python tools/create_ref_eeg_ref_mastr_list.py
 python tools/check_osm_tag_format.py saarland note
-python tools/check_osm_life_cycle.py germany note
+python tools/check_osm_life_cycle.py germany
 
 -----
 
@@ -111,6 +111,3 @@ TO-DO: This should probably be a seperate utility ...
 Plot only MaStR-Units groubed by ...
 python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Hersteller --plot Hersteller
 python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Nettonennleistung --plot Nettonennleistung
-
-TO-DO:
-Fix check_life_cycle parser...

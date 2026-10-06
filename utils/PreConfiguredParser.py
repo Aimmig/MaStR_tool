@@ -61,6 +61,29 @@ def createOSMFormatParser():
     return parser
 
 
+def createOSMLifecycleParser():
+    """
+    Custom parser for reading the osm pbf file
+    and check life of osm objects against mastr
+    """
+    parser = argparse.ArgumentParser(
+        usage='%(prog)s [options]',
+        )
+    parser.add_argument(
+        "area",
+        type=str,
+        choices=["germany"] + sources.subregions.germany.available,
+        help="area to investigate",
+        )
+    parser.add_argument(
+        "lifecycle",
+        type=str,
+        choices=["disused", "construction"],
+        help="Check if construction has finished or plants are disused",
+        )
+    return parser
+
+
 def createParser():
     """
     Custom parser for the main program.
