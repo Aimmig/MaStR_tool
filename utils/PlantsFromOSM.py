@@ -8,7 +8,7 @@ from utils.Constants import MANUFACTURER, REF_EEG, REF_MASTR
 from utils.Constants import OTHER_OSM, PREFIX_POWER
 
 
-def get_fixed_area_fps(area: str):
+def get_fixed_area_fps(area: str, directory: str):
     # Fix cases where _ in selectable regions
     # is replaced with - in downloaded file name
     area = area.replace("_", "-")
@@ -16,10 +16,10 @@ def get_fixed_area_fps(area: str):
     if area in ["berlin", "hamburg", "bremen"]:
         area = area.title()
     # assemble file paths
-    if not os.getenv("OSM_TMP_PATH").endswith('/'):
-        fp_path = os.getenv("OSM_TMP_PATH") + '/'
+    if not directory.endswith('/'):
+        fp_path = directory + '/'
     else:
-        fp_path = os.getenv("OSM_TMP_PATH")
+        fp_path = directory
     fp_base = fp_path + area
     suffix = ".osm.pbf"
     fp_full = fp_base + "-latest" + suffix
@@ -32,28 +32,34 @@ def get_fixed_area_fps(area: str):
 
 
 def getWindPlantsInArea(area: str, sanitize: bool):
-    return getPlantsWithinArea(area, "wind", "wind_turbine", sanitize)
+    download_dir = os.getenv("OSM_TMP_PATH")
+    return getPlantsWithinArea(area, download_dir,
+                               "wind", "wind_turbine",
+                               sanitize)
 
 
-def getPlantsWithinArea(area: str, gen_source: str, gen_method: str,
+def getPlantsWithinArea(area: str, directory: str,
+                        gen_source: str, gen_method: str,
+                        update_area: bool = False,
                         sanitize: bool = False):
     """
     Wrapper function to download, pre-filter and then read and prepare
     data from osm pbf
     """
-    fp_full, fp_filtered = get_fixed_area_fps(area)
-    if not os.path.isfile(fp_full):
-        # Why is this not used ???
-        fp = pyrosm.get_data(area, update=True)
-    else:
-        print("[INFO]: Using existing base file " + fp_full)
+    fp_full, fp_filtered = get_fixed_area_fps(area, directory)
+    # Only download full extract if filtered file does not exist
+    if not os.path.isfile(fp_filtered):
+        fp_full = pyrosm.get_data(area,
+                                  update=update_area,
+                                  directory=directory)
     filter_and_write(fp_full, fp_filtered,
                      gen_source, gen_method)
     return read_and_prepare(fp_filtered, gen_source, gen_method,
                             sanitize=sanitize)
 
 
-def filter_and_write(osm_pbf_in: str, tmp_file: str, gen_source: str, gen_method: str):
+def filter_and_write(osm_pbf_in: str, tmp_file: str,
+                     gen_source: str, gen_method: str):
     """
     Filters the osm pbf for useful tags and writes output
     to tmp file. This tmp file should be used after that.

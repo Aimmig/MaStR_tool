@@ -1,3 +1,4 @@
+osm_extracts/*
 env/*
 config.ini
 *.csv
