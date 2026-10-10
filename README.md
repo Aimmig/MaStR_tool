@@ -105,8 +105,11 @@ python tools/download_filter_mastr_compare_osm.py wind schleswig_holstein --disc
 ... power output
 python tools/download_filter_mastr_compare_osm.py wind schleswig_holstein --discardSmall 50 -power MW -currently --plot --keep Nettonennleistung
 
+
+Plot all MaStR-Units in a region where in max-distance there is a match with power and query criteria matches, e.g. end date before 2020-10-01:
+python tools/download_filter_mastr_compare_osm.py wind germany --discardSmall 50 -power MW --onshore --plot --keep Nettonennleistung --query "DatumEndgueltigeStilllegung <= '2020-10-01'"
 -----
 
 Plot only MaStR-Units groubed by ...
-python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Hersteller --plot Hersteller
-python tools/download_filter_mastr_compare_osm.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Nettonennleistung --plot Nettonennleistung
+python tools/plot_mastr_by_area_tag.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Hersteller Nettonennleistung --plot Hersteller
+python tools/plot_mastr_by_area_tag.py wind --discardSmall 50 -m -power MW -currently --query "Bundesland == 'Schleswig-Holstein'" --keep Hersteller Nettonennleistung --plot Nettonennleistung
