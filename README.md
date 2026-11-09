@@ -1,6 +1,6 @@
 This projet is intended to download and preprocess the data for german power plants,
 especially renewable energy plants which is available to download from the official
-[Markstammdatenregister](https://www.marktstammdatenregister.de/MaStR) part of
+[Markstammdatenregister](https://www.marktstammdatenregister.de/MaStR) licensed under [dl-de/by-2-0](https://www.govdata.de/dl-de/by-2-0) part of
 Bundesnetzagentur for a possible import to [OpenStreetMap](https://www.openstreetmap.org/copyright).
 The data is downloaded using [open-MaStR](https://github.com/OpenEnergyPlatform/open-MaStR)
 and is processed with [pandas](https://pandas.pydata.org) and [geopandas](https://geopandas.org)
@@ -85,7 +85,7 @@ Some functionality (depending on the utility used) should be configured via env 
 -----
 
 Some example usages for basic tools
-python tools/get_mastr_data_by_ref.py wind "SEE940146675093" -k Nettonennleistung
+python tools/get_mastr_data_by_ref.py wind "SEExxxxxx" -k Nettonennleistung
 python tools/create_ref_eeg_ref_mastr_list.py
 python tools/check_osm_tag_format.py saarland note
 python tools/check_osm_life_cycle.py germany

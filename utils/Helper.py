@@ -1,6 +1,7 @@
 import pandas as pd
 import geopandas as gpd
 import numpy as np
+import folium
 import os
 import xyzservices.providers as xyz
 from utils.Constants import COMMON_COLS, SELECT_COLS, GEOMETRY_COLS, MASTR_SUFFIX, OSM_SUFFIX
@@ -107,6 +108,22 @@ def check_length(df: pd.DataFrame, col: str) -> pd.DataFrame:
     return df[df[mastr].between(np.floor(df[osm]-1), np.ceil(df[osm])+1)]
 
 
+def add_mastr_attribution(m):
+    attribution_html = '''<div
+    style="position: fixed; bottom: 40px; left: 5px;
+    z-index:9999; font-size:10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px; border-radius: 3px;">
+    Data Layer License:
+    <a href="https://www.govdata.de/dl-de/by-2-0"
+    target="_blank">dl-de/by-2-0</a> |
+    <a href="https://www.marktstammdatenregister.de/MaStR/Datendownload"
+    target="_blank">Marktstammdatenregister Bundesnetzagentur</a> |
+    eigene Bearbeitung
+    </div>'''
+    m.get_root().html.add_child(folium.Element(attribution_html))
+
+
 def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
     """
     Plots the data based on the given arguments
@@ -133,6 +150,7 @@ def plot(plot_args: str, cols_popup: list[str], plants: gpd.GeoDataFrame):
             column=main_col,
             popup=cols_popup,
             )
+        add_mastr_attribution(plotted_map)
         map_file = os.environ.get("MAP_PATH")
         plotted_map.save(map_file)
 
