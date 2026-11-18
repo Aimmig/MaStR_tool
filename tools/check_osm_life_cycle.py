@@ -87,19 +87,15 @@ def get_osm_potentially_closed(area: str):
     return active.dropna(subset=["DatumEndgueltigeStilllegung"])
 
 
-def get_by_life_cyle(life_cycle: str, area: str):
+def get_by_life_cycle(env_file: str, life_cycle: str):
     """
     Get units for specified lifecyle
     """
-    if life_cycle == "construction":
-        return get_osm_potentially_open(area)
-    if life_cycle == "disused":
-        return get_osm_potentially_closed(area)
-
-
-if __name__ == "__main__":
-    env_file = "env_conf/.check_osm_life_cycle_env"
     load_dotenv(env_file)
     parser = createOSMLifecycleParser()
     args = parser.parse_args()
-    print(get_by_life_cyle(args.lifecycle, args.area))
+    if life_cycle == "construction":
+        res = get_osm_potentially_open(args.area)
+    if life_cycle == "disused":
+        res = get_osm_potentially_closed(args.area)
+    print(res)

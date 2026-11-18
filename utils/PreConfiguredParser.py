@@ -72,15 +72,17 @@ def createOSMLifecycleParser():
     parser.add_argument(
         "area",
         type=str,
+        nargs='?',
+        default="germany",
         choices=["germany"] + sources.subregions.germany.available,
         help="area to investigate",
         )
-    parser.add_argument(
-        "lifecycle",
-        type=str,
-        choices=["disused", "construction"],
-        help="Check if construction has finished or plants are disused",
-        )
+    # parser.add_argument(
+    #    "lifecycle",
+    #    type=str,
+    #    choices=["disused", "construction"],
+    #    help="Check if construction has finished or plants are disused",
+    #    )
     return parser
 
 
