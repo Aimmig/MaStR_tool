@@ -8,3 +8,10 @@ source env/bin/activate
 python tools/check_osm_construction.py
 ### Create map for permanently shut down
 python tools/check_osm_disused.py
+# -- Offshore ---
+# Planned
+python tools/plot_offshore_future.py wind -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" -future --keep Hersteller Nettonennleistung GeplantesInbetriebnahmedatum --plot Hersteller
+# Active
+python tools/plot_offshore_running.py wind -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" -currently --keep Hersteller Nettonennleistung Inbetriebnahmedatum --plot Hersteller
+# All
+python tools/plot_offshore_all.py wind -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" --keep Hersteller Nettonennleistung Inbetriebnahmedatum GeplantesInbetriebnahmedatum --plot Hersteller
