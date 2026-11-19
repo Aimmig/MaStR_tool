@@ -77,6 +77,17 @@ def createOSMLifecycleParser():
         choices=["germany"] + sources.subregions.germany.available,
         help="area to investigate",
         )
+    parser.add_argument(
+        "--keepColumns", "-keep",
+        nargs='*',
+        choices=SELECT_COLS.keys(),
+        help="columns to keep, if these exist.")
+    parser.add_argument(
+        "--plot",
+        type=str,
+        nargs='?',
+        help="Whether to plot data and which column to use as colour",
+        )
     # parser.add_argument(
     #    "lifecycle",
     #    type=str,

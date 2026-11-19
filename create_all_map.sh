@@ -5,9 +5,9 @@ source env/bin/activate
 # rm osm_extracts/germany-latest-filtered.osm.pbf
 ### Create map for newly finished construction
 ### Implicitly download MaStR data and create osm extract
-python tools/check_osm_construction.py
+python tools/check_osm_construction.py --plot Hersteller
 ### Create map for permanently shut down
-python tools/check_osm_disused.py
+python tools/check_osm_disused.py --plot Hersteller
 # -- Offshore ---
 # Planned
 python tools/plot_offshore_future.py wind -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" -future --keep Hersteller Nettonennleistung GeplantesInbetriebnahmedatum --plot Hersteller

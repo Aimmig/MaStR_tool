@@ -3,8 +3,12 @@ from utils.PlantsFromOSM import getWindPlantsInArea
 from dotenv import load_dotenv
 from get_mastr_data_by_ref import get_data
 from utils.Constants import REF_MASTR
+from utils.Constants import START, END
+from utils.Constants import MANUFACTURER
 from utils.Constants import CONSTRUCTION_POWER, PLANNED_POWER
+from utils.Helper import plot
 import pandas as pd
+import geopandas
 
 DESC_CONSTR = "under construction"
 GEN = "generator"
@@ -59,7 +63,7 @@ def get_and_read_mastr(refs: list[str], cols: list[str]):
     return get_data("wind", fixed_refs, cols)
 
 
-def get_osm_potentially_open(area: str):
+def get_osm_potentially_open(area: str, keepCols: list[str]):
     """
     Gets all osm wind units in area which are considered as
     tagged construction
@@ -69,11 +73,12 @@ def get_osm_potentially_open(area: str):
     osm_units = getWindPlantsInArea(area, sanitize=True)
     constr_refs = get_construction_refs_osm(osm_units)
     cols = ["Inbetriebnahmedatum", "Laengengrad", "Breitengrad"]
+    cols = cols + keepCols
     maybe_open = get_and_read_mastr(constr_refs, cols)
     return maybe_open.dropna(subset=["Inbetriebnahmedatum"])
 
 
-def get_osm_potentially_closed(area: str):
+def get_osm_potentially_closed(area: str, keepCols: list[str]):
     """
     Gets all osm wind units in area which are considered as
     currently operational.
@@ -83,6 +88,7 @@ def get_osm_potentially_closed(area: str):
     osm_units = getWindPlantsInArea(area, sanitize=True)
     active_refs = get_active_refs_osm(osm_units)
     cols = ["DatumEndgueltigeStilllegung", "Laengengrad", "Breitengrad"]
+    cols = cols + keepCols
     active = get_and_read_mastr(active_refs, cols)
     return active.dropna(subset=["DatumEndgueltigeStilllegung"])
 
@@ -95,7 +101,18 @@ def get_by_life_cycle(env_file: str, life_cycle: str):
     parser = createOSMLifecycleParser()
     args = parser.parse_args()
     if life_cycle == "construction":
-        res = get_osm_potentially_open(args.area)
+        res = get_osm_potentially_open(args.area, args.keepColumns)
     if life_cycle == "disused":
-        res = get_osm_potentially_closed(args.area)
+        res = get_osm_potentially_closed(args.area, args.keepColumns)
+    res = rename_cols_before_plot(res)
     print(res)
+    gdf = geopandas.GeoDataFrame(
+    res, geometry=geopandas.points_from_xy(res.Laengengrad, res.Breitengrad), crs="EPSG:4326")
+    plot(args.plot, [], gdf)
+
+
+def rename_cols_before_plot(df):
+    df.rename(columns={"Inbetriebnahmedatum": START}, inplace=True)
+    df.rename(columns={"Hersteller": MANUFACTURER}, inplace=True)
+    df.rename(columns={"DatumEndgueltigeStilllegung": END}, inplace=True)
+    return df
