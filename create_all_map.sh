@@ -1,13 +1,13 @@
 source env/bin/activate
 ### Update geofabrik extract
-# pyosmium-up-to-date osm_extracts/germany-latest.osm.pbf
+pyosmium-up-to-date osm_extracts/germany-latest.osm.pbf
 ### Remove old filtered file
-# rm osm_extracts/germany-latest-filtered.osm.pbf
+rm osm_extracts/germany-latest-filtered.osm.pbf
 ### Create map for newly finished construction
 ### Implicitly download MaStR data and create osm extract
-python tools/check_osm_construction.py --plot Hersteller
+python tools/check_osm_construction.py --keep Hersteller Nettonennleistung --plot Hersteller
 ### Create map for permanently shut down
-python tools/check_osm_disused.py --plot Hersteller
+python tools/check_osm_disused.py --keep Hersteller Nettonennleistung --plot Hersteller
 # -- Offshore ---
 # Planned
 python tools/plot_offshore_future.py wind -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" -future --keep Hersteller Nettonennleistung GeplantesInbetriebnahmedatum --plot Hersteller

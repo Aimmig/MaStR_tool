@@ -8,7 +8,7 @@ from utils.Constants import MANUFACTURER
 from utils.Constants import CONSTRUCTION_POWER, PLANNED_POWER
 from utils.Helper import plot
 import pandas as pd
-import geopandas
+import geopandas as gpd
 
 DESC_CONSTR = "under construction"
 GEN = "generator"
@@ -106,8 +106,10 @@ def get_by_life_cycle(env_file: str, life_cycle: str):
         res = get_osm_potentially_closed(args.area, args.keepColumns)
     res = rename_cols_before_plot(res)
     print(res)
-    gdf = geopandas.GeoDataFrame(
-    res, geometry=geopandas.points_from_xy(res.Laengengrad, res.Breitengrad), crs="EPSG:4326")
+    gdf = gpd.GeoDataFrame(
+            res,
+            geometry=gpd.points_from_xy(res.Laengengrad, res.Breitengrad),
+            crs="EPSG:4326")
     plot(args.plot, [], gdf)
 
 

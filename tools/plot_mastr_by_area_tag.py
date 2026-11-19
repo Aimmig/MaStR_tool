@@ -17,6 +17,7 @@ def generic_by_area(env_file):
     if csv:
         print(csv)
 
+
 if __name__ == "__main__":
     env_file = "env_conf/.generic_by_area_env"
     generic_by_area(env_file)
