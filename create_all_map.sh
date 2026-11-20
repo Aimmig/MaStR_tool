@@ -10,8 +10,8 @@ python tools/check_osm_construction.py --keep Hersteller Nettonennleistung --plo
 python tools/check_osm_disused.py --keep Hersteller Nettonennleistung --plot Hersteller
 # -- Offshore ---
 # Planned
-python tools/plot_offshore_future.py wind -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" -future --keep Hersteller Nettonennleistung GeplantesInbetriebnahmedatum --plot Hersteller
+python tools/plot_offshore_future.py -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" -future --keep Hersteller Nettonennleistung GeplantesInbetriebnahmedatum --plot Hersteller
 # Active
-python tools/plot_offshore_running.py wind -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" -currently --keep Hersteller Nettonennleistung Inbetriebnahmedatum --plot Hersteller
+python tools/plot_offshore_running.py -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" -currently --keep Hersteller Nettonennleistung Inbetriebnahmedatum --plot Hersteller
 # All
-python tools/plot_offshore_all.py wind -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" --keep Hersteller Nettonennleistung Inbetriebnahmedatum GeplantesInbetriebnahmedatum --plot Hersteller
+python tools/plot_offshore_all.py -m -power MW --query "Bundesland == 'Ausschließliche Wirtschaftszone'" --keep Hersteller Nettonennleistung Inbetriebnahmedatum GeplantesInbetriebnahmedatum --plot Hersteller

@@ -17,12 +17,13 @@ def createSimpleMastrQueryParser():
         )
     parser.add_argument(
         "source",
+        nargs='?',
         choices=ENERGY_SOURCES,
         help="The energy source to download and search from MaStR",
         )
     parser.add_argument(
-        "--keepColumns", "-keep",
-        nargs='*',
+        "keep",
+        nargs='?',
         choices=list(SELECT_COLS.keys()) + list(COMMON_COLS.keys()),
         help="Which columns to keep, if these exist.",
         )
@@ -32,6 +33,8 @@ def createSimpleMastrQueryParser():
         type=str,
         help="The MaStR reference to search, e.g. SEExxx, EEGxxx etc.",
     )
+    parser.set_defaults(source="wind")
+    parser.set_defaults(keep=list(SELECT_COLS.keys()) + list(COMMON_COLS.keys()))
     return parser
 
 
@@ -46,6 +49,7 @@ def createOSMFormatParser():
         )
     parser.add_argument(
         "area",
+        nargs='?',
         type=str,
         choices=["germany"] + sources.subregions.germany.available,
         help="area to investigate",
@@ -58,6 +62,7 @@ def createOSMFormatParser():
                  START, END] + OTHER_OSM,
         help="osm tag to check formatting",
         )
+    parser.set_defaults(area="germany")
     return parser
 
 
@@ -73,7 +78,6 @@ def createOSMLifecycleParser():
         "area",
         type=str,
         nargs='?',
-        default="germany",
         choices=["germany"] + sources.subregions.germany.available,
         help="area to investigate",
         )
@@ -88,6 +92,7 @@ def createOSMLifecycleParser():
         nargs='?',
         help="Whether to plot data and which column to use as colour",
         )
+    parser.set_defaults(area="germany")
     # parser.add_argument(
     #    "lifecycle",
     #    type=str,
@@ -106,11 +111,6 @@ def createParser():
     parser = argparse.ArgumentParser(
         prog="mastr-tool",
         usage='%(prog)s [options]',
-        )
-    parser.add_argument(
-        "source",
-        choices=ENERGY_SOURCES,
-        help="energy source for which to download the data from MaStR",
         )
     parser.add_argument(
         "--keepColumns", "-keep",
@@ -193,7 +193,6 @@ def createParser():
         nargs='?',
         help="Whether to plot data and which column to use as colour",
         )
-
     parser.set_defaults(formatPower="kW")
     parser.set_defaults(formatManufacturer=True)
     parser.set_defaults(discardSmall=30)
@@ -204,7 +203,9 @@ def createDownloadFilterParser():
     parser = createParser()
     parser.add_argument(
         "testagainstOSM",
+        nargs='?',
         choices=["germany"] + sources.subregions.germany.available,
         help="Select area to test",
         )
+    parser.set_defaults(testagainstOSM="germany")
     return parser

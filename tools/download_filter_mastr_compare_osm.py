@@ -28,6 +28,7 @@ if __name__ == "__main__":
     enf_file = "env_conf/.env"
     load_dotenv(enf_file)
     parser = createDownloadFilterParser()
+    parser.add_argument('source', nargs='?', const=1, type=str, default="wind")
     arguments = parser.parse_args()
     mastr_units, cols = get_filtered_mastr_from_args(arguments)
     csv = mastr_units[cols].to_csv(

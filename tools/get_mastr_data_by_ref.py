@@ -30,7 +30,7 @@ if __name__ == "__main__":
     arguments = parser.parse_args()
     source = arguments.source
     refs = arguments.ref
-    keepColumns = arguments.keepColumns
+    keepColumns = arguments.keep
     df = get_data(source, refs, keepColumns)
     csv = df.to_csv(None,
                     index=False,

@@ -73,7 +73,8 @@ def get_osm_potentially_open(area: str, keepCols: list[str]):
     osm_units = getWindPlantsInArea(area, sanitize=True)
     constr_refs = get_construction_refs_osm(osm_units)
     cols = ["Inbetriebnahmedatum", "Laengengrad", "Breitengrad"]
-    cols = cols + keepCols
+    if keepCols:
+        cols = cols + keepCols
     maybe_open = get_and_read_mastr(constr_refs, cols)
     return maybe_open.dropna(subset=["Inbetriebnahmedatum"])
 
@@ -88,7 +89,8 @@ def get_osm_potentially_closed(area: str, keepCols: list[str]):
     osm_units = getWindPlantsInArea(area, sanitize=True)
     active_refs = get_active_refs_osm(osm_units)
     cols = ["DatumEndgueltigeStilllegung", "Laengengrad", "Breitengrad"]
-    cols = cols + keepCols
+    if keepCols:
+        cols = cols + keepCols
     active = get_and_read_mastr(active_refs, cols)
     return active.dropna(subset=["DatumEndgueltigeStilllegung"])
 

@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 def generic_by_area(env_file):
     load_dotenv(env_file)
     parser = createParser()
+    parser.add_argument('source', nargs='?', const=1, type=str, default="wind")
     arguments = parser.parse_args()
     mastr_units, cols = get_filtered_mastr_from_args(arguments)
     plot(arguments.plot, cols, mastr_units)
