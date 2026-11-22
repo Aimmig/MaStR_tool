@@ -19,5 +19,7 @@ python tools/plot_offshore_all.py -m -power MW --query "Bundesland == 'Ausschlie
 # -- Onshore ---
 # Match: Hersteller inside default distance
 python tools/download_filter_mastr_compare_osm_match_on_tag.py --discardSmall 50 -m --onshore -power MW -currently --plot --keep Hersteller
+# Match: Hersteller inside default distance but ONLY planned for DATE
+python tools/download_filter_mastr_compare_osm_match_not_active_yet.py --discardSmall 50 -m --onshore -power MW --query "GeplantesInbetriebnahmedatum >= '2027-12-01'" --plot --keep Hersteller
 # No machtes at all inside default distance
 python tools/download_filter_mastr_compare_osm_no_match.py --discardSmall 50 -m --onshore -power MW -currently --query "Inbetriebnahmedatum >= '2020-01-01'" --plot

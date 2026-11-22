@@ -21,7 +21,19 @@ def drop_units_where_ref_mastr_osm_exists(df, osm_pbf, drop_or_keep="all"):
     return df
 
 
-def compute_matches(arguments, distance, drop_or_keep="all"):
+def keep_only_with_generator_tag(df, which: str):
+    if which == "all":
+        return df
+    if which == "generator":
+        return df.loc[df['power'] == "generator"]
+    if which == "construction":
+        return df.loc[df['construction:power'] == "generator"]
+    if which == "prosed":
+        return df.loc[df['proposed:power'] == "generator"]
+    return df
+
+
+def compute_matches(arguments, distance, drop_or_keep="all", keep_only_power="all"):
     mastr_units, cols = get_filtered_mastr_from_args(arguments)
     csv = mastr_units[cols].to_csv(
                 None,
@@ -43,8 +55,11 @@ def compute_matches(arguments, distance, drop_or_keep="all"):
                                         strict=True)
         if arguments.keepColumns is None:
             joined = drop_units_where_ref_mastr_osm_exists(joined, osm_pbf, drop_or_keep=drop_or_keep)
+            joined = keep_only_with_generator_tag(joined, keep_only_power)
             plot("dist", cols, joined)
             exit
+
+        joined = keep_only_with_generator_tag(joined, keep_only_power)
         plot("dist", cols, joined)
         mastr_diff = get_existing_ref_missmatch(joined)
         joined = get_without_osm_ref(joined)

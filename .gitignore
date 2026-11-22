@@ -11,6 +11,6 @@ __pycache__/*
 */__pycache__/*
 .idea/*
 *.html
-!example_maps/*.html
+example_maps/*.html
 proposal
 *.egg-info
